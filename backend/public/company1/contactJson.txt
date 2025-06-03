@@ -1,0 +1,938 @@
+[
+  {
+    "id": "5524981254232@s.whatsapp.net",
+    "name": "Dudu"
+  },
+  {
+    "id": "5524999073240@s.whatsapp.net",
+    "name": "Lidi"
+  },
+  {
+    "id": "5527996026437@s.whatsapp.net",
+    "name": "Diego Galvão"
+  },
+  {
+    "id": "5524999913977@s.whatsapp.net",
+    "name": "Vania Despachante"
+  },
+  {
+    "id": "5524993207123@s.whatsapp.net",
+    "name": "Rafael Paixão"
+  },
+  {
+    "id": "5524974045184@s.whatsapp.net",
+    "name": "Cristiane Sousa"
+  },
+  {
+    "id": "556296044899@s.whatsapp.net",
+    "name": "skinhairbrazil Cliente"
+  },
+  {
+    "id": "5524988183519@s.whatsapp.net",
+    "name": "Inovatti Odontologia e Estética"
+  },
+  {
+    "id": "5511952412682@s.whatsapp.net",
+    "name": "Guilherme Catto Cliente"
+  },
+  {
+    "id": "15082395645@s.whatsapp.net",
+    "name": "Rodrigo Souza Cliente 🇺🇸"
+  },
+  {
+    "id": "5524981466048@s.whatsapp.net",
+    "name": "Juan"
+  },
+  {
+    "id": "555199277765@s.whatsapp.net",
+    "name": "Luciano Suporte ERP"
+  },
+  {
+    "id": "555183295686@s.whatsapp.net",
+    "name": "Marcio Santos"
+  },
+  {
+    "id": "5527998641103@s.whatsapp.net",
+    "name": "Cobranças - Paytime Fintech"
+  },
+  {
+    "id": "5524999625749@s.whatsapp.net",
+    "name": "Raquel Teófilo"
+  },
+  {
+    "id": "556199665014@s.whatsapp.net",
+    "name": "Misael Cliente"
+  },
+  {
+    "id": "5524999593832@s.whatsapp.net",
+    "name": "Leidy - Oi"
+  },
+  {
+    "id": "5524992587541@s.whatsapp.net",
+    "name": "Geovane Zinid "
+  },
+  {
+    "id": "559684039040@s.whatsapp.net",
+    "name": "Cláudio Bezerra Cliente"
+  },
+  {
+    "id": "5524974035270@s.whatsapp.net",
+    "name": "Irene De Jesus"
+  },
+  {
+    "id": "554898219421@s.whatsapp.net",
+    "name": "Luciano Moreno Cliente"
+  },
+  {
+    "id": "554591250537@s.whatsapp.net",
+    "name": "Geberson Cliente"
+  },
+  {
+    "id": "5516982207761@s.whatsapp.net",
+    "name": "Jonatas Sena"
+  },
+  {
+    "id": "5524993166516@s.whatsapp.net",
+    "name": "Vitor Seixas Pop Car"
+  },
+  {
+    "id": "5524999430590@s.whatsapp.net",
+    "name": "Renato Ritton"
+  },
+  {
+    "id": "553491463856@s.whatsapp.net",
+    "name": "Pedro Maaple Cliente"
+  },
+  {
+    "id": "5521982225455@s.whatsapp.net",
+    "name": "Elisangela Cras"
+  },
+  {
+    "id": "554396467695@s.whatsapp.net",
+    "name": "Nando Cardoso"
+  },
+  {
+    "id": "554891464910@s.whatsapp.net",
+    "name": "Eurico"
+  },
+  {
+    "id": "5524998721975@s.whatsapp.net",
+    "name": "Jean souza"
+  },
+  {
+    "id": "5511991081410@s.whatsapp.net",
+    "name": "Natural Labs Cliente"
+  },
+  {
+    "id": "5524992273396@s.whatsapp.net",
+    "name": "Laura Cras"
+  },
+  {
+    "id": "553192921646@s.whatsapp.net",
+    "name": "Mateus Alvim Cliente TH"
+  },
+  {
+    "id": "5524999353865@s.whatsapp.net",
+    "name": "Ingrid ( Tam )"
+  },
+  {
+    "id": "5524992825433@s.whatsapp.net",
+    "name": "Julia Moreira Influencier"
+  },
+  {
+    "id": "5521985057261@s.whatsapp.net",
+    "name": "Thiago Mello Cliente"
+  },
+  {
+    "id": "5519974160913@s.whatsapp.net",
+    "name": "Adriano Marson Cliente"
+  },
+  {
+    "id": "555195540476@s.whatsapp.net",
+    "name": "Luis Machado Cliente"
+  },
+  {
+    "id": "558198458526@s.whatsapp.net",
+    "name": "Raquel Motta Cliente"
+  },
+  {
+    "id": "5524998580623@s.whatsapp.net",
+    "name": "Amor"
+  },
+  {
+    "id": "554796067992@s.whatsapp.net",
+    "name": "Thiago Bauer"
+  },
+  {
+    "id": "558496516765@s.whatsapp.net",
+    "name": "Fortunato Cliente"
+  },
+  {
+    "id": "553788398561@s.whatsapp.net",
+    "name": "Matheus Teodoro (Avante Soluções)"
+  },
+  {
+    "id": "556399402627@s.whatsapp.net",
+    "name": "Doni Cliente"
+  },
+  {
+    "id": "559492718669@s.whatsapp.net",
+    "name": "Edton Braz Cliente"
+  },
+  {
+    "id": "555181260307@s.whatsapp.net",
+    "name": "Jefferson Silva"
+  },
+  {
+    "id": "5524981394555@s.whatsapp.net",
+    "name": "Kauã José Sobrinho"
+  },
+  {
+    "id": "5524974003145@s.whatsapp.net",
+    "name": "Vitória Henrique"
+  },
+  {
+    "id": "5521981673833@s.whatsapp.net",
+    "name": "Cassiano Larrussa"
+  },
+  {
+    "id": "553199993045@s.whatsapp.net",
+    "name": "Rômulo Prof.."
+  },
+  {
+    "id": "551132301682@s.whatsapp.net",
+    "name": "Fale Paco"
+  },
+  {
+    "id": "5521998811121@s.whatsapp.net",
+    "name": "Pedro Cliente"
+  },
+  {
+    "id": "556195835517@s.whatsapp.net",
+    "name": "Parcerias - Maqplan"
+  },
+  {
+    "id": "5511972757237@s.whatsapp.net",
+    "name": "Líquida SP Perfex"
+  },
+  {
+    "id": "556385003823@s.whatsapp.net",
+    "name": "Henry Guedes Cliente"
+  },
+  {
+    "id": "556281330647@s.whatsapp.net",
+    "name": "Gabriel Ferreira Cliente"
+  },
+  {
+    "id": "5527998093781@s.whatsapp.net",
+    "name": "Wanderson - Paytime"
+  },
+  {
+    "id": "5524999971200@s.whatsapp.net",
+    "name": "Flávio Nenzinha"
+  },
+  {
+    "id": "5524998463716@s.whatsapp.net",
+    "name": "Dayane"
+  },
+  {
+    "id": "5519991730708@s.whatsapp.net",
+    "name": "Reinvent Web do Brasil"
+  },
+  {
+    "id": "5511999773485@s.whatsapp.net",
+    "name": "Renan Gomes Cliente"
+  },
+  {
+    "id": "5524998616279@s.whatsapp.net",
+    "name": "Eduardo Mecânico Lanternagem"
+  },
+  {
+    "id": "557799869009@s.whatsapp.net",
+    "name": "Adriano Amarante Cliente"
+  },
+  {
+    "id": "554195868816@s.whatsapp.net",
+    "name": "𝑑𝑒ℎ 𝑠𝑎𝑖𝑑𝑜𝑘"
+  },
+  {
+    "id": "5519971395449@s.whatsapp.net",
+    "name": "Eurico"
+  },
+  {
+    "id": "553194142470@s.whatsapp.net",
+    "name": "Prof. Luíza Sernizon"
+  },
+  {
+    "id": "5511947164464@s.whatsapp.net",
+    "name": "Fashion Vestiário"
+  },
+  {
+    "id": "556282060712@s.whatsapp.net",
+    "name": "Wellington Almeida Cliente"
+  },
+  {
+    "id": "5524993959492@s.whatsapp.net",
+    "name": "Rafael Paixão"
+  },
+  {
+    "id": "5524998638291@s.whatsapp.net",
+    "name": "Rayanne Estacionamento"
+  },
+  {
+    "id": "557199748068@s.whatsapp.net",
+    "name": "Celene Brito-EcoRecitec"
+  },
+  {
+    "id": "5521993235171@s.whatsapp.net",
+    "name": "Samir Cliente"
+  },
+  {
+    "id": "5524998332482@s.whatsapp.net",
+    "name": "Carol Prima Da Katellin"
+  },
+  {
+    "id": "5524981114878@s.whatsapp.net",
+    "name": "Leandro"
+  },
+  {
+    "id": "554796197883@s.whatsapp.net",
+    "name": "Ana De Souza"
+  },
+  {
+    "id": "554796072993@s.whatsapp.net",
+    "name": "Paulo Liboni Cliente"
+  },
+  {
+    "id": "5524998675544@s.whatsapp.net",
+    "name": "Conceição Medeiros"
+  },
+  {
+    "id": "558287246813@s.whatsapp.net",
+    "name": "Carlos Sapucaia Cliente"
+  },
+  {
+    "id": "557191734122@s.whatsapp.net",
+    "name": "Letícia ECN"
+  },
+  {
+    "id": "5524999721853@s.whatsapp.net",
+    "name": "Marcos Costa"
+  },
+  {
+    "id": "5524992754226@s.whatsapp.net",
+    "name": "Matheus Sousa"
+  },
+  {
+    "id": "61449938730@s.whatsapp.net",
+    "name": "Wemerson Cliente Australia"
+  },
+  {
+    "id": "5524998517992@s.whatsapp.net",
+    "name": "Pamela"
+  },
+  {
+    "id": "555491185037@s.whatsapp.net",
+    "name": "Jaqueline Galleazzi"
+  },
+  {
+    "id": "556196878959@s.whatsapp.net",
+    "name": "Raphael - Astra Online"
+  },
+  {
+    "id": "19783282106@s.whatsapp.net",
+    "name": "Brenna Costa Cliente 🇱🇷"
+  },
+  {
+    "id": "5511914092221@s.whatsapp.net",
+    "name": "Roger Cliente"
+  },
+  {
+    "id": "5524993003546@s.whatsapp.net",
+    "name": "Paloma Santos"
+  },
+  {
+    "id": "556292951564@s.whatsapp.net",
+    "name": "Rakan Cliente"
+  },
+  {
+    "id": "554796505700@s.whatsapp.net",
+    "name": "Diego Hakko Cliente"
+  },
+  {
+    "id": "5524998425266@s.whatsapp.net",
+    "name": "Vivi Cunha"
+  },
+  {
+    "id": "5511992006199@s.whatsapp.net",
+    "name": "Agência soul"
+  },
+  {
+    "id": "556199686824@s.whatsapp.net",
+    "name": "Will Cliente"
+  },
+  {
+    "id": "5524999431418@s.whatsapp.net",
+    "name": "Guilherme"
+  },
+  {
+    "id": "5524981410448@s.whatsapp.net",
+    "name": "Tam Novo"
+  },
+  {
+    "id": "553588028888@s.whatsapp.net",
+    "name": "Daniel"
+  },
+  {
+    "id": "5513996553816@s.whatsapp.net",
+    "name": "RH HelpGigii Cliente"
+  },
+  {
+    "id": "5518996046202@s.whatsapp.net",
+    "name": "Jaque Azevedo Cliente"
+  },
+  {
+    "id": "5522988011038@s.whatsapp.net",
+    "name": "Anderson Cliente Rj"
+  },
+  {
+    "id": "554399149896@s.whatsapp.net",
+    "name": "Paulo Cliente"
+  },
+  {
+    "id": "5524999483519@s.whatsapp.net",
+    "name": "Patrícia"
+  },
+  {
+    "id": "5511995918179@s.whatsapp.net",
+    "name": "Carol Campos Nutricionista"
+  },
+  {
+    "id": "447745520224@s.whatsapp.net",
+    "name": "Plus Up Cliente"
+  },
+  {
+    "id": "5511951590610@s.whatsapp.net",
+    "name": "Marcos Cliente Loja Brás"
+  },
+  {
+    "id": "5524998434671@s.whatsapp.net",
+    "name": "Diego Forno E Fogão"
+  },
+  {
+    "id": "552231990035@s.whatsapp.net",
+    "name": "Condata Web"
+  },
+  {
+    "id": "5524992700323@s.whatsapp.net",
+    "name": "Tarzan Tour"
+  },
+  {
+    "id": "554791236797@s.whatsapp.net",
+    "name": "Carlos Klauberg Cliente"
+  },
+  {
+    "id": "554291454653@s.whatsapp.net",
+    "name": "Luiz Cliente"
+  },
+  {
+    "id": "556196316204@s.whatsapp.net",
+    "name": "Leonardo B Cliente"
+  },
+  {
+    "id": "5513978004000@s.whatsapp.net",
+    "name": "Pano Di Maré"
+  },
+  {
+    "id": "5524981001964@s.whatsapp.net",
+    "name": "Ludimila Maninha"
+  },
+  {
+    "id": "556793484621@s.whatsapp.net",
+    "name": "Lindomar Cliente"
+  },
+  {
+    "id": "5524992117823@s.whatsapp.net",
+    "name": "Lan"
+  },
+  {
+    "id": "553391649624@s.whatsapp.net",
+    "name": "Giovana Xavier"
+  },
+  {
+    "id": "5511949401794@s.whatsapp.net",
+    "name": "Vendedor Nego"
+  },
+  {
+    "id": "554788117100@s.whatsapp.net",
+    "name": "Fábio Abi Saber"
+  },
+  {
+    "id": "556696536115@s.whatsapp.net",
+    "name": "Marcelo Cliente"
+  },
+  {
+    "id": "5524998598318@s.whatsapp.net",
+    "name": "Ralf Alexandre"
+  },
+  {
+    "id": "558599102177@s.whatsapp.net",
+    "name": "Marcos Alan"
+  },
+  {
+    "id": "5524992525708@s.whatsapp.net",
+    "name": "Luciana"
+  },
+  {
+    "id": "5511988166481@s.whatsapp.net",
+    "name": "Agência Na Web"
+  },
+  {
+    "id": "5524999247607@s.whatsapp.net",
+    "name": "Nicole Coutinho"
+  },
+  {
+    "id": "553784040934@s.whatsapp.net",
+    "name": "Denzel Cliente"
+  },
+  {
+    "id": "5524974034023@s.whatsapp.net",
+    "name": "Caio Irmão"
+  },
+  {
+    "id": "553194153900@s.whatsapp.net",
+    "name": "Flávio Henrique"
+  },
+  {
+    "id": "553173390488@s.whatsapp.net",
+    "name": "Laura Santos - Especilista em Carreiras"
+  },
+  {
+    "id": "557781146375@s.whatsapp.net",
+    "name": "Comercial Aprocom Brasil"
+  },
+  {
+    "id": "5521977227944@s.whatsapp.net",
+    "name": "Jonas designer"
+  },
+  {
+    "id": "554899349945@s.whatsapp.net",
+    "name": "Frank Cliente"
+  },
+  {
+    "id": "351915667813@s.whatsapp.net",
+    "name": "Guga Brasa Cliente"
+  },
+  {
+    "id": "553391210220@s.whatsapp.net",
+    "name": "Cristiano Devloper"
+  },
+  {
+    "id": "559188955323@s.whatsapp.net",
+    "name": "MATHEUS PEREIRA Cliente"
+  },
+  {
+    "id": "5524998352518@s.whatsapp.net",
+    "name": "Délio Chão Moiado"
+  },
+  {
+    "id": "5511964737233@s.whatsapp.net",
+    "name": "Lucas Palmiro"
+  },
+  {
+    "id": "5527988340056@s.whatsapp.net",
+    "name": "Benner Cliente"
+  },
+  {
+    "id": "5524998260199@s.whatsapp.net",
+    "name": "Bruno Fagundes"
+  },
+  {
+    "id": "554491690878@s.whatsapp.net",
+    "name": "Kausley Seguidores"
+  },
+  {
+    "id": "5524998626583@s.whatsapp.net",
+    "name": "Tio Edson"
+  },
+  {
+    "id": "5521981668184@s.whatsapp.net",
+    "name": "Camila Marques Mkt"
+  },
+  {
+    "id": "556699123852@s.whatsapp.net",
+    "name": "Fábio Ribeiro Cliente"
+  },
+  {
+    "id": "553588754197@s.whatsapp.net",
+    "name": "Pedro Bastos"
+  },
+  {
+    "id": "554199828180@s.whatsapp.net",
+    "name": "Gabriela Kulesza"
+  },
+  {
+    "id": "5511934246265@s.whatsapp.net",
+    "name": "Daniel Colpo"
+  },
+  {
+    "id": "5524998823015@s.whatsapp.net",
+    "name": "Mãe"
+  },
+  {
+    "id": "556296193147@s.whatsapp.net",
+    "name": "Matheus Sá Cliente"
+  },
+  {
+    "id": "5521970594062@s.whatsapp.net",
+    "name": "Moisés Uber"
+  },
+  {
+    "id": "553196107280@s.whatsapp.net",
+    "name": "Mario Henrique Cliente"
+  },
+  {
+    "id": "5517981272804@s.whatsapp.net",
+    "name": "Aline Cunhada"
+  },
+  {
+    "id": "5524999412481@s.whatsapp.net",
+    "name": "Peixoto Bras"
+  },
+  {
+    "id": "558196764594@s.whatsapp.net",
+    "name": "Fernando Hygeia"
+  },
+  {
+    "id": "5524993173217@s.whatsapp.net",
+    "name": "Pedro Miguel ⚽ Filhão"
+  },
+  {
+    "id": "5524998388230@s.whatsapp.net",
+    "name": "Tio Anderson"
+  },
+  {
+    "id": "5524993192129@s.whatsapp.net",
+    "name": "Rodrigo GUINCHO"
+  },
+  {
+    "id": "556281580898@s.whatsapp.net",
+    "name": "Eduardo Fonseca Cliente"
+  },
+  {
+    "id": "558481471061@s.whatsapp.net",
+    "name": "ON-NEXXT"
+  },
+  {
+    "id": "551151984043@s.whatsapp.net",
+    "name": "SAC B2B"
+  },
+  {
+    "id": "554196644390@s.whatsapp.net",
+    "name": "Diailon Malaquias Cliente"
+  },
+  {
+    "id": "5524981609497@s.whatsapp.net",
+    "name": "Fabricio Dupin"
+  },
+  {
+    "id": "5524999306017@s.whatsapp.net",
+    "name": "Guedão Material de Construção"
+  },
+  {
+    "id": "558193921991@s.whatsapp.net",
+    "name": "Dr. Eduardo Sansolo Cliente"
+  },
+  {
+    "id": "5511910024600@s.whatsapp.net",
+    "name": "Especialistas Contador Direto"
+  },
+  {
+    "id": "5524981258980@s.whatsapp.net",
+    "name": "Juliana ▪︎ Despachante ▪︎"
+  },
+  {
+    "id": "5524998690612@s.whatsapp.net",
+    "name": "Amil"
+  },
+  {
+    "id": "5511915611546@s.whatsapp.net",
+    "name": "Anderson - Atech Foundation Solutions"
+  },
+  {
+    "id": "5511981931758@s.whatsapp.net",
+    "name": "Danilo Ferreira Cliente"
+  },
+  {
+    "id": "5519982200811@s.whatsapp.net",
+    "name": "Richard Cliente"
+  },
+  {
+    "id": "5524992685269@s.whatsapp.net",
+    "name": "Edgar Berriel"
+  },
+  {
+    "id": "5524988176390@s.whatsapp.net",
+    "name": "Dinda"
+  },
+  {
+    "id": "553194943695@s.whatsapp.net",
+    "name": "Lucas Ferreira Cliente"
+  },
+  {
+    "id": "5524999962868@s.whatsapp.net",
+    "name": "Gabriel Ritton"
+  },
+  {
+    "id": "555199995301@s.whatsapp.net",
+    "name": "Daiane Suporte"
+  },
+  {
+    "id": "5513996090016@s.whatsapp.net",
+    "name": "Ney Em Alto Mar"
+  },
+  {
+    "id": "555197350445@s.whatsapp.net",
+    "name": "Sandro Cliente"
+  },
+  {
+    "id": "5524993263079@s.whatsapp.net",
+    "name": "Henrique Sousa"
+  },
+  {
+    "id": "5519997102906@s.whatsapp.net",
+    "name": "Luis Bot Do whatsapp Delivery"
+  },
+  {
+    "id": "5516991815926@s.whatsapp.net",
+    "name": "Ótica Isabela Dias"
+  },
+  {
+    "id": "5524998323277@s.whatsapp.net",
+    "name": "Juliano Magalhães ⚖️"
+  },
+  {
+    "id": "556282022472@s.whatsapp.net",
+    "name": "Selma RC Card"
+  },
+  {
+    "id": "5524998834533@s.whatsapp.net",
+    "name": "Pique"
+  },
+  {
+    "id": "5524998517469@s.whatsapp.net",
+    "name": "Matheus Gomes"
+  },
+  {
+    "id": "554184661634@s.whatsapp.net",
+    "name": "Everton Coral Cliente"
+  },
+  {
+    "id": "5524999828720@s.whatsapp.net",
+    "name": "Luciano Fofão"
+  },
+  {
+    "id": "554791951430@s.whatsapp.net",
+    "name": "Priscila Milani Cliente"
+  },
+  {
+    "id": "5521979999088@s.whatsapp.net",
+    "name": "Davi Wendell - Web Designer"
+  },
+  {
+    "id": "244951827670@s.whatsapp.net",
+    "name": "Gildo Santos Cliente Angola"
+  },
+  {
+    "id": "556696701140@s.whatsapp.net",
+    "name": "Carlos Almeida Cliente"
+  },
+  {
+    "id": "5511997089296@s.whatsapp.net",
+    "name": "Dr. Felipe"
+  },
+  {
+    "id": "558596648595@s.whatsapp.net",
+    "name": "Rafael Castro Curso De IA"
+  },
+  {
+    "id": "5511994945411@s.whatsapp.net",
+    "name": "Isabella Atendimento Brazucas"
+  },
+  {
+    "id": "5511950326210@s.whatsapp.net",
+    "name": "William Cliente"
+  },
+  {
+    "id": "5524999874500@s.whatsapp.net",
+    "name": "Ana Júlia"
+  },
+  {
+    "id": "556299712515@s.whatsapp.net",
+    "name": "Michele Garcês Cliente"
+  },
+  {
+    "id": "5524992127810@s.whatsapp.net",
+    "name": "Gabriela Marques"
+  },
+  {
+    "id": "5516988080441@s.whatsapp.net",
+    "name": "Leonardo Ribeiro Cliente"
+  },
+  {
+    "id": "5521988159140@s.whatsapp.net",
+    "name": "Cliente Maxwel"
+  },
+  {
+    "id": "5513997641725@s.whatsapp.net",
+    "name": "Fabrício Jesus Cliente"
+  },
+  {
+    "id": "5524993188074@s.whatsapp.net",
+    "name": "Samuel"
+  },
+  {
+    "id": "5524999550529@s.whatsapp.net",
+    "name": "José"
+  },
+  {
+    "id": "5524999193286@s.whatsapp.net",
+    "name": "Liza Jankowiak"
+  },
+  {
+    "id": "558382347024@s.whatsapp.net",
+    "name": "Kennedy Suporte Zpro"
+  },
+  {
+    "id": "558791219131@s.whatsapp.net",
+    "name": "Rafael Magalhaes Cliente"
+  },
+  {
+    "id": "5524999198454@s.whatsapp.net",
+    "name": "Renata Goulart"
+  },
+  {
+    "id": "5524993026240@s.whatsapp.net",
+    "name": "Pelé"
+  },
+  {
+    "id": "552433540335@s.whatsapp.net",
+    "name": "Fae Developer"
+  },
+  {
+    "id": "5524978357330@s.whatsapp.net",
+    "name": "Vanessa De Miranda Cliente"
+  },
+  {
+    "id": "5524999651558@s.whatsapp.net",
+    "name": "Jalisson"
+  },
+  {
+    "id": "553185761196@s.whatsapp.net",
+    "name": "Marcus Vinicius Cliente"
+  },
+  {
+    "id": "5524992708208@s.whatsapp.net",
+    "name": "Ana Ventura"
+  },
+  {
+    "id": "5524999968727@s.whatsapp.net",
+    "name": "Eduarda Marques Matheus"
+  },
+  {
+    "id": "5511966321736@s.whatsapp.net",
+    "name": "Jaqueline Tenório"
+  },
+  {
+    "id": "5511994093752@s.whatsapp.net",
+    "name": "Felipe"
+  },
+  {
+    "id": "5512920004248@s.whatsapp.net",
+    "name": "clara"
+  },
+  {
+    "id": "554899262696@s.whatsapp.net",
+    "name": "Dai Laskoski Cliente"
+  },
+  {
+    "id": "554891442039@s.whatsapp.net",
+    "name": "Nani - Betts Loja Cliente"
+  },
+  {
+    "id": "558179152532@s.whatsapp.net",
+    "name": "Estefany Designer"
+  },
+  {
+    "id": "5524999711449@s.whatsapp.net",
+    "name": "Maria Eduarda"
+  },
+  {
+    "id": "5524998823318@s.whatsapp.net",
+    "name": "Ana Paula Maia"
+  },
+  {
+    "id": "554699322672@s.whatsapp.net",
+    "name": "Vivi Potrich Cliente"
+  },
+  {
+    "id": "554791360910@s.whatsapp.net",
+    "name": "Wagner Machado Cliente /Terapeuta"
+  },
+  {
+    "id": "5524981310400@s.whatsapp.net",
+    "name": "Fabio Vale"
+  },
+  {
+    "id": "558499192494@s.whatsapp.net",
+    "name": "Matteo Celone Cliente"
+  },
+  {
+    "id": "5524981640900@s.whatsapp.net",
+    "name": "Jairo Rodrigues Escobar"
+  },
+  {
+    "id": "5524981353957@s.whatsapp.net",
+    "name": "Marcelo Silva"
+  },
+  {
+    "id": "5511961364323@s.whatsapp.net",
+    "name": "Tio Mario"
+  },
+  {
+    "id": "5524988088788@s.whatsapp.net",
+    "name": "José André Escobar"
+  },
+  {
+    "id": "5524992481788@s.whatsapp.net",
+    "name": "Claudia Barra 2"
+  },
+  {
+    "id": "554888695714@s.whatsapp.net",
+    "name": "Code 22 Web"
+  },
+  {
+    "id": "5511986522632@s.whatsapp.net",
+    "name": "Rafael Coelho Cliente"
+  },
+  {
+    "id": "554899234554@s.whatsapp.net",
+    "name": "Marcello Borges"
+  },
+  {
+    "id": "5524981470095@s.whatsapp.net",
+    "name": "Luciano Cunhado stars star"
+  },
+  {
+    "id": "5524981827118@s.whatsapp.net",
+    "name": "Rafaela Meneses Cliente"
+  },
+  {
+    "id": "556992102281@s.whatsapp.net",
+    "name": "Thalisson Cliente"
+  },
+  {
+    "id": "556281151906@s.whatsapp.net",
+    "name": "Moura Cliente"
+  }
+]
