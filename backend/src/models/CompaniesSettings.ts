@@ -41,7 +41,7 @@ import {
     @Column
     acceptCallWhatsapp: string;
 
-    //inicio de opções: enabled ou disabled
+    // Opções válidas: "enabled" ou "disabled"
     @Column
     userRandom: string; 
 
@@ -93,7 +93,7 @@ import {
     @Column
     lgpdLink: string
 
-    //fim de opções: enabled ou disabled 
+    // Opções válidas: "enabled" ou "disabled"
     @Column
     lgpdMessage: string
 
