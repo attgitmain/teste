@@ -69,7 +69,7 @@ class Whatsapp extends Model<Whatsapp> {
 
   @Default("")
   @Column(DataType.TEXT)
-  complationMessage: string;
+  completionMessage: string;
 
   @Default("")
   @Column(DataType.TEXT)

@@ -27,7 +27,7 @@ interface WhatsappData {
   queueIds: number[];
   companyId: number;
   greetingMessage?: string;
-  complationMessage?: string;
+  completionMessage?: string;
   outOfHoursMessage?: string;
   status?: string;
   isDefault?: boolean;
@@ -89,7 +89,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     status,
     isDefault,
     greetingMessage,
-    complationMessage,
+    completionMessage,
     outOfHoursMessage,
     queueIds,
     token,
@@ -141,7 +141,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     status,
     isDefault,
     greetingMessage,
-    complationMessage,
+    completionMessage,
     outOfHoursMessage,
     queueIds,
     companyId,

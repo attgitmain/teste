@@ -694,15 +694,15 @@ export const handleMessage = async (
                   //Se digitou 2, recusou o bot e encerra chamado
                 } else if (choosenOption === 2) {
 
-                  if (getSession.complationMessage !== "" && getSession.complationMessage !== undefined) {
+                  if (getSession.completionMessage !== "" && getSession.completionMessage !== undefined) {
 
                     const sentMessage = await sendText(
                       contact.number,
-                      `\u200e${getSession.complationMessage}`,
+                      `\u200e${getSession.completionMessage}`,
                       getSession.facebookUserToken
                     );
 
-                    await verifyMessageFace(sentMessage, `\u200e${getSession.complationMessage}`, ticket, contact);
+                    await verifyMessageFace(sentMessage, `\u200e${getSession.completionMessage}`, ticket, contact);
                   }
 
                   await ticket.update({

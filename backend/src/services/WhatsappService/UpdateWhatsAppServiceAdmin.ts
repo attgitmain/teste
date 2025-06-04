@@ -13,7 +13,7 @@ interface WhatsappData {
   session?: string;
   isDefault?: boolean;
   greetingMessage?: string;
-  complationMessage?: string;
+  completionMessage?: string;
   outOfHoursMessage?: string;
   queueIds?: number[];
   token?: string;
@@ -70,7 +70,7 @@ const UpdateWhatsAppServiceAdmin = async ({
     isDefault,
     session,
     greetingMessage,
-    complationMessage,
+    completionMessage,
     outOfHoursMessage,
     queueIds = [],
     token,
@@ -130,7 +130,7 @@ const UpdateWhatsAppServiceAdmin = async ({
     status,
     session,
     greetingMessage,
-    complationMessage,
+    completionMessage,
     outOfHoursMessage,
     isDefault,
     companyId,

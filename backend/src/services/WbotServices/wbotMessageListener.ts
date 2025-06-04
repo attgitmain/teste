@@ -1672,14 +1672,14 @@ const verifyQueue = async (
     // await ticket.update({ queueOptionId: null, chatbot: false, queueId: null, userId: null, status: "closed"});
     //await verifyQueue(wbot, msg, ticket, ticket.contact);
 
-    // const complationMessage = ticket.whatsapp?.complationMessage;
+    // const completionMessage = ticket.whatsapp?.completionMessage;
 
-    // console.log(complationMessage)
+    // console.log(completionMessage)
     // const textMessage = {
-    //   text: formatBody(`\u200e${complationMessage}`, ticket),
+    //   text: formatBody(`\u200e${completionMessage}`, ticket),
     // };
 
-    // if (!isNil(complationMessage)) {
+    // if (!isNil(completionMessage)) {
     //   const sendMsg = await wbot.sendMessage(
     //     `${ticket?.contact?.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
     //     textMessage
@@ -3313,7 +3313,7 @@ export const handleRating = async (
   console.log("2050", { handleRating })
 
   // console.log("GETTING WHATSAPP HANDLE RATING", ticket.whatsappId, ticket.id)
-  const { complationMessage } = await ShowWhatsAppService(
+  const { completionMessage } = await ShowWhatsAppService(
     ticket.whatsappId,
 
     companyId
@@ -3336,11 +3336,11 @@ export const handleRating = async (
   });
 
   if (
-    !isNil(complationMessage) &&
-    complationMessage !== "" &&
+    !isNil(completionMessage) &&
+    completionMessage !== "" &&
     !ticket.isGroup
   ) {
-    const body = formatBody(`\u200e${complationMessage}`, ticket);
+    const body = formatBody(`\u200e${completionMessage}`, ticket);
     if (ticket.channel === "whatsapp") {
       const msg = await SendWhatsAppMessage({ body, ticket });
 
@@ -4207,8 +4207,8 @@ const handleMessage = async (
     if (
       ticket.status === "closed" ||
       (unreadMessages === 0 &&
-        whatsapp.complationMessage &&
-        formatBody(whatsapp.complationMessage, ticket) === bodyMessage)
+        whatsapp.completionMessage &&
+        formatBody(whatsapp.completionMessage, ticket) === bodyMessage)
     ) {
       return;
     }
