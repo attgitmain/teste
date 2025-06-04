@@ -710,7 +710,7 @@ export const handleMessage = async (
                     amountUsedBotQueues: 0
                   })
 
-                  await ticketTraking.destroy;
+                  await ticketTraking.destroy();
 
                   return
                   //se digitou qualquer opção que não seja 1 ou 2 limpa o lgpdSendMessageAt para 
