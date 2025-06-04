@@ -258,7 +258,7 @@ async function handleSendScheduledMessage(job) {
           unidadeIntervalo = 'months';
           break;
         case 4:
-          unidadeIntervalo = 'minuts';
+          unidadeIntervalo = 'minutes';
           break;
         default:
           throw new Error('Intervalo inválido');
@@ -294,7 +294,7 @@ async function handleSendScheduledMessage(job) {
       let novaData = new Date(dataExistente); // Clone da data existente para não modificar a original
 
       console.log(unidadeIntervalo)
-      if (unidadeIntervalo !== "minuts") {
+      if (unidadeIntervalo !== "minutes") {
         novaData.setDate(novaData.getDate() + schedule.valorIntervalo * (unidadeIntervalo === 'days' ? 1 : unidadeIntervalo === 'weeks' ? 7 : 30));
       } else {
         novaData.setMinutes(novaData.getMinutes() + Number(schedule.valorIntervalo));
