@@ -179,8 +179,8 @@ const handleNPSTickets = async (companyId: number, whatsapp: any) => {
 
       let bodyComplationMessage = "";
 
-      if (!isNil(whatsapp.complationMessage) && whatsapp.complationMessage !== "") {
-        bodyComplationMessage = formatBody(`\u200e${whatsapp.complationMessage}`, ticket);
+      if (!isNil(whatsapp.completionMessage) && whatsapp.completionMessage !== "") {
+        bodyComplationMessage = formatBody(`\u200e${whatsapp.completionMessage}`, ticket);
         const sentMessage = await SendWhatsAppMessage({ body: bodyComplationMessage, ticket: ticket });
         await verifyMessage(sentMessage, ticket, ticket.contact);
       }
@@ -207,7 +207,7 @@ export const ClosedAllOpenTickets = async (companyId: number): Promise<void> => 
     const whatsapps = await Whatsapp.findAll({
       attributes: ["id", "name", "status", "timeSendQueue", "sendIdQueue", "timeInactiveMessage",
         "expiresInactiveMessage", "inactiveMessage", "expiresTicket", "expiresTicketNPS", "whenExpiresTicket",
-        "complationMessage"],
+        "completionMessage"],
       where: {
         [Op.or]: [
           { expiresTicket: { [Op.gt]: '0' } },

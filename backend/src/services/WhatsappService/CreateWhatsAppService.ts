@@ -11,7 +11,7 @@ interface Request {
   companyId: number;
   queueIds?: number[];
   greetingMessage?: string;
-  complationMessage?: string;
+  completionMessage?: string;
   outOfHoursMessage?: string;
   ratingMessage?: string;
   status?: string;
@@ -62,7 +62,7 @@ const CreateWhatsAppService = async ({
   status = "OPENING",
   queueIds = [],
   greetingMessage,
-  complationMessage,
+  completionMessage,
   outOfHoursMessage,
   isDefault = false,
   companyId,
@@ -197,7 +197,7 @@ const CreateWhatsAppService = async ({
       name,
       status,
       greetingMessage,
-      complationMessage,
+      completionMessage,
       outOfHoursMessage,
       ratingMessage,
       isDefault,

@@ -111,7 +111,7 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
   const initialState = {
     name: "",
     greetingMessage: "",
-    complationMessage: "",
+    completionMessage: "",
     outOfHoursMessage: "",
     ratingMessage: "",
     isDefault: false,
@@ -851,17 +851,17 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                     <div>
                       <Field
                         as={TextField}
-                        label={i18n.t("whatsappModal.form.complationMessage")}
+                        label={i18n.t("whatsappModal.form.completionMessage")}
                         multiline
                         rows={4}
                         fullWidth
-                        name="complationMessage"
+                        name="completionMessage"
                         error={
-                          touched.complationMessage &&
-                          Boolean(errors.complationMessage)
+                          touched.completionMessage &&
+                          Boolean(errors.completionMessage)
                         }
                         helperText={
-                          touched.complationMessage && errors.complationMessage
+                          touched.completionMessage && errors.completionMessage
                         }
                         variant="outlined"
                         margin="dense"

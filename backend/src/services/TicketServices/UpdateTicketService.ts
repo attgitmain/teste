@@ -144,7 +144,7 @@ const UpdateTicketService = async ({
       whatsappId: ticket?.whatsappId
     });
     // console.log("GETTING WHATSAPP UPDATE TICKETSERVICE", ticket?.whatsappId)
-    const { complationMessage, ratingMessage, groupAsTicket } = await ShowWhatsAppService(
+    const { completionMessage, ratingMessage, groupAsTicket } = await ShowWhatsAppService(
       ticket?.whatsappId,
 
       companyId
@@ -231,7 +231,7 @@ const UpdateTicketService = async ({
       }
 
       if (((!isNil(user?.farewellMessage) && user?.farewellMessage !== "") ||
-        (!isNil(complationMessage) && complationMessage !== "")) &&
+        (!isNil(completionMessage) && completionMessage !== "")) &&
         (sendFarewellMessage || sendFarewellMessage === undefined)) {
 
         let body: any
@@ -240,7 +240,7 @@ const UpdateTicketService = async ({
           if (!isNil(user) && !isNil(user?.farewellMessage) && user?.farewellMessage !== "") {
             body = `\u200e ${user.farewellMessage}`;
           } else {
-            body = `\u200e ${complationMessage}`;
+            body = `\u200e ${completionMessage}`;
           }
           if (ticket.channel === "whatsapp" && (!ticket.isGroup || groupAsTicket === "enabled") && ticket.whatsapp.status === 'CONNECTED') {
             const sentMessage = await SendWhatsAppMessage({ body, ticket, isForwarded: false });

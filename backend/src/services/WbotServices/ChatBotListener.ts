@@ -1365,13 +1365,13 @@ export const sayChatbot = async (
 
     await UpdateTicketService(ticketUpdateAgent);
 
-    // const complationMessage = ticket.whatsapp?.complationMessage;
+    // const completionMessage = ticket.whatsapp?.completionMessage;
 
     // const textMessage = {
-    //   text: formatBody(`\u200e${complationMessage}`, ticket),
+    //   text: formatBody(`\u200e${completionMessage}`, ticket),
     // };
 
-    // if (!isNil(complationMessage)) {
+    // if (!isNil(completionMessage)) {
     //   const sendMsg = await wbot.sendMessage(
     //     `${ticket?.contact?.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
     //     textMessage
