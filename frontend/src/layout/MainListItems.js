@@ -840,6 +840,18 @@ const MainListItems = ({ collapsed, drawerClose }) => {
                 />
               )}
             />
+                <ListItemLink
+                  to="/leads"
+                  primary={i18n.t("mainDrawer.listItems.leads")}
+                  icon={<ListAlt />}
+                  tooltip={collapsed}
+                />
+                <ListItemLink
+                  to="/chip-maturation"
+                  primary={i18n.t("mainDrawer.listItems.chipMaturation")}
+                  icon={<GridOn />}
+                  tooltip={collapsed}
+                />
           )}
             {/* {user.super && (
               <ListSubheader inset>

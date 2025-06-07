@@ -868,6 +868,8 @@ const messages = {
           kanban: "Kanban",
           prompts: "Talk.Ai",
           allConnections: "Admin conexiones",
+          leads: "Leads",
+          chipMaturation: "Maduración de Chip"
         },
         appBar: {
           user: {
@@ -1456,6 +1458,14 @@ const messages = {
           deleteMessage: "Estás seguro de borrar este listado?",
           deleteAllMessage: "Estás seguro de borrar todos los listado?",
         },
+      },
+      leads: {
+        title: "Leads",
+        message: "Página en desarrollo."
+      },
+      chipMaturation: {
+        title: "Maduración de Chip",
+        message: "Página en desarrollo."
       },
       settings: {
         success: "Configuración guardada satisfactoriamente.",
