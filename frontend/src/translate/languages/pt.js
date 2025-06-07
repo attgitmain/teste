@@ -893,7 +893,7 @@ const messages = {
           prompts: "Talk.Ai",
           allConnections: "Gerenciar conexões",
           reports: "Relatórios",
-          management: "Gerência"
+          management: "Gerência",
           leads: "Leads",
           chipMaturation: "Maturação de Chip"
         },

@@ -828,30 +828,32 @@ const MainListItems = ({ collapsed, drawerClose }) => {
             />
 
           {planExpired && (
-            <Can
-              role={user.profile}
-              perform="dashboard:view"
-              yes={() => (
-                <ListItemLink
-                  to="/settings"
-                  primary={i18n.t("mainDrawer.listItems.settings")}
-                  icon={<SettingsOutlinedIcon />}
-                  tooltip={collapsed}
-                />
-              )}
-            />
-                <ListItemLink
-                  to="/leads"
-                  primary={i18n.t("mainDrawer.listItems.leads")}
-                  icon={<ListAlt />}
-                  tooltip={collapsed}
-                />
-                <ListItemLink
-                  to="/chip-maturation"
-                  primary={i18n.t("mainDrawer.listItems.chipMaturation")}
-                  icon={<GridOn />}
-                  tooltip={collapsed}
-                />
+            <>
+              <Can
+                role={user.profile}
+                perform="dashboard:view"
+                yes={() => (
+                  <ListItemLink
+                    to="/settings"
+                    primary={i18n.t("mainDrawer.listItems.settings")}
+                    icon={<SettingsOutlinedIcon />}
+                    tooltip={collapsed}
+                  />
+                )}
+              />
+              <ListItemLink
+                to="/leads"
+                primary={i18n.t("mainDrawer.listItems.leads")}
+                icon={<ListAlt />}
+                tooltip={collapsed}
+              />
+              <ListItemLink
+                to="/chip-maturation"
+                primary={i18n.t("mainDrawer.listItems.chipMaturation")}
+                icon={<GridOn />}
+                tooltip={collapsed}
+              />
+            </>
           )}
             {/* {user.super && (
               <ListSubheader inset>
