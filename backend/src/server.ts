@@ -7,10 +7,14 @@ import app from "./app";
 import cron from "node-cron";
 import { initIO } from "./libs/socket";
 import logger from "./utils/logger";
+import runMigrations from "./utils/runMigrations";
 import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhatsAppsSessions";
 import Company from "./models/Company";
 import BullQueue from './libs/queue';
 import { startQueueProcess } from "./queues";
+
+// Run pending database migrations on startup
+runMigrations();
 
 if (process.env.CERTIFICADOS == "true") {
   
