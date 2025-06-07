@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Build directories
+build/
+dist/
+
+# Environment files
+.env
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# OS-generated files
+.DS_Store
+
+# Archives and compressed files
+*.zip
