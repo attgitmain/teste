@@ -256,6 +256,8 @@ const messages = {
 					administration: "Administration",
 					users: "Users",
 					settings: "Settings",
+                                        leads: "Leads",
+                                        chipMaturation: "Chip Maturation"
 				},
 				appBar: {
 					user: {
@@ -320,6 +322,14 @@ const messages = {
 					},
 				},
 			},
+                        leads: {
+                                title: "Leads",
+                                message: "Page under development."
+                        },
+                        chipMaturation: {
+                                title: "Chip Maturation",
+                                message: "Page under development."
+                        },
 			messagesList: {
 				header: {
 					assignedTo: "Assigned to:",

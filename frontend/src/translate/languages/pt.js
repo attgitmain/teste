@@ -894,6 +894,8 @@ const messages = {
           allConnections: "Gerenciar conexões",
           reports: "Relatórios",
           management: "Gerência"
+          leads: "Leads",
+          chipMaturation: "Maturação de Chip"
         },
         appBar: {
           user: {
@@ -1514,6 +1516,14 @@ const messages = {
           deleteMessage: "Tem certeza que deseja deletar esta lista?",
           deleteAllMessage: "Tem certeza que deseja deletar todas as listas?",
         },
+      },
+      leads: {
+        title: "Leads",
+        message: "Página em desenvolvimento."
+      },
+      chipMaturation: {
+        title: "Maturação de Chip",
+        message: "Página em desenvolvimento."
       },
       settings: {
         success: "Configurações salvas com sucesso.",
