@@ -1532,6 +1532,7 @@ const messages = {
           dataNascimento: "Data de Nascimento",
         },
         creditsAvailable: "Créditos disponíveis",
+        creditInfo: "Cada consulta de 15 leads consome 1 crédito",
         historyCleared: "Histórico apagado com sucesso",
         noCredits: "Você não possui créditos suficientes",
         message: "Página em desenvolvimento."

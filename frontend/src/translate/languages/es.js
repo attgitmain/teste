@@ -1461,6 +1461,10 @@ const messages = {
       },
       leads: {
         title: "Leads",
+        creditsAvailable: "Créditos disponibles",
+        creditInfo: "Cada grupo de 15 leads consume 1 crédito",
+        noCredits: "No tienes créditos suficientes",
+        historyCleared: "Historial borrado correctamente",
         message: "Página en desarrollo."
       },
       chipMaturation: {
