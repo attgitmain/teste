@@ -33,7 +33,8 @@ export default function CreditsManager() {
       setLoading(false);
     };
     fetchData();
-  }, [list]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChangeAmount = (id, value) => {
     setAmounts((prev) => ({ ...prev, [id]: value }));
