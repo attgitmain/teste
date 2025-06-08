@@ -15,7 +15,7 @@ const ConsultCpfService = async ({ cpf, companyId }: Request) => {
       503
     );
   }
-  const url = `https://api.dbconsultas.com/api/v1/${token}/cpf/${cpf}`;
+  const url = `https://api.dbconsultas.com/api/v1/${token}/datalinkcpf/${cpf}`;
 
   const balance = await ConsumeCreditsService(companyId, 3);
 
