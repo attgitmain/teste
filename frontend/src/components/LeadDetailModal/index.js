@@ -183,6 +183,89 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                   <FileCopyOutlinedIcon fontSize="small" />
                 </IconButton>
               </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>CBO:</Typography>
+                <Typography>
+                  {renderValue(lead.dados_basicos?.cbo, classes.placeholder)}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => copyField(lead.dados_basicos?.cbo)}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>Status Receita:</Typography>
+                <Typography>
+                  {renderValue(lead.dados_basicos?.status_receita, classes.placeholder)}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => copyField(lead.dados_basicos?.status_receita)}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>% Cargo Societário:</Typography>
+                <Typography>
+                  {renderValue(lead.dados_basicos?.pct_cargo_societario, classes.placeholder)}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => copyField(lead.dados_basicos?.pct_cargo_societario)}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>Qt. Veículos:</Typography>
+                <Typography>
+                  {renderValue(lead.dados_basicos?.qt_veiculos, classes.placeholder)}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => copyField(lead.dados_basicos?.qt_veiculos)}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>Faixa Renda:</Typography>
+                <Typography>
+                  {renderValue(lead.dados_basicos?.faixa_renda, classes.placeholder)}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => copyField(lead.dados_basicos?.faixa_renda)}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
+              <Grid item className={classes.fieldRow}>
+                <Typography className={classes.fieldLabel}>Óbito:</Typography>
+                <Typography>
+                  {renderValue(
+                    lead.dados_basicos?.obito
+                      ? `${lead.dados_basicos.obito.status}${lead.dados_basicos.obito.data ? ` (${lead.dados_basicos.obito.data})` : ''}`
+                      : null,
+                    classes.placeholder
+                  )}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() =>
+                    copyField(
+                      lead.dados_basicos?.obito
+                        ? `${lead.dados_basicos.obito.status}${lead.dados_basicos.obito.data ? ` (${lead.dados_basicos.obito.data})` : ''}`
+                        : ''
+                    )
+                  }
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Grid>
             </Grid>
             <Divider />
             <Typography variant="subtitle1" className={classes.sectionTitle}>
