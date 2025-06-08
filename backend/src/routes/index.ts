@@ -37,6 +37,8 @@ import apiCompanyRoutes from "./api/apiCompanyRoutes";
 import apiContactRoutes from "./api/apiContactRoutes";
 import apiMessageRoutes from "./api/apiMessageRoutes";
 import companySettingsRoutes from "./companySettingsRoutes";
+import creditRoutes from "./creditRoutes";
+import consultRoutes from "./consultRoutes";
 
 import promptRoutes from "./promptRouter";
 import statisticsRoutes from "./statisticsRoutes";
@@ -86,6 +88,8 @@ routes.use(ticketTagRoutes);
 routes.use("/api", apiCompanyRoutes);
 routes.use("/api", apiContactRoutes);
 routes.use("/api", apiMessageRoutes);
+routes.use(creditRoutes);
+routes.use(consultRoutes);
 
 routes.use(flowDefaultRoutes);
 routes.use(webHook)
