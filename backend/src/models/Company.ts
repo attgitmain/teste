@@ -77,6 +77,9 @@ class Company extends Model<Company> {
   @UpdatedAt
   updatedAt: Date;
 
+  @Column({ defaultValue: 0 })
+  credits: number;
+
   @Column
   folderSize: string;
 

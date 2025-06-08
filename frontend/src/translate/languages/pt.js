@@ -1519,6 +1519,21 @@ const messages = {
       },
       leads: {
         title: "Leads",
+        table: {
+          logradouro: "Logradouro",
+          numero: "Número",
+          bairro: "Bairro",
+          cidade: "Cidade",
+          uf: "UF",
+          nome: "Nome",
+          cpf: "CPF",
+          nomeMae: "Nome da Mãe",
+          renda: "Renda",
+          dataNascimento: "Data de Nascimento",
+        },
+        creditsAvailable: "Créditos disponíveis",
+        historyCleared: "Histórico apagado com sucesso",
+        noCredits: "Você não possui créditos suficientes",
         message: "Página em desenvolvimento."
       },
       chipMaturation: {
