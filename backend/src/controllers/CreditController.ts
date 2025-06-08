@@ -15,10 +15,12 @@ export const addCredits = async (req: Request, res: Response): Promise<Response>
   const parsedAmount = Number(amount);
   const parsedCompanyId = Number(companyId);
 
+  const userId = parseInt(id);
+
   if (isNaN(parsedAmount) || isNaN(parsedCompanyId)) {
     return res.status(400).json({ error: "Parâmetros inválidos" });
   }
 
-  const balance = await AddCreditsService(parsedCompanyId, parsedAmount, id);
+  const balance = await AddCreditsService(parsedCompanyId, parsedAmount, userId);
   return res.status(200).json({ balance });
 };
