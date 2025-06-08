@@ -28,6 +28,9 @@ import CakeIcon from '@material-ui/icons/Cake';
 import HomeIcon from '@material-ui/icons/Home';
 import BusinessIcon from '@material-ui/icons/Business';
 import DriveEtaIcon from '@material-ui/icons/DriveEta';
+import FingerprintIcon from '@material-ui/icons/Fingerprint';
+import FaceIcon from '@material-ui/icons/Face';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 import WcIcon from '@material-ui/icons/Wc';
@@ -209,6 +212,17 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                 <Grid container direction="column">
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>
+                      <FingerprintIcon fontSize="small" /> CPF:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_pessoais?.cpf, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_pessoais?.cpf)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
                       <PersonIcon fontSize="small" /> Nome:
                     </Typography>
                     <Typography>
@@ -226,6 +240,17 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       {renderValue(lead.dados_pessoais?.nasc, classes.placeholder)}
                     </Typography>
                     <IconButton size="small" onClick={() => copyField(lead.dados_pessoais?.nasc)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <FaceIcon fontSize="small" /> Nome da Mãe:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_pessoais?.nome_mae, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_pessoais?.nome_mae)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -252,6 +277,17 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <BusinessIcon fontSize="small" /> CBO:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_basicos?.cbo, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.cbo)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Status Receita:</Typography>
                     {lead.dados_basicos?.status_receita ? (
                       <Chip
@@ -262,6 +298,39 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                     ) : (
                       renderValue(null, classes.placeholder)
                     )}
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <BusinessIcon fontSize="small" /> % Cargo Societário:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_basicos?.pct_cargo_societario, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.pct_cargo_societario)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <DriveEtaIcon fontSize="small" /> Qt. Veículos:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_basicos?.qt_veiculos, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.qt_veiculos)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <AttachMoneyIcon fontSize="small" /> Faixa Renda:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_basicos?.faixa_renda, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.faixa_renda)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Óbito:</Typography>
@@ -289,6 +358,15 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
               <AccordionDetails>
                 <Grid container direction="column">
                   <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Tipo:</Typography>
+                    <Typography>
+                      {renderValue(lead.endereco?.tipo, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.endereco?.tipo)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>
                       <HomeIcon fontSize="small" /> Logradouro:
                     </Typography>
@@ -309,6 +387,24 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Complemento:</Typography>
+                    <Typography>
+                      {renderValue(lead.endereco?.complemento, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.endereco?.complemento)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Bairro:</Typography>
+                    <Typography>
+                      {renderValue(lead.endereco?.bairro, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.endereco?.bairro)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Cidade/Estado:</Typography>
                     <Typography>
                       {renderValue(
@@ -317,6 +413,15 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       )}
                     </Typography>
                     <IconButton size="small" onClick={() => copyField(lead.endereco?.cidade ? `${lead.endereco.cidade} / ${lead.endereco.estado}` : '')}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>CEP:</Typography>
+                    <Typography>
+                      {renderValue(lead.endereco?.cep, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.endereco?.cep)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
