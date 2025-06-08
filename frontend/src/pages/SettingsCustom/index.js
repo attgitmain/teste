@@ -8,6 +8,7 @@ import TabPanel from "../../components/TabPanel";
 
 import SchedulesForm from "../../components/SchedulesForm";
 import CompaniesManager from "../../components/CompaniesManager";
+import CreditsManager from "../../components/CreditsManager";
 import PlansManager from "../../components/PlansManager";
 import HelpsManager from "../../components/HelpsManager";
 import Options from "../../components/Settings/Options";
@@ -154,6 +155,7 @@ const SettingsCustom = () => {
               <Tab label={i18n.t("settings.tabs.options")} value={"options"} />
               {schedulesEnabled && <Tab label="Horários" value={"schedules"} />}
               {isSuper() ? <Tab label="Empresas" value={"companies"} /> : null}
+              {isSuper() ? <Tab label="Créditos" value={"credits"} /> : null}
               {isSuper() ? <Tab label={i18n.t("settings.tabs.plans")} value={"plans"} /> : null}
               {isSuper() ? <Tab label={i18n.t("settings.tabs.helps")} value={"helps"} /> : null}
               {isSuper() ? <Tab label="Whitelabel" value={"whitelabel"} /> : null}
@@ -181,6 +183,14 @@ const SettingsCustom = () => {
                       name={"companies"}
                     >
                       <CompaniesManager />
+                    </TabPanel>
+
+                    <TabPanel
+                      className={classes.container}
+                      value={tab}
+                      name={"credits"}
+                    >
+                      <CreditsManager />
                     </TabPanel>
 
                     <TabPanel
