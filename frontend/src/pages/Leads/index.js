@@ -21,6 +21,7 @@ import { CSVLink } from "react-csv";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { toast } from "react-toastify";
@@ -71,6 +72,9 @@ const Leads = () => {
   const [history, setHistory] = useState([]);
   const [credits, setCredits] = useState(0);
   const [tokenError, setTokenError] = useState(false);
+  const [pageApi, setPageApi] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const { dateToClient } = useDate();
   const searchTimeout = useRef(null);
 
@@ -116,12 +120,14 @@ const Leads = () => {
       setLoading(true);
       setTokenError(false);
       try {
-        const { data } = await api.get(`/consult/cep/${cep}`);
-        setResults(data.data || []);
+        const { data } = await api.get(`/consult/cep/${cep}?page=1`);
+        setResults(data.leads || []);
+        setPageApi(1);
+        setHasMore(data.hasMore);
         if (typeof data.credits === "number") {
           setCredits(data.credits);
         }
-        if (!data.data || data.data.length === 0) {
+        if (!data.leads || data.leads.length === 0) {
           toast.error("CEP não encontrado");
         }
       } catch (err) {
@@ -148,12 +154,52 @@ const Leads = () => {
   const handleClear = () => {
     setCep("");
     setResults([]);
+    setPageApi(1);
+    setHasMore(false);
   };
 
   const handleClearHistory = () => {
     setHistory([]);
     localStorage.removeItem("leadsHistory");
     toast.success(i18n.t("leads.historyCleared"));
+  };
+
+  const handleLoadMore = async () => {
+    const next = pageApi + 1;
+    setLoadingMore(true);
+    try {
+      const { data } = await api.get(`/consult/cep/${cep}?page=${next}`);
+      setResults((prev) => [...prev, ...(data.leads || [])]);
+      setHasMore(data.hasMore);
+      if (typeof data.credits === "number") {
+        setCredits(data.credits);
+      }
+      setPageApi(next);
+    } catch (err) {
+      if (err.response && err.response.status === 402) {
+        toast.error(i18n.t("leads.noCredits"));
+      } else {
+        toast.error("Erro ao buscar dados");
+      }
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleCpf = async (cpf) => {
+    try {
+      const { data } = await api.get(`/consult/cpf/${cpf}`);
+      if (typeof data.credits === "number") {
+        setCredits(data.credits);
+      }
+      alert(JSON.stringify(data.data, null, 2));
+    } catch (err) {
+      if (err.response && err.response.status === 402) {
+        toast.error(i18n.t("leads.noCredits"));
+      } else {
+        toast.error("Erro ao consultar CPF");
+      }
+    }
   };
 
   return (
@@ -163,6 +209,9 @@ const Leads = () => {
       </MainHeader>
       <Typography variant="subtitle1" gutterBottom>
         {i18n.t("leads.creditsAvailable")}: {credits}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" gutterBottom>
+        {i18n.t("leads.creditInfo")}
       </Typography>
 
       <div className={classes.form}>
@@ -201,16 +250,6 @@ const Leads = () => {
         </Button>
       </div>
 
-      <TextField
-        label="CPF"
-        variant="outlined"
-        size="small"
-        disabled
-        fullWidth
-      />
-      <Typography variant="caption" color="textSecondary">
-        Consulta por CPF em manutenção no momento.
-      </Typography>
 
       {loading && (
         <div className={classes.loadingContainer}>
@@ -299,7 +338,12 @@ const Leads = () => {
                           <TableCell>{item.bairro}</TableCell>
                           <TableCell>{item.cidade}</TableCell>
                           <TableCell>{item.uf}</TableCell>
-                          <TableCell>{item.dados_pessoais.nome}</TableCell>
+                          <TableCell>
+                            {item.dados_pessoais.nome}
+                            <IconButton size="small" onClick={() => handleCpf(item.dados_pessoais.cpf)}>
+                              <InfoOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </TableCell>
                           <TableCell>{item.dados_pessoais.cpf}</TableCell>
                           <TableCell>{item.dados_pessoais.nome_mae}</TableCell>
                           <TableCell>{item.dados_pessoais.renda}</TableCell>
@@ -336,6 +380,15 @@ const Leads = () => {
               onChange={(e, value) => setPage(value)}
               color="primary"
             />
+            {hasMore && (
+              <Button
+                variant="outlined"
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+              >
+                {loadingMore ? <CircularProgress size={20} /> : "+15"}
+              </Button>
+            )}
           </div>
         </>
       )}

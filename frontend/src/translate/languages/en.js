@@ -337,6 +337,7 @@ const messages = {
                                         dataNascimento: "Birth Date",
                                 },
                                 creditsAvailable: "Available credits",
+                                creditInfo: "Each batch of 15 leads costs 1 credit",
                                 historyCleared: "History cleared successfully",
                                 noCredits: "You do not have enough credits",
                                 message: "Page under development."
