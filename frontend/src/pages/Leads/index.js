@@ -26,6 +26,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { toast } from "react-toastify";
 import moment from "moment";
+import LeadDetailModal from "../../components/LeadDetailModal";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
@@ -75,6 +76,10 @@ const Leads = () => {
   const [pageApi, setPageApi] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailData, setDetailData] = useState(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState("");
   const { dateToClient } = useDate();
   const searchTimeout = useRef(null);
 
@@ -187,18 +192,24 @@ const Leads = () => {
   };
 
   const handleCpf = async (cpf) => {
+    setDetailLoading(true);
+    setDetailError("");
+    setDetailOpen(true);
     try {
       const { data } = await api.get(`/consult/cpf/${cpf}`);
       if (typeof data.credits === "number") {
         setCredits(data.credits);
       }
-      alert(JSON.stringify(data.data, null, 2));
+      setDetailData(data.data);
     } catch (err) {
       if (err.response && err.response.status === 402) {
         toast.error(i18n.t("leads.noCredits"));
       } else {
+        setDetailError("Não foi possível carregar os detalhes deste lead. Tente novamente.");
         toast.error("Erro ao consultar CPF");
       }
+    } finally {
+      setDetailLoading(false);
     }
   };
 
@@ -392,6 +403,13 @@ const Leads = () => {
           </div>
         </>
       )}
+      <LeadDetailModal
+        open={detailOpen}
+        onClose={() => setDetailOpen(false)}
+        lead={detailData}
+        loading={detailLoading}
+        error={detailError}
+      />
     </MainContainer>
   );
 };
