@@ -1,6 +1,7 @@
 import axios from "axios";
 import LeadView from "../../models/LeadView";
 import ConsumeCreditsService from "../CreditService/ConsumeCreditsService";
+import AppError from "../../errors/AppError";
 
 interface Request {
   cep: string;
@@ -13,8 +14,20 @@ const PAGE_SIZE = 15;
 
 const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   const token = process.env.API_TOKEN_CEP;
+  if (!token) {
+    throw new AppError("Consulta por CEP em manutenção no momento", 503);
+  }
   const url = `https://api.dbconsultas.com/api/v1/${token}/cep/${cep}`;
-  const { data } = await axios.get(url);
+
+  let data: any;
+  try {
+    ({ data } = await axios.get(url));
+  } catch (err: any) {
+    const status = err.response?.status || 500;
+    const message = err.response?.data?.message || "Erro ao consultar CEP";
+    throw new AppError(message, status);
+  }
+
   const allLeads = data.data || [];
 
   const cpfs = allLeads.map((l: any) => l.dados_pessoais.cpf);
