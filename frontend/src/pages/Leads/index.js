@@ -27,6 +27,7 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { toast } from "react-toastify";
 import moment from "moment";
 import LeadDetailModal from "../../components/LeadDetailModal";
+import normalizeCpfDetail from "../../helpers/normalizeCpfDetail";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
@@ -200,7 +201,8 @@ const Leads = () => {
       if (typeof data.credits === "number") {
         setCredits(data.credits);
       }
-      const detail = data.data !== undefined ? data.data : data;
+      const rawDetail = data.data !== undefined ? data.data : data;
+      const detail = normalizeCpfDetail(rawDetail);
       setDetailData(detail);
     } catch (err) {
       if (err.response && err.response.status === 402) {
