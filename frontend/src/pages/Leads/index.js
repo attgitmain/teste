@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -20,6 +20,8 @@ import ReactInputMask from "react-input-mask";
 import { CSVLink } from "react-csv";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import IconButton from "@material-ui/core/IconButton";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -49,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
   },
   history: {
     marginTop: theme.spacing(1),
+    display: "flex",
+    alignItems: "center",
     "& span": {
       cursor: "pointer",
       marginRight: theme.spacing(1),
@@ -65,9 +69,22 @@ const Leads = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [history, setHistory] = useState([]);
+  const [credits, setCredits] = useState(0);
   const [tokenError, setTokenError] = useState(false);
   const { dateToClient } = useDate();
   const searchTimeout = useRef(null);
+
+  useEffect(() => {
+    const loadCredits = async () => {
+      try {
+        const { data } = await api.get("/credits");
+        setCredits(data.balance);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadCredits();
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("leadsResults");
@@ -99,10 +116,11 @@ const Leads = () => {
       setLoading(true);
       setTokenError(false);
       try {
-        const token = process.env.REACT_APP_API_TOKEN_CEP;
-        const url = `https://api.dbconsultas.com/api/v1/${token}/cep/${cep}`;
-        const { data } = await axios.get(url);
+        const { data } = await api.get(`/consult/cep/${cep}`);
         setResults(data.data || []);
+        if (typeof data.credits === "number") {
+          setCredits(data.credits);
+        }
         if (!data.data || data.data.length === 0) {
           toast.error("CEP não encontrado");
         }
@@ -113,6 +131,8 @@ const Leads = () => {
             toast.error("Token expirado");
           } else if (err.response.status === 404) {
             toast.error("CEP não encontrado");
+          } else if (err.response.status === 402) {
+            toast.error(i18n.t("leads.noCredits"));
           } else {
             toast.error("Erro ao buscar dados");
           }
@@ -130,11 +150,20 @@ const Leads = () => {
     setResults([]);
   };
 
+  const handleClearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("leadsHistory");
+    toast.success(i18n.t("leads.historyCleared"));
+  };
+
   return (
     <MainContainer>
       <MainHeader>
         <Title>{i18n.t("leads.title")}</Title>
       </MainHeader>
+      <Typography variant="subtitle1" gutterBottom>
+        {i18n.t("leads.creditsAvailable")}: {credits}
+      </Typography>
 
       <div className={classes.form}>
         <ReactInputMask
@@ -211,6 +240,9 @@ const Leads = () => {
               <ReplayIcon fontSize="small" /> {h.cep} - {h.count} resultados
             </span>
           ))}
+          <IconButton size="small" onClick={handleClearHistory}>
+            <DeleteOutlineIcon fontSize="small" />
+          </IconButton>
         </div>
       )}
 

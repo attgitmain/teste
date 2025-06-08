@@ -1531,6 +1531,9 @@ const messages = {
           renda: "Renda",
           dataNascimento: "Data de Nascimento",
         },
+        creditsAvailable: "Créditos disponíveis",
+        historyCleared: "Histórico apagado com sucesso",
+        noCredits: "Você não possui créditos suficientes",
         message: "Página em desenvolvimento."
       },
       chipMaturation: {

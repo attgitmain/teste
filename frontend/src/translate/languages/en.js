@@ -336,6 +336,9 @@ const messages = {
                                         renda: "Income",
                                         dataNascimento: "Birth Date",
                                 },
+                                creditsAvailable: "Available credits",
+                                historyCleared: "History cleared successfully",
+                                noCredits: "You do not have enough credits",
                                 message: "Page under development."
                         },
                         chipMaturation: {
