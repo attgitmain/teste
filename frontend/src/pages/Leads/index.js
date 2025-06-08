@@ -200,7 +200,8 @@ const Leads = () => {
       if (typeof data.credits === "number") {
         setCredits(data.credits);
       }
-      setDetailData(data.data);
+      const detail = data.data !== undefined ? data.data : data;
+      setDetailData(detail);
     } catch (err) {
       if (err.response && err.response.status === 402) {
         toast.error(i18n.t("leads.noCredits"));
