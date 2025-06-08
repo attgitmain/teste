@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -12,9 +12,17 @@ import {
   TableRow,
   CircularProgress,
   Typography,
+  MenuItem,
+  Fade,
 } from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
+import ReactInputMask from "react-input-mask";
+import { CSVLink } from "react-csv";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
@@ -39,6 +47,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     padding: theme.spacing(3),
   },
+  history: {
+    marginTop: theme.spacing(1),
+    "& span": {
+      cursor: "pointer",
+      marginRight: theme.spacing(1),
+      textDecoration: "underline",
+    },
+  },
 }));
 
 const Leads = () => {
@@ -46,21 +62,67 @@ const Leads = () => {
   const [cep, setCep] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [history, setHistory] = useState([]);
+  const [tokenError, setTokenError] = useState(false);
   const { dateToClient } = useDate();
+  const searchTimeout = useRef(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("leadsResults");
+    if (stored) {
+      setResults(JSON.parse(stored));
+    }
+    const hist = JSON.parse(localStorage.getItem("leadsHistory") || "[]");
+    setHistory(hist);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("leadsResults", JSON.stringify(results));
+    if (results && results.length > 0) {
+      const prev = JSON.parse(localStorage.getItem("leadsHistory") || "[]");
+      const exists = prev.find((h) => h.cep === cep);
+      const entry = { cep, count: results.length };
+      const newHist = [entry, ...prev.filter((h) => h.cep !== cep)].slice(0, 5);
+      localStorage.setItem("leadsHistory", JSON.stringify(newHist));
+      if (!exists || exists.count !== results.length) {
+        setHistory(newHist);
+      }
+    }
+  }, [results]);
 
   const handleSearch = async () => {
-    if (!cep) return;
-    setLoading(true);
-    try {
-      const token = process.env.REACT_APP_API_TOKEN_CEP;
-      const url = `https://api.dbconsultas.com/api/v1/${token}/cep/${cep}`;
-      const { data } = await axios.get(url);
-      setResults(data.data || []);
-    } catch (err) {
-      alert("Erro ao buscar dados");
-    } finally {
-      setLoading(false);
-    }
+    if (!cep || cep.length !== 8) return;
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(async () => {
+      setLoading(true);
+      setTokenError(false);
+      try {
+        const token = process.env.REACT_APP_API_TOKEN_CEP;
+        const url = `https://api.dbconsultas.com/api/v1/${token}/cep/${cep}`;
+        const { data } = await axios.get(url);
+        setResults(data.data || []);
+        if (!data.data || data.data.length === 0) {
+          toast.error("CEP não encontrado");
+        }
+      } catch (err) {
+        if (err.response) {
+          if (err.response.status === 401) {
+            setTokenError(true);
+            toast.error("Token expirado");
+          } else if (err.response.status === 404) {
+            toast.error("CEP não encontrado");
+          } else {
+            toast.error("Erro ao buscar dados");
+          }
+        } else {
+          toast.error("Erro de rede, verifique sua conexão");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }, 300);
   };
 
   const handleClear = () => {
@@ -75,21 +137,29 @@ const Leads = () => {
       </MainHeader>
 
       <div className={classes.form}>
-        <TextField
-          label="CEP"
-          variant="outlined"
-          size="small"
+        <ReactInputMask
+          mask="99999999"
           value={cep}
-          onChange={(e) => setCep(e.target.value)}
-        />
+          onChange={(e) => setCep(e.target.value.replace(/\D/g, ""))}
+        >
+          {(inputProps) => (
+            <TextField
+              {...inputProps}
+              placeholder="Digite o CEP (somente números)"
+              label="CEP"
+              variant="outlined"
+              size="small"
+            />
+          )}
+        </ReactInputMask>
         <Button
           variant="contained"
           color="primary"
           onClick={handleSearch}
-          startIcon={<SearchIcon />}
+          startIcon={!loading && <SearchIcon />}
           disabled={loading}
         >
-          Buscar
+          {loading ? <CircularProgress size={20} /> : "Buscar"}
         </Button>
         <Button
           variant="outlined"
@@ -115,47 +185,127 @@ const Leads = () => {
 
       {loading && (
         <div className={classes.loadingContainer}>
-          <CircularProgress />
+          {Array.from({ length: 3 }).map((_, idx) => (
+            <Skeleton
+              key={idx}
+              variant="rect"
+              animation="wave"
+              height={40}
+              style={{ marginBottom: 4, width: "100%" }}
+            />
+          ))}
+        </div>
+      )}
+
+      {tokenError && (
+        <Typography color="error">
+          Token inválido. Verifique a variável REACT_APP_API_TOKEN_CEP no arquivo
+          .env
+        </Typography>
+      )}
+
+      {history.length > 0 && (
+        <div className={classes.history}>
+          {history.map((h) => (
+            <span key={h.cep} onClick={() => setCep(h.cep)}>
+              <ReplayIcon fontSize="small" /> {h.cep} - {h.count} resultados
+            </span>
+          ))}
         </div>
       )}
 
       {results.length > 0 && (
-        <Paper className={classes.tableWrapper} variant="outlined">
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Logradouro</TableCell>
-                <TableCell>Número</TableCell>
-                <TableCell>Bairro</TableCell>
-                <TableCell>Cidade</TableCell>
-                <TableCell>UF</TableCell>
-                <TableCell>Nome</TableCell>
-                <TableCell>CPF</TableCell>
-                <TableCell>Nome da Mãe</TableCell>
-                <TableCell>Renda</TableCell>
-                <TableCell>Data de Nascimento</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {results.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>{item.logradouro}</TableCell>
-                  <TableCell>{item.numero}</TableCell>
-                  <TableCell>{item.bairro}</TableCell>
-                  <TableCell>{item.cidade}</TableCell>
-                  <TableCell>{item.uf}</TableCell>
-                  <TableCell>{item.dados_pessoais.nome}</TableCell>
-                  <TableCell>{item.dados_pessoais.cpf}</TableCell>
-                  <TableCell>{item.dados_pessoais.nome_mae}</TableCell>
-                  <TableCell>{item.dados_pessoais.renda}</TableCell>
-                  <TableCell>
-                    {dateToClient(item.dados_pessoais.nasc)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
+        <>
+          <Typography variant="subtitle2" gutterBottom>
+            {results.length} resultados encontrados para o CEP {cep}
+          </Typography>
+          <Button
+            variant="outlined"
+            component={CSVLink}
+            data={results}
+            filename={`leads-${cep}.csv`}
+          >
+            Exportar CSV
+          </Button>
+          <Fade in>
+            <Paper className={classes.tableWrapper} variant="outlined">
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{i18n.t("leads.table.logradouro")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.numero")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.bairro")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.cidade")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.uf")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.nome")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.cpf")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.nomeMae")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.renda")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.dataNascimento")}</TableCell>
+                    <TableCell>Tags</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {results
+                    .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+                    .map((item, index) => {
+                      const tags = [];
+                      if (parseFloat(item.dados_pessoais.renda) > 5000) {
+                        tags.push("💸 Renda Alta");
+                      }
+                      const age = moment().diff(
+                        moment(item.dados_pessoais.nasc),
+                        "years"
+                      );
+                      if (age > 60) {
+                        tags.push("👴 Maior de 60 anos");
+                      }
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{item.logradouro}</TableCell>
+                          <TableCell>{item.numero}</TableCell>
+                          <TableCell>{item.bairro}</TableCell>
+                          <TableCell>{item.cidade}</TableCell>
+                          <TableCell>{item.uf}</TableCell>
+                          <TableCell>{item.dados_pessoais.nome}</TableCell>
+                          <TableCell>{item.dados_pessoais.cpf}</TableCell>
+                          <TableCell>{item.dados_pessoais.nome_mae}</TableCell>
+                          <TableCell>{item.dados_pessoais.renda}</TableCell>
+                          <TableCell>
+                            {dateToClient(item.dados_pessoais.nasc)}
+                          </TableCell>
+                          <TableCell>{tags.join(" ")}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </Paper>
+          </Fade>
+          <div className={classes.form}>
+            <TextField
+              select
+              label="Mostrar"
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value, 10));
+                setPage(1);
+              }}
+              variant="outlined"
+              size="small"
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+            </TextField>
+            <Pagination
+              count={Math.ceil(results.length / rowsPerPage)}
+              page={page}
+              onChange={(e, value) => setPage(value)}
+              color="primary"
+            />
+          </div>
+        </>
       )}
     </MainContainer>
   );

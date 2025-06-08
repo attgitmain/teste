@@ -324,6 +324,18 @@ const messages = {
 			},
                         leads: {
                                 title: "Leads",
+                                table: {
+                                        logradouro: "Address",
+                                        numero: "Number",
+                                        bairro: "District",
+                                        cidade: "City",
+                                        uf: "State",
+                                        nome: "Name",
+                                        cpf: "CPF",
+                                        nomeMae: "Mother's Name",
+                                        renda: "Income",
+                                        dataNascimento: "Birth Date",
+                                },
                                 message: "Page under development."
                         },
                         chipMaturation: {
