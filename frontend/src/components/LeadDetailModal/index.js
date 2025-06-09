@@ -57,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
   fieldRow: {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
+    wordBreak: 'break-word',
     marginBottom: theme.spacing(1),
     gap: theme.spacing(1),
   },

@@ -338,6 +338,8 @@ const messages = {
                                 },
                                 creditsAvailable: "Available credits",
                                 creditInfo: "Each batch of 15 leads costs 1 credit",
+                                cpfCreditInfo: "Each CPF lookup costs 3 credits",
+                                addCredits: "Add credits",
                                 historyCleared: "History cleared successfully",
                                 noCredits: "You do not have enough credits",
                                 message: "Page under development."
