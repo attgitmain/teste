@@ -1076,13 +1076,13 @@ style={{ color: 'white' }}
                         <Grid2 xs={12} sm={6} md={3}>
                           <Paper elevation={3} >
                             <ChartDonut
-                              data={[`{'name': 'Promotores', 'value': ${counters.npsPromotersPerc | 100}}`,
-                              `{'name': 'Detratores', 'value': ${counters.npsDetractorsPerc | 0}}`,
-                              `{'name': 'Neutros', 'value': ${counters.npsPassivePerc | 0}}`
+                              data={[`{'name': 'Promotores', 'value': ${counters.npsPromotersPerc || 100}}`,
+                              `{'name': 'Detratores', 'value': ${counters.npsDetractorsPerc || 0}}`,
+                              `{'name': 'Neutros', 'value': ${counters.npsPassivePerc || 0}}`
                               ]}
-                              value={counters.npsScore | 0}
+                              value={counters.npsScore || 0}
                               title="Score"
-                              color={(parseInt(counters.npsPromotersPerc | 0) + parseInt(counters.npsDetractorsPerc | 0) + parseInt(counters.npsPassivePerc | 0)) === 0 ? ["#918F94"] : ["#2EA85A", "#F73A2C", "#F7EC2C"]}
+                              color={(parseInt(counters.npsPromotersPerc || 0) + parseInt(counters.npsDetractorsPerc || 0) + parseInt(counters.npsPassivePerc || 0)) === 0 ? ["#918F94"] : ["#2EA85A", "#F73A2C", "#F7EC2C"]}
                             />
                           </Paper>
                         </Grid2>
@@ -1091,7 +1091,7 @@ style={{ color: 'white' }}
                           <Paper elevation={3}>
                             <ChartDonut
                               title={i18n.t("dashboard.assessments.prosecutors")}
-                              value={counters.npsPromotersPerc | 0}
+                              value={counters.npsPromotersPerc || 0}
                               data={[`{'name': 'Promotores', 'value': 100}`]}
                               color={["#2EA85A"]}
                             />
@@ -1103,7 +1103,7 @@ style={{ color: 'white' }}
                             <ChartDonut
                               data={[`{'name': 'Neutros', 'value': 100}`]}
                               title={i18n.t("dashboard.assessments.neutral")}
-                              value={counters.npsPassivePerc | 0}
+                              value={counters.npsPassivePerc || 0}
                               color={["#F7EC2C"]}
                             />
                           </Paper>
@@ -1114,7 +1114,7 @@ style={{ color: 'white' }}
                             <ChartDonut
                               data={[`{'name': 'Detratores', 'value': 100}`]}
                               title={i18n.t("dashboard.assessments.detractors")}
-                              value={counters.npsDetractorsPerc | 0}
+                              value={counters.npsDetractorsPerc || 0}
                               color={["#F73A2C"]}
                             />
                           </Paper>
