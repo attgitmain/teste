@@ -46,6 +46,14 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
     },
   },
+  creditsRow: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(1),
+    "& > *": {
+      marginRight: theme.spacing(1),
+    },
+  },
   tableWrapper: {
     overflowX: "auto",
   },
@@ -184,6 +192,11 @@ const Leads = () => {
     setHasMore(false);
   };
 
+  const handleClearCpf = () => {
+    setCpf("");
+    setDetailData(null);
+  };
+
   const handleClearHistory = () => {
     setHistory([]);
     localStorage.removeItem("leadsHistory");
@@ -248,11 +261,19 @@ const Leads = () => {
       <MainHeader>
         <Title>{i18n.t("leads.title")}</Title>
       </MainHeader>
-      <Typography variant="subtitle1" gutterBottom>
-        {i18n.t("leads.creditsAvailable")}: {credits}
-      </Typography>
+      <div className={classes.creditsRow}>
+        <Typography variant="subtitle1" gutterBottom>
+          {i18n.t("leads.creditsAvailable")}: {credits}
+        </Typography>
+        <Button variant="outlined" color="primary" size="small">
+          {i18n.t("leads.addCredits")}
+        </Button>
+      </div>
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {i18n.t("leads.creditInfo")}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" gutterBottom>
+        {i18n.t("leads.cpfCreditInfo")}
       </Typography>
 
       <div className={classes.form}>
@@ -317,6 +338,14 @@ const Leads = () => {
             disabled={loading}
           >
             Consultar CPF
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleClearCpf}
+            disabled={loading}
+          >
+            Limpar
           </Button>
         </div>
       )}

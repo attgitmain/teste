@@ -1463,6 +1463,8 @@ const messages = {
         title: "Leads",
         creditsAvailable: "Créditos disponibles",
         creditInfo: "Cada grupo de 15 leads consume 1 crédito",
+        cpfCreditInfo: "Cada consulta de CPF cuesta 3 créditos",
+        addCredits: "Acreditar créditos",
         noCredits: "No tienes créditos suficientes",
         historyCleared: "Historial borrado correctamente",
         message: "Página en desarrollo."
