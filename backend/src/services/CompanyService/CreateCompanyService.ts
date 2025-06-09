@@ -17,6 +17,7 @@ interface CompanyData {
   paymentMethod?: string;
   password?: string;
   companyUserName?: string;
+  credits?: number;
 }
 
 const CreateCompanyService = async (
@@ -33,7 +34,8 @@ const CreateCompanyService = async (
     recurrence,
     document,
     paymentMethod,
-    companyUserName
+    companyUserName,
+    credits = 0
   } = companyData;
 
   const companySchema = Yup.object().shape({
@@ -51,17 +53,19 @@ const CreateCompanyService = async (
   const t = await sequelize.transaction();
 
   try {
-    const company = await Company.create({
-      name,
-      phone,
-      email,
-      status,
-      planId,
-      dueDate,
-      recurrence,
-      document,
-      paymentMethod
-    },
+    const company = await Company.create(
+      {
+        name,
+        phone,
+        email,
+        status,
+        planId,
+        dueDate,
+        recurrence,
+        document,
+        paymentMethod,
+        credits
+      },
       { transaction: t }
     );
 

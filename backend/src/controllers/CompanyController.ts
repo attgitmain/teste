@@ -44,6 +44,7 @@ type CompanyData = {
   recurrence?: string;
   document?: string;
   paymentMethod?: string;
+  credits?: number;
 };
 
 type SchedulesData = {
@@ -84,6 +85,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
   const schema = Yup.object().shape({
     name: Yup.string().required(),
+    credits: Yup.number(),
     password: Yup.string().required().min(5)
   });
 
@@ -153,7 +155,8 @@ export const update = async (
   const companyData: CompanyData = req.body;
 
   const schema = Yup.object().shape({
-    name: Yup.string()
+    name: Yup.string(),
+    credits: Yup.number()
   });
 
   try {

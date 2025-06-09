@@ -41,6 +41,7 @@ type CompanyData = {
   recurrence?: string;
   document?: string;
   paymentMethod?: string;
+  credits?: number;
 };
 
 type SchedulesData = {
@@ -100,6 +101,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
       ),
     phone: Yup.string(),
     email: Yup.string(),
+    credits: Yup.number(),
     planId: Yup.number().required(),
     password: Yup.string().required().min(5)
   });
@@ -165,6 +167,7 @@ export const update = async (
       ),
     phone: Yup.string(),
     email: Yup.string(),
+    credits: Yup.number(),
     document: Yup.string()
       .min(11, "ERR_COMPANY_INVALID_DOCUMENT")
       .max(14, "ERR_COMPANY_INVALID_DOCUMENT")
