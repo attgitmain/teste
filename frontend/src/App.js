@@ -23,7 +23,9 @@ const App = () => {
   const appNameLocalStorage = localStorage.getItem("appName") || "";
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const preferredTheme = window.localStorage.getItem("preferredTheme");
-  const [mode, setMode] = useState(preferredTheme ? preferredTheme : prefersDarkMode ? "dark" : "light");
+  const [mode, setMode] = useState(
+    preferredTheme ? preferredTheme : prefersDarkMode ? "dark" : "light"
+  );
   const [primaryColorLight, setPrimaryColorLight] = useState(appColorLocalStorage);
   const [primaryColorDark, setPrimaryColorDark] = useState(appColorLocalStorage);
   const [appLogoLight, setAppLogoLight] = useState(defaultLogoLight);
@@ -129,6 +131,13 @@ const App = () => {
   useEffect(() => {
     window.localStorage.setItem("preferredTheme", mode);
   }, [mode]);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("preferredTheme");
+    if (!stored) {
+      setMode(prefersDarkMode ? "dark" : "light");
+    }
+  }, [prefersDarkMode]);
 
   useEffect(() => {
     console.log("|=========== handleSaveSetting ==========|")
