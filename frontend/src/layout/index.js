@@ -324,10 +324,15 @@ const LoggedInLayout = ({ children, themeToggle }) => {
         setDrawerOpen(true);
       }
     }
+  }, [user.defaultMenu]);
+
+  useEffect(() => {
     if (user.defaultTheme === "dark" && theme.mode === "light") {
       colorMode.toggleColorMode();
+    } else if (user.defaultTheme === "light" && theme.mode === "dark") {
+      colorMode.toggleColorMode();
     }
-  }, [user.defaultMenu, document.body.offsetWidth]);
+  }, [user.defaultTheme]);
 
   useEffect(() => {
     if (document.body.offsetWidth < 600) {
