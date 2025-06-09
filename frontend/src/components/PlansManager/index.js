@@ -83,6 +83,7 @@ export function PlanManagerForm(props) {
         useKanban: true,
         useOpenAi: true,
         useIntegrations: true,
+        useConsultCpf: false,
         isPublic: true
     });
 
@@ -367,6 +368,24 @@ export function PlanManagerForm(props) {
                                 </Field>
                             </FormControl>
                         </Grid>
+
+                        {/* CONSULTA CPF */}
+                        <Grid xs={12} sm={8} md={2} item>
+                            <FormControl margin="dense" variant="outlined" fullWidth>
+                                <InputLabel htmlFor="useConsultCpf-selection">{i18n.t("plans.form.consultCpf")}</InputLabel>
+                                <Field
+                                    as={Select}
+                                    id="useConsultCpf-selection"
+                                    label={i18n.t("plans.form.consultCpf")}
+                                    labelId="useConsultCpf-selection-label"
+                                    name="useConsultCpf"
+                                    margin="dense"
+                                >
+                                    <MenuItem value={true}>{i18n.t("plans.form.enabled")}</MenuItem>
+                                    <MenuItem value={false}>{i18n.t("plans.form.disabled")}</MenuItem>
+                                </Field>
+                            </FormControl>
+                        </Grid>
                     </Grid>
                     <Grid spacing={2} justifyContent="flex-end" container>
 
@@ -438,6 +457,10 @@ export function PlansManagerGrid(props) {
         return row.useIntegrations === false ? `${i18n.t("plans.form.no")}` : `${i18n.t("plans.form.yes")}`;
     };
 
+    const renderConsultCpf = (row) => {
+        return row.useConsultCpf === false ? `${i18n.t("plans.form.no")}` : `${i18n.t("plans.form.yes")}`;
+    };
+
     return (
         <Paper className={classes.tableContainer}>
             <Table
@@ -465,6 +488,7 @@ export function PlansManagerGrid(props) {
                         <TableCell align="center">Kanban</TableCell>
                         <TableCell align="center">Talk.Ai</TableCell>
                         <TableCell align="center">Integrações</TableCell>
+                        <TableCell align="center">{i18n.t("plans.form.consultCpf")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -491,6 +515,7 @@ export function PlansManagerGrid(props) {
                             <TableCell align="center">{renderKanban(row)}</TableCell>
                             <TableCell align="center">{renderOpenAi(row)}</TableCell>
                             <TableCell align="center">{renderIntegrations(row)}</TableCell>
+                            <TableCell align="center">{renderConsultCpf(row)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -597,6 +622,7 @@ export default function PlansManager() {
             useKanban: true,
             useOpenAi: true,
             useIntegrations: true,
+            useConsultCpf: false,
             isPublic: true
         })
     }
@@ -613,6 +639,7 @@ export default function PlansManager() {
         let useKanban = data.useKanban === false ? false : true
         let useOpenAi = data.useOpenAi === false ? false : true
         let useIntegrations = data.useIntegrations === false ? false : true
+        let useConsultCpf = data.useConsultCpf === false ? false : true
 
         setRecord({
             id: data.id,
@@ -631,6 +658,7 @@ export default function PlansManager() {
             useKanban,
             useOpenAi,
             useIntegrations,
+            useConsultCpf,
             isPublic: data.isPublic
         })
     }

@@ -38,6 +38,11 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import EventNoteIcon from '@material-ui/icons/EventNote';
+import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import Skeleton from '@material-ui/lab/Skeleton';
 import copy from 'clipboard-copy';
 import { differenceInYears } from 'date-fns';
@@ -218,6 +223,17 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       {renderValue(lead.dados_pessoais?.cpf, classes.placeholder)}
                     </Typography>
                     <IconButton size="small" onClick={() => copyField(lead.dados_pessoais?.cpf)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>
+                      <LabelImportantIcon fontSize="small" /> Safra:
+                    </Typography>
+                    <Typography>
+                      {renderValue(lead.dados_basicos?.safra, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.safra)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -425,6 +441,15 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>UF:</Typography>
+                    <Typography>
+                      {renderValue(lead.endereco?.uf, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.endereco?.uf)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
                 </Grid>
               </AccordionDetails>
             </Accordion>
@@ -438,9 +463,47 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                   lead.empregos.map((job, idx) => (
                     <Grid key={idx} container direction="column" style={{ marginBottom: 8 }}>
                       <Grid item className={classes.fieldRow}>
-                        <Typography className={classes.fieldLabel}>Empregador:</Typography>
+                        <Typography className={classes.fieldLabel}>
+                          <BusinessCenterIcon fontSize="small" /> Empregador:
+                        </Typography>
                         <Typography>{renderValue(job.nome_empregador, classes.placeholder)}</Typography>
                         <IconButton size="small" onClick={() => copyField(job.nome_empregador)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>
+                          <WorkOutlineIcon fontSize="small" /> Setor:
+                        </Typography>
+                        <Typography>{renderValue(job.setor, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.setor)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>
+                          <MonetizationOnIcon fontSize="small" /> Remuneração:
+                        </Typography>
+                        <Typography>{renderValue(job.remuneracao, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.remuneracao)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>
+                          <EventNoteIcon fontSize="small" /> Admissão:
+                        </Typography>
+                        <Typography>{renderValue(job.admissao, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.admissao)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>
+                          <EventNoteIcon fontSize="small" /> Término:
+                        </Typography>
+                        <Typography>{renderValue(job.termino, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.termino)}>
                           <FileCopyOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Grid>
