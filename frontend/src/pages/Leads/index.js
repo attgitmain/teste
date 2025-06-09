@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../services/api";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -28,6 +28,8 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import LeadDetailModal from "../../components/LeadDetailModal";
 import normalizeCpfDetail from "../../helpers/normalizeCpfDetail";
+import usePlans from "../../hooks/usePlans";
+import { AuthContext } from "../../context/Auth/AuthContext";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
@@ -66,6 +68,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Leads = () => {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
+  const { getPlanCompany } = usePlans();
   const [cep, setCep] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -81,8 +85,24 @@ const Leads = () => {
   const [detailData, setDetailData] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [canConsultCpf, setCanConsultCpf] = useState(false);
   const { dateToClient } = useDate();
   const searchTimeout = useRef(null);
+
+  useEffect(() => {
+    async function fetchPermission() {
+      if (!user) return;
+      try {
+        const planConfigs = await getPlanCompany(undefined, user.companyId);
+        setCanConsultCpf(planConfigs.plan.useConsultCpf);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchPermission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const loadCredits = async () => {
@@ -216,6 +236,13 @@ const Leads = () => {
     }
   };
 
+  const handleCpfSearch = () => {
+    const num = cpf.replace(/\D/g, "");
+    if (num.length === 11) {
+      handleCpf(num);
+    }
+  };
+
   return (
     <MainContainer>
       <MainHeader>
@@ -262,7 +289,37 @@ const Leads = () => {
         >
           Limpar
         </Button>
+        <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener noreferrer">
+          Não sabe o CEP? Consulte aqui
+        </a>
       </div>
+
+      {canConsultCpf && (
+        <div className={classes.form}>
+          <ReactInputMask
+            mask="999.999.999-99"
+            value={cpf}
+            onChange={(e) => setCpf(e.target.value)}
+          >
+            {(inputProps) => (
+              <TextField
+                {...inputProps}
+                label="CPF"
+                variant="outlined"
+                size="small"
+              />
+            )}
+          </ReactInputMask>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCpfSearch}
+            disabled={loading}
+          >
+            Consultar CPF
+          </Button>
+        </div>
+      )}
 
 
       {loading && (

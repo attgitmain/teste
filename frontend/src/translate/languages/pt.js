@@ -1417,7 +1417,8 @@ const messages = {
           yes: "Sim",
           no: "Não",
           money: "R$",
-          public: "Público"
+          public: "Público",
+          consultCpf: "Consulta CPF"
         },
       },
       helps: {

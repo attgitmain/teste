@@ -80,6 +80,9 @@ class Plan extends Model<Plan> {
   @Column
   useIntegrations: boolean;
 
+  @Column({ defaultValue: false })
+  useConsultCpf: boolean;
+
   @Default(true)
   @Column
   isPublic: boolean;
