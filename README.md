@@ -37,6 +37,12 @@ cp .env.exemple .env
 # edite o arquivo .env
 ```
 
+As credenciais do aplicativo Meta (Facebook/Instagram) devem ser definidas nas
+variáveis `FACEBOOK_APP_ID` e `FACEBOOK_APP_SECRET` no backend. O frontend usa
+`REACT_APP_FACEBOOK_APP_ID` para inicializar o SDK. Esses valores precisam ser
+os mesmos em ambos os projetos para que o login via Facebook e Instagram
+funcione corretamente.
+
 ## Executando o backend
 
 Na pasta `backend` estão disponíveis os seguintes scripts:

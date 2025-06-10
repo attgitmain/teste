@@ -12,12 +12,18 @@ const apiBase = (token: string) =>
   });
 
 export const getAccessToken = async (): Promise<string> => {
+  const { FACEBOOK_APP_ID, FACEBOOK_APP_SECRET } = process.env;
+
+  if (!FACEBOOK_APP_ID || !FACEBOOK_APP_SECRET) {
+    throw new Error("FACEBOOK_APP_ID_OR_SECRET_NOT_DEFINED");
+  }
+
   const { data } = await axios.get(
     "https://graph.facebook.com/v20.0/oauth/access_token",
     {
       params: {
-        client_id: "2813216208828642",
-        client_secret: "8233912aeade366dd8e2ebef6be256b6",
+        client_id: FACEBOOK_APP_ID,
+        client_secret: FACEBOOK_APP_SECRET,
         grant_type: "client_credentials"
       }
     }
@@ -200,12 +206,18 @@ export const getAccessTokenFromPage = async (
   try {
     if (!token) throw new Error("ERR_FETCHING_FB_USER_TOKEN");
 
+    const { FACEBOOK_APP_ID, FACEBOOK_APP_SECRET } = process.env;
+
+    if (!FACEBOOK_APP_ID || !FACEBOOK_APP_SECRET) {
+      throw new Error("FACEBOOK_APP_ID_OR_SECRET_NOT_DEFINED");
+    }
+
     const { data } = await axios.get(
       "https://graph.facebook.com/v20.0/oauth/access_token",
       {
         params: {
-          client_id: "2813216208828642",
-          client_secret: "8233912aeade366dd8e2ebef6be256b6",
+          client_id: FACEBOOK_APP_ID,
+          client_secret: FACEBOOK_APP_SECRET,
           grant_type: "fb_exchange_token",
           fb_exchange_token: token
         }
