@@ -12,6 +12,7 @@ import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhats
 import Company from "./models/Company";
 import BullQueue from './libs/queue';
 import { startQueueProcess } from "./queues";
+import { initMaturations } from "./services/MaturationService";
 
 // Run pending database migrations on startup
 runMigrations();
@@ -37,6 +38,7 @@ if (process.env.CERTIFICADOS == "true") {
 
     Promise.all(allPromises).then(async () => {
       await startQueueProcess();
+      await initMaturations();
     });
 
     if (process.env.REDIS_URI_ACK && process.env.REDIS_URI_ACK !== '') {
@@ -78,8 +80,8 @@ if (process.env.CERTIFICADOS == "true") {
     });
   
     Promise.all(allPromises).then(async () => {
-  
       await startQueueProcess();
+      await initMaturations();
     });
   
     if (process.env.REDIS_URI_ACK && process.env.REDIS_URI_ACK !== '') {
