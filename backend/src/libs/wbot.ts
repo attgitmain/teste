@@ -112,7 +112,7 @@ export const restartWbot = async (
     whatsapp.map(async c => {
       const sessionIndex = sessions.findIndex(s => s.id === c.id);
       if (sessionIndex !== -1) {
-        sessions[sessionIndex].ws.close(undefined);
+        sessions[sessionIndex].ws.close();
       }
 
     });
