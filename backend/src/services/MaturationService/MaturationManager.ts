@@ -94,9 +94,12 @@ class MaturationManager {
   }
 
   private serializeJob(job: MaturationJob) {
+    const { timeout, ...rest } = job;
     return {
-      ...job,
-      progress: (Date.now() - job.startAt.getTime()) / (job.endAt.getTime() - job.startAt.getTime())
+      ...rest,
+      progress:
+        (Date.now() - job.startAt.getTime()) /
+        (job.endAt.getTime() - job.startAt.getTime())
     };
   }
 
