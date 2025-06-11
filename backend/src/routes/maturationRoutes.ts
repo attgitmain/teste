@@ -8,5 +8,6 @@ routes.get("/maturation", isAuth, MaturationController.index);
 routes.post("/maturation", isAuth, MaturationController.store);
 routes.get("/maturation/:id", isAuth, MaturationController.show);
 routes.delete("/maturation/:id", isAuth, MaturationController.remove);
+routes.get("/maturation/:id/logs", isAuth, MaturationController.logs);
 
 export default routes;
