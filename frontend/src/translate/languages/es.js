@@ -1472,7 +1472,7 @@ const messages = {
       },
       chipMaturation: {
         title: "Maduración de Chip",
-        chipLabel: "Número del Chip",
+        chipLabel: "Seleccione la Conexión",
         daysLabel: "Días",
         conversationLabel: "Conversaciones (una por línea)",
         startButton: "Iniciar Maduración",
