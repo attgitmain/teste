@@ -69,6 +69,9 @@ const ChipMaturation = () => {
       <MainHeader>
         <Title>{i18n.t("chipMaturation.title")}</Title>
       </MainHeader>
+      <Typography variant="body2" style={{ marginBottom: 16 }}>
+        {i18n.t("chipMaturation.description")}
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Paper style={{ padding: 16 }}>
