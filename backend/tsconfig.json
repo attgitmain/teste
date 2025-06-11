@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "commonjs",
+    "moduleResolution": "node",
+    "rootDir": "./src",
     "outDir": "./dist",
     "strict": false,
     "strictPropertyInitialization": false,
@@ -11,5 +13,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
+  "include": ["src/**/*.ts"],
   "exclude": ["public"]
 }
