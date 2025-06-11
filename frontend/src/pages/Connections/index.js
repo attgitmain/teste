@@ -755,8 +755,9 @@ const Connections = () => {
                             {whatsApp.name}
                             {maturationJobs.some(
                               (job) =>
-                                job.chipId === String(whatsApp.number) &&
-                                job.status === "running"
+                                job.status === "running" &&
+                                (job.originChipId === String(whatsApp.number) ||
+                                  job.targetChipIds?.includes(String(whatsApp.number)))
                             ) && (
                               <Chip
                                 label={i18n.t(
