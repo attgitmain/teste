@@ -53,6 +53,24 @@ const ChipMaturation = () => {
   };
 
   useEffect(() => {
+    if (activeStep === 0 && origin) {
+      setActiveStep(1);
+    }
+  }, [origin]);
+
+  useEffect(() => {
+    if (activeStep === 1 && targets.length > 0) {
+      setActiveStep(2);
+    }
+  }, [targets]);
+
+  useEffect(() => {
+    if (activeStep === 2 && days) {
+      setActiveStep(3);
+    }
+  }, [days]);
+
+  useEffect(() => {
     fetchJobs();
     if (socket && user) {
       const onUpdate = (data) => {
@@ -79,8 +97,11 @@ const ChipMaturation = () => {
         originChipId: origin,
         targetChipIds: targets,
         days: Number(days),
-        conversations: conversations.split("\n").filter(Boolean),
-        companyId: user.companyId
+        conversations: conversations
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .filter(Boolean),
+        companyId: user.companyId,
       });
       toast.success(i18n.t("chipMaturation.started"));
       setOrigin("");
@@ -89,7 +110,8 @@ const ChipMaturation = () => {
       setActiveStep(0);
       fetchJobs();
     } catch (err) {
-      toast.error(i18n.t("chipMaturation.error"));
+      const msg = err?.response?.data?.error || i18n.t("chipMaturation.error");
+      toast.error(msg);
     }
   };
 
@@ -180,8 +202,16 @@ const ChipMaturation = () => {
               </Step>
             </Stepper>
             <div style={{ marginTop: 16 }}>
-              {activeStep > 0 && <Button onClick={() => setActiveStep(activeStep - 1)}>Back</Button>}
-              {activeStep < 3 && <Button color="primary" onClick={() => setActiveStep(activeStep + 1)}>Next</Button>}
+              {activeStep > 0 && (
+                <Button onClick={() => setActiveStep(activeStep - 1)}>
+                  {i18n.t("chipMaturation.backButton")}
+                </Button>
+              )}
+              {activeStep < 3 && (
+                <Button color="primary" onClick={() => setActiveStep(activeStep + 1)}>
+                  {i18n.t("chipMaturation.nextButton")}
+                </Button>
+              )}
               {activeStep === 3 && (
                 <Button
                   color="primary"

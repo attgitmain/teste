@@ -1555,6 +1555,8 @@ const messages = {
         startButton: "Iniciar Maturação",
         historyButton: "Ver histórico",
         cancelButton: "Interromper",
+        nextButton: "Próximo",
+        backButton: "Voltar",
         started: "Maturação iniciada",
         error: "Erro ao iniciar",
         status_running: "Em andamento",
