@@ -14,6 +14,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  StepContent,
   Checkbox,
   ListItemText,
 } from "@material-ui/core";
@@ -148,69 +149,77 @@ const ChipMaturation = () => {
             <Stepper activeStep={activeStep} orientation="vertical">
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_origin")}</StepLabel>
-                <Select
-                  fullWidth
-                  displayEmpty
-                  value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
-                  renderValue={() => {
-                    if (!origin) return i18n.t("chipMaturation.chipLabel");
-                    const conn = activeConnections.find(c => String(c.number) === origin);
-                    return conn ? `${conn.name} (${conn.number})` : origin;
-                  }}
-                >
-                  {activeConnections.map((conn) => (
-                    <MenuItem key={conn.id} value={String(conn.number)}>
-                      {conn.name} ({conn.number})
-                    </MenuItem>
-                  ))}
-                </Select>
+                <StepContent>
+                  <Select
+                    fullWidth
+                    displayEmpty
+                    value={origin}
+                    onChange={(e) => setOrigin(e.target.value)}
+                    renderValue={() => {
+                      if (!origin) return i18n.t("chipMaturation.chipLabel");
+                      const conn = activeConnections.find(c => String(c.number) === origin);
+                      return conn ? `${conn.name} (${conn.number})` : origin;
+                    }}
+                  >
+                    {activeConnections.map((conn) => (
+                      <MenuItem key={conn.id} value={String(conn.number)}>
+                        {conn.name} ({conn.number})
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StepContent>
               </Step>
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_targets")}</StepLabel>
-                <Select
-                  multiple
-                  fullWidth
-                  value={targets}
-                  onChange={(e) => setTargets(e.target.value)}
-                  renderValue={(selected) => selected.join(", ")}
-                >
-                  {activeConnections.filter(c => String(c.number) !== origin).map((conn) => (
-                    <MenuItem key={conn.id} value={String(conn.number)}>
-                      <Checkbox checked={targets.indexOf(String(conn.number)) > -1} />
-                      <ListItemText primary={`${conn.name} (${conn.number})`} />
-                    </MenuItem>
-                  ))}
-                </Select>
+                <StepContent>
+                  <Select
+                    multiple
+                    fullWidth
+                    value={targets}
+                    onChange={(e) => setTargets(e.target.value)}
+                    renderValue={(selected) => selected.join(", ")}
+                  >
+                    {activeConnections.filter(c => String(c.number) !== origin).map((conn) => (
+                      <MenuItem key={conn.id} value={String(conn.number)}>
+                        <Checkbox checked={targets.indexOf(String(conn.number)) > -1} />
+                        <ListItemText primary={`${conn.name} (${conn.number})`} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StepContent>
               </Step>
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_schedule")}</StepLabel>
-                <TextField
-                  type="number"
-                  label={i18n.t("chipMaturation.daysLabel")}
-                  fullWidth
-                  value={days}
-                  onChange={(e) => setDays(e.target.value)}
-                />
-                <TextField
-                  type="number"
-                  style={{ marginTop: 8 }}
-                  label={i18n.t("chipMaturation.intervalLabel")}
-                  fullWidth
-                  value={intervalHours}
-                  onChange={(e) => setIntervalHours(e.target.value)}
-                />
+                <StepContent>
+                  <TextField
+                    type="number"
+                    label={i18n.t("chipMaturation.daysLabel")}
+                    fullWidth
+                    value={days}
+                    onChange={(e) => setDays(e.target.value)}
+                  />
+                  <TextField
+                    type="number"
+                    style={{ marginTop: 8 }}
+                    label={i18n.t("chipMaturation.intervalLabel")}
+                    fullWidth
+                    value={intervalHours}
+                    onChange={(e) => setIntervalHours(e.target.value)}
+                  />
+                </StepContent>
               </Step>
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_messages")}</StepLabel>
-                <TextField
-                  multiline
-                  rows={4}
-                  label={i18n.t("chipMaturation.conversationLabel")}
-                  fullWidth
-                  value={conversations}
-                  onChange={(e) => setConversations(e.target.value)}
-                />
+                <StepContent>
+                  <TextField
+                    multiline
+                    rows={4}
+                    label={i18n.t("chipMaturation.conversationLabel")}
+                    fullWidth
+                    value={conversations}
+                    onChange={(e) => setConversations(e.target.value)}
+                  />
+                </StepContent>
               </Step>
             </Stepper>
             <div style={{ marginTop: 16 }}>
