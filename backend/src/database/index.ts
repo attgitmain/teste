@@ -53,6 +53,8 @@ import { FlowCampaignModel } from "../models/FlowCampaign";
 import { FlowImgModel } from "../models/FlowImg";
 import { WebhookModel } from "../models/Webhook";
 import LeadView from "../models/LeadView";
+import ChipMaturation from "../models/ChipMaturation";
+import ChipMaturationLog from "../models/ChipMaturationLog";
 
 // eslint-disable-next-line
 const dbConfig = require("../config/database");
@@ -113,7 +115,9 @@ const models = [
   FlowCampaignModel,
   FlowImgModel,
   LeadView,
-  WebhookModel
+  WebhookModel,
+  ChipMaturation,
+  ChipMaturationLog
 ];
 
 sequelize.addModels(models);
