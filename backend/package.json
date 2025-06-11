@@ -83,7 +83,8 @@
     "uuid": "^8.3.2",
     "winston": "^3.13.0",
     "xlsx": "^0.18.3",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "ioredis": "^4.28.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
