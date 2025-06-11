@@ -3,7 +3,7 @@ import * as MaturationService from "../services/MaturationService";
 import { MaturationJob } from "../services/MaturationService/MaturationManager";
 
 const formatJob = (job: MaturationJob) => {
-  const { interval, ...rest } = job;
+  const { timeout, ...rest } = job;
   return {
     ...rest,
     progress:
