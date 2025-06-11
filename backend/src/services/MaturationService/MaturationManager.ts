@@ -20,6 +20,8 @@ export interface MaturationJob {
   history: { timestamp: Date; from: string; to: string; message: string; success: boolean; error?: string }[];
   timeout?: NodeJS.Timeout;
   companyId: number;
+  currentIndex: number;
+  lastFrom?: string;
 }
 
 class MaturationManager {
@@ -39,12 +41,21 @@ class MaturationManager {
     if (!job || job.status !== "running") return;
 
     const chips = [job.originChipId, ...job.targetChipIds];
-    const from = chips[Math.floor(Math.random() * chips.length)];
+    let from = chips[Math.floor(Math.random() * chips.length)];
+    if (job.lastFrom) {
+      let attempts = 0;
+      while (from === job.lastFrom && chips.length > 1 && attempts < 10) {
+        from = chips[Math.floor(Math.random() * chips.length)];
+        attempts += 1;
+      }
+    }
     let to = chips[Math.floor(Math.random() * chips.length)];
     while (to === from && chips.length > 1) {
       to = chips[Math.floor(Math.random() * chips.length)];
     }
-    const msg = job.conversations[Math.floor(Math.random() * job.conversations.length)];
+    const msg = job.conversations[job.currentIndex % job.conversations.length];
+    job.currentIndex += 1;
+    job.lastFrom = from;
 
     const whatsapp = await Whatsapp.findOne({ where: { number: from, companyId: job.companyId } });
     let success = false;
@@ -103,7 +114,9 @@ class MaturationManager {
         endAt: record.endAt,
         status: record.status as MaturationStatus,
         companyId: record.companyId,
-        history: []
+        history: [],
+        currentIndex: 0,
+        lastFrom: undefined
       };
       this.jobs.set(job.id, job);
       this.scheduleNext(job);
@@ -146,7 +159,9 @@ class MaturationManager {
       endAt,
       status: "running",
       history: [],
-      companyId: data.companyId
+      companyId: data.companyId,
+      currentIndex: 0,
+      lastFrom: undefined
     };
 
     this.jobs.set(id, job);
