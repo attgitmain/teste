@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
 import Title from "../../components/Title";
@@ -6,6 +6,8 @@ import {
   Typography,
   Paper,
   TextField,
+  Select,
+  MenuItem,
   Button,
   Grid,
   LinearProgress,
@@ -17,12 +19,16 @@ import {
   listMaturations,
   cancelMaturation,
 } from "../../services/maturacaoApi";
+import { WhatsAppsContext } from "../../context/WhatsApp/WhatsAppsContext";
 
 const ChipMaturation = () => {
+  const { whatsApps } = useContext(WhatsAppsContext);
   const [chip, setChip] = useState("");
   const [days, setDays] = useState(1);
   const [conversations, setConversations] = useState("");
   const [jobs, setJobs] = useState([]);
+
+  const activeConnections = whatsApps?.filter(w => w.status === "CONNECTED") || [];
 
   const fetchJobs = async () => {
     try {
@@ -66,12 +72,25 @@ const ChipMaturation = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Paper style={{ padding: 16 }}>
-            <TextField
-              label={i18n.t("chipMaturation.chipLabel")}
+            <Select
               fullWidth
+              displayEmpty
               value={chip}
               onChange={(e) => setChip(e.target.value)}
-            />
+              renderValue={() => {
+                if (!chip) {
+                  return i18n.t("chipMaturation.chipLabel");
+                }
+                const conn = activeConnections.find(c => String(c.number) === chip);
+                return conn ? `${conn.name} (${conn.number})` : chip;
+              }}
+            >
+              {activeConnections.map((conn) => (
+                <MenuItem key={conn.id} value={String(conn.number)}>
+                  {conn.name} ({conn.number})
+                </MenuItem>
+              ))}
+            </Select>
             <TextField
               type="number"
               label={i18n.t("chipMaturation.daysLabel")}

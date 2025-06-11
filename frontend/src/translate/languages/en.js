@@ -347,7 +347,7 @@ const messages = {
                         },
                         chipMaturation: {
                                 title: "Chip Maturation",
-                                chipLabel: "Chip Number",
+                                chipLabel: "Select Connection",
                                 daysLabel: "Days",
                                 conversationLabel: "Conversations (one per line)",
                                 startButton: "Start Maturation",
