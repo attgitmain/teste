@@ -10,12 +10,12 @@ const useStyles = makeStyles(theme => ({
 		height: `calc(100% - 48px)`,
 	},
 
-	contentWrapper: {
-		height: "100%",
-		overflowY: "hidden",
-		display: "flex",
-		flexDirection: "column",
-	},
+        contentWrapper: {
+                height: "100%",
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+        },
 }));
 
 const MainContainer = ({ children }) => {
