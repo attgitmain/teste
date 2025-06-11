@@ -65,8 +65,8 @@ class MaturationManager {
   public cancelJob(id: string): void {
     const job = this.jobs.get(id);
     if (!job) return;
-    job.status = "canceled";
     if (job.interval) clearInterval(job.interval);
+    this.jobs.delete(id);
   }
 }
 
