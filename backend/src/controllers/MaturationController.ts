@@ -1,13 +1,19 @@
 import { Request, Response } from "express";
 import * as MaturationService from "../services/MaturationService";
+import { MaturationJob } from "../services/MaturationService/MaturationManager";
 
-export const index = (req: Request, res: Response): Response => {
-  const jobs = MaturationService.listMaturations().map(job => ({
-    ...job,
+const formatJob = (job: MaturationJob) => {
+  const { interval, ...rest } = job;
+  return {
+    ...rest,
     progress:
       (Date.now() - job.startAt.getTime()) /
       (job.endAt.getTime() - job.startAt.getTime()),
-  }));
+  };
+};
+
+export const index = (req: Request, res: Response): Response => {
+  const jobs = MaturationService.listMaturations().map(formatJob);
   return res.json(jobs);
 };
 
@@ -21,7 +27,7 @@ export const store = (req: Request, res: Response): Response => {
     days: Number(days),
     conversations,
   });
-  return res.status(201).json(job);
+  return res.status(201).json(formatJob(job));
 };
 
 export const show = (req: Request, res: Response): Response => {
@@ -30,12 +36,7 @@ export const show = (req: Request, res: Response): Response => {
   if (!job) {
     return res.status(404).json({ error: "Not found" });
   }
-  return res.json({
-    ...job,
-    progress:
-      (Date.now() - job.startAt.getTime()) /
-      (job.endAt.getTime() - job.startAt.getTime()),
-  });
+  return res.json(formatJob(job));
 };
 
 export const remove = (req: Request, res: Response): Response => {

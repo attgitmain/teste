@@ -345,9 +345,11 @@ const messages = {
                                 noCredits: "You do not have enough credits",
                                 message: "Page under development."
                         },
-                        chipMaturation: {
-                                title: "Chip Maturation",
-                                chipLabel: "Chip Number",
+                       chipMaturation: {
+                               title: "Chip Maturation",
+                                description:
+                                        "Select an active connection and provide sample messages. They will be sent automatically to keep the chip in use.",
+                               chipLabel: "Select Connection",
                                 daysLabel: "Days",
                                 conversationLabel: "Conversations (one per line)",
                                 startButton: "Start Maturation",
