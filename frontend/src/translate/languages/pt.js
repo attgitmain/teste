@@ -1543,6 +1543,8 @@ const messages = {
       },
       chipMaturation: {
         title: "Maturação de Chip",
+        description:
+          "Selecione uma conexão ativa e forneça mensagens exemplo. Elas serão enviadas automaticamente para manter o chip em uso.",
         chipLabel: "Selecione a Conexão",
         daysLabel: "Dias",
         conversationLabel: "Conversas (uma por linha)",
