@@ -4,6 +4,7 @@ interface CreateMaturationData {
   originChipId: string;
   targetChipIds: string[];
   days: number;
+  intervalHours: number;
   conversations: string[];
   companyId: number;
 }

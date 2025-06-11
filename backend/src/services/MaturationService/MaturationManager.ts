@@ -12,6 +12,7 @@ export interface MaturationJob {
   originChipId: string;
   targetChipIds: string[];
   days: number;
+  intervalHours: number;
   conversations: string[];
   startAt: Date;
   endAt: Date;
@@ -29,7 +30,7 @@ class MaturationManager {
   }
 
   private scheduleNext(job: MaturationJob) {
-    const delay = (1 + Math.floor(Math.random() * 4)) * 60 * 60 * 1000;
+    const delay = job.intervalHours * 60 * 60 * 1000;
     job.timeout = setTimeout(() => this.executeJob(job.id), delay);
   }
 
@@ -96,6 +97,7 @@ class MaturationManager {
         originChipId: record.originChipId,
         targetChipIds: record.targetChipIds || [],
         days: record.days,
+        intervalHours: (record as any).intervalHours || 1,
         conversations: record.conversations || [],
         startAt: record.startAt,
         endAt: record.endAt,
@@ -112,6 +114,7 @@ class MaturationManager {
     originChipId: string;
     targetChipIds: string[];
     days: number;
+    intervalHours: number;
     conversations: string[];
     companyId: number;
   }): Promise<MaturationJob> {
@@ -124,6 +127,7 @@ class MaturationManager {
       originChipId: data.originChipId,
       targetChipIds: data.targetChipIds,
       days: data.days,
+      intervalHours: data.intervalHours,
       conversations: data.conversations,
       startAt,
       endAt,
@@ -136,6 +140,7 @@ class MaturationManager {
       originChipId: data.originChipId,
       targetChipIds: data.targetChipIds,
       days: data.days,
+      intervalHours: data.intervalHours,
       conversations: data.conversations,
       startAt,
       endAt,
@@ -145,7 +150,8 @@ class MaturationManager {
     };
 
     this.jobs.set(id, job);
-    this.scheduleNext(job);
+
+    await this.executeJob(id);
 
     return job;
   }
