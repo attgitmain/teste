@@ -18,14 +18,15 @@ export const index = (req: Request, res: Response): Response => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { originChipId, targetChipIds, days, conversations, companyId } = req.body;
-  if (!originChipId || !targetChipIds?.length || !conversations || !Array.isArray(conversations)) {
+  const { originChipId, targetChipIds, days, intervalHours, conversations, companyId } = req.body;
+  if (!originChipId || !targetChipIds?.length || !conversations || !Array.isArray(conversations) || !days) {
     return res.status(400).json({ error: "Invalid data" });
   }
   const job = await MaturationService.createMaturation({
     originChipId,
     targetChipIds,
     days: Number(days),
+    intervalHours: Number(intervalHours) || 1,
     conversations,
     companyId
   });

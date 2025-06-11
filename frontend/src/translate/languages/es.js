@@ -1475,8 +1475,10 @@ const messages = {
         description:
           "Seleccione una conexión activa y proporcione mensajes de ejemplo. Se enviarán automáticamente para mantener el chip en uso.",
         chipLabel: "Seleccione la Conexión",
+        step_schedule: "Defina Días e Intervalo",
         daysLabel: "Días",
         conversationLabel: "Conversaciones (una por línea)",
+        intervalLabel: "Intervalo (horas)",
         startButton: "Iniciar Maduración",
         cancelButton: "Interrumpir",
         started: "Maduración iniciada",
