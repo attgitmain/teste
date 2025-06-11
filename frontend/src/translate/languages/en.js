@@ -85,10 +85,11 @@ const messages = {
 					status: "Status",
 					lastUpdate: "Last Update",
 					default: "Default",
-					actions: "Actions",
-					session: "Session",
-				},
-			},
+                                        actions: "Actions",
+                                        session: "Session",
+                                        maturationInProgress: "Maturation in progress",
+                                },
+                        },
 			whatsappModal: {
 				title: {
 					add: "Add WhatsApp",
@@ -346,7 +347,16 @@ const messages = {
                         },
                         chipMaturation: {
                                 title: "Chip Maturation",
-                                message: "Page under development."
+                                chipLabel: "Chip Number",
+                                daysLabel: "Days",
+                                conversationLabel: "Conversations (one per line)",
+                                startButton: "Start Maturation",
+                                cancelButton: "Stop",
+                                started: "Maturation started",
+                                error: "Failed to start",
+                                status_running: "Running",
+                                status_completed: "Completed",
+                                status_canceled: "Canceled"
                         },
 			messagesList: {
 				header: {

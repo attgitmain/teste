@@ -24,6 +24,7 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
 } from "@material-ui/core";
 import {
   Edit,
@@ -60,6 +61,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import ForbiddenPage from "../../components/ForbiddenPage";
 import { Can } from "../../components/Can";
 import moment from "moment";
+import { listMaturations } from "../../services/maturacaoApi";
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
@@ -159,6 +161,7 @@ const Connections = () => {
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [selectedWhatsApp, setSelectedWhatsApp] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [maturationJobs, setMaturationJobs] = useState([]);
   const { handleLogout } = useContext(AuthContext);
   const history = useHistory();
   const confirmationModalInitialState = {
@@ -185,6 +188,21 @@ const Connections = () => {
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchMaturationJobs = async () => {
+    try {
+      const { data } = await listMaturations();
+      setMaturationJobs(data);
+    } catch (err) {
+      // ignore
+    }
+  };
+
+  useEffect(() => {
+    fetchMaturationJobs();
+    const interval = setInterval(fetchMaturationJobs, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   var before = moment(moment().format()).isBefore(user.company.dueDate);
@@ -733,7 +751,23 @@ const Connections = () => {
                       whatsApps.map((whatsApp) => (
                         <TableRow key={whatsApp.id}>
                           <TableCell align="center">{IconChannel(whatsApp.channel)}</TableCell>
-                          <TableCell align="center">{whatsApp.name}</TableCell>
+                          <TableCell align="center">
+                            {whatsApp.name}
+                            {maturationJobs.some(
+                              (job) =>
+                                job.chipId === String(whatsApp.number) &&
+                                job.status === "running"
+                            ) && (
+                              <Chip
+                                label={i18n.t(
+                                  "connections.table.maturationInProgress"
+                                )}
+                                size="small"
+                                color="primary"
+                                style={{ marginLeft: 8 }}
+                              />
+                            )}
+                          </TableCell>
                           <TableCell align="center">{whatsApp.number && whatsApp.channel === 'whatsapp' ? (<>{formatSerializedId(whatsApp.number)}</>) : whatsApp.number}</TableCell>
                           <TableCell align="center">{renderStatusToolTips(whatsApp)}</TableCell>
                           <TableCell align="center">{renderActionButtons(whatsApp)}</TableCell>

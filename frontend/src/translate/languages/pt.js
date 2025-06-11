@@ -253,6 +253,7 @@ const messages = {
           actions: "Ações",
           session: "Sessão",
           number: "Número do Whatsapp",
+          maturationInProgress: "Chip em maturação",
         },
       },
       showTicketOpenModal: {
@@ -1542,7 +1543,16 @@ const messages = {
       },
       chipMaturation: {
         title: "Maturação de Chip",
-        message: "Página em desenvolvimento."
+        chipLabel: "Número do Chip",
+        daysLabel: "Dias",
+        conversationLabel: "Conversas (uma por linha)",
+        startButton: "Iniciar Maturação",
+        cancelButton: "Interromper",
+        started: "Maturação iniciada",
+        error: "Erro ao iniciar",
+        status_running: "Em andamento",
+        status_completed: "Concluído",
+        status_canceled: "Interrompido",
       },
       settings: {
         success: "Configurações salvas com sucesso.",
