@@ -30,16 +30,10 @@ if (process.env.CERTIFICADOS == "true") {
       attributes: ["id"]
     });
 
-    const allPromises: any[] = [];
-    companies.map(async c => {
-      const promise = StartAllWhatsAppsSessions(c.id);
-      allPromises.push(promise);
-    });
-
-    Promise.all(allPromises).then(async () => {
+      const sessionPromises = companies.map(c => StartAllWhatsAppsSessions(c.id));
+      await Promise.allSettled(sessionPromises);
       await startQueueProcess();
       await initMaturations();
-    });
 
     if (process.env.REDIS_URI_ACK && process.env.REDIS_URI_ACK !== '') {
       BullQueue.process();
@@ -73,16 +67,10 @@ if (process.env.CERTIFICADOS == "true") {
       attributes: ["id"]
     });
   
-    const allPromises: any[] = [];
-    companies.map(async c => {
-      const promise = StartAllWhatsAppsSessions(c.id);
-      allPromises.push(promise);
-    });
-  
-    Promise.all(allPromises).then(async () => {
+      const sessionPromises = companies.map(c => StartAllWhatsAppsSessions(c.id));
+      await Promise.allSettled(sessionPromises);
       await startQueueProcess();
       await initMaturations();
-    });
   
     if (process.env.REDIS_URI_ACK && process.env.REDIS_URI_ACK !== '') {
       BullQueue.process();
