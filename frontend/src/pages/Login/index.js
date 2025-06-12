@@ -276,7 +276,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>{appName || "ZapFlow"}</title>
+        <title>{appName || "Loopchat"}</title>
         <link rel="icon" href={appLogoFavicon || "/default-favicon.ico"} />
       </Helmet>
       <div className={classes.root}>
@@ -284,7 +284,7 @@ const Login = () => {
           <CssBaseline />
           <div className={classes.paper}>
             <div>
-              <img className={classes.logoImg} src="/zapflow-logo.png" alt="ZapFlow" />
+              <img className={classes.logoImg} src="/logo.png" alt="Loopchat" />
             </div>
             <form className={classes.form} noValidate onSubmit={handlSubmit}>
               <TextField
@@ -354,7 +354,7 @@ const Login = () => {
             </form>
           </div>
           <Typography variant="body2" align="center" className={classes.copyright}>
-            Copyright 2025 - ZapFlow
+            Copyright 2025 - Loopchat
           </Typography>
         </Container>
       </div>
