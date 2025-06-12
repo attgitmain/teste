@@ -2,8 +2,8 @@
   "name": "frontend",
   "version": "4.5.0",
   "private": true,
-  "nomeEmpresa": "Sua empresa",
-  "versionSystem": "7.0.0",
+  "nomeEmpresa": "Loopchat",
+  "versionSystem": "1.0.0",
   "dependencies": {
     "@date-io/date-fns": "^2.16.0",
     "@emotion/react": "^11.10.5",
