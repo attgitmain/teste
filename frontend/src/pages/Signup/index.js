@@ -131,7 +131,7 @@ const useStyles = makeStyles(theme => ({
 
 const handleNewUserMessage = newMessage => {
     window.open(
-        `https://api.whatsapp.com/send?phone=5583996226002&text=${encodeURIComponent(newMessage)}`,
+        `https://api.whatsapp.com/send?phone=5544997098335&text=${encodeURIComponent(newMessage)}`,
       "_blank"
     );
 };
