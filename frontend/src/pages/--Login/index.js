@@ -213,7 +213,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>{appName || "CHATPAGEPRO"}</title>
+        <title>{appName || "LOOPCHAT"}</title>
         <link rel="icon" href={appLogoFavicon || "/default-favicon.ico"} />
       </Helmet>
       <div className={classes.root}>
