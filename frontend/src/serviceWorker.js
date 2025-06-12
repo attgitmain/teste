@@ -4,7 +4,7 @@ export function register() {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
-      navigator.serviceWorker.register(swUrl)
+      navigator.serviceWorker.register(swUrl, { type: 'module' })
         .then((registration) => {
           console.log('Service worker registrado com sucesso!', registration);
         })
