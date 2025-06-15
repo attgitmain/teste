@@ -14,6 +14,7 @@ import HelpsManager from "../../components/HelpsManager";
 import Options from "../../components/Settings/Options";
 import Whitelabel from "../../components/Settings/Whitelabel";
 import UploaderCert from "../../components/Settings/UploaderCert";
+import ChipConversationUpload from "../../components/Settings/ChipConversationUpload";
 import { i18n } from "../../translate/i18n.js";
 import { toast } from "react-toastify";
 
@@ -160,6 +161,7 @@ const SettingsCustom = () => {
               {isSuper() ? <Tab label={i18n.t("settings.tabs.helps")} value={"helps"} /> : null}
               {isSuper() ? <Tab label="Whitelabel" value={"whitelabel"} /> : null}
               {isSuper() ? <Tab label="Certificado Efí PIX" value={"uploadercert"} /> : null}
+              {isSuper() ? <Tab label="Maturação de Chip" value={"chipmaturation"} /> : null}
             </Tabs>
             <Paper className={classes.paper} elevation={0}>
               <TabPanel
@@ -223,6 +225,13 @@ const SettingsCustom = () => {
                     name={"uploadercert"}
                     >
                     <UploaderCert />
+                    </TabPanel>
+                    <TabPanel
+                      className={classes.container}
+                      value={tab}
+                      name={"chipmaturation"}
+                    >
+                      <ChipConversationUpload />
                     </TabPanel>
                   </>
                 )}
