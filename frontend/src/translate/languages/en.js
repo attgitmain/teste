@@ -356,6 +356,7 @@ const messages = {
                                 step_messages: "Messages",
                                daysLabel: "Days",
                                conversationLabel: "Conversations (one per line)",
+                               selectListsLabel: "Conversation Lists",
                                intervalLabel: "Interval (minutes)",
                                startButton: "Start Maturation",
                                 historyButton: "View history",

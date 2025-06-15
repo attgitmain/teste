@@ -29,6 +29,7 @@ import {
 import { WhatsAppsContext } from "../../context/WhatsApp/WhatsAppsContext";
 import { AuthContext } from "../../context/Auth/AuthContext";
 import Modal from "@material-ui/core/Modal";
+import { listConversationLists } from "../../services/conversationListApi";
 
 const ChipMaturation = () => {
   const { whatsApps } = useContext(WhatsAppsContext);
@@ -38,12 +39,26 @@ const ChipMaturation = () => {
   const [days, setDays] = useState(1);
   const [intervalMinutes, setIntervalMinutes] = useState(60);
   const [conversations, setConversations] = useState("");
+  const [conversationLists, setConversationLists] = useState([]);
+  const [selectedLists, setSelectedLists] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [history, setHistory] = useState([]);
 
   const activeConnections = whatsApps?.filter(w => w.status === "CONNECTED") || [];
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        const { data } = await listConversationLists();
+        setConversationLists(data);
+      } catch (err) {
+        // ignore
+      }
+    };
+    fetchLists();
+  }, []);
 
   const fetchJobs = async () => {
     try {
@@ -95,21 +110,27 @@ const ChipMaturation = () => {
 
   const handleStart = async () => {
     try {
+      let msgs = conversations
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+      selectedLists.forEach((id) => {
+        const list = conversationLists.find((l) => l.id === id);
+        if (list) msgs = msgs.concat(list.messages);
+      });
       await startMaturation({
         originChipId: origin,
         targetChipIds: targets,
         days: Number(days),
         intervalMinutes: Number(intervalMinutes),
-        conversations: conversations
-          .split(/\r?\n/)
-          .map((l) => l.trim())
-          .filter(Boolean),
+        conversations: msgs,
         companyId: user.companyId,
       });
       toast.success(i18n.t("chipMaturation.started"));
       setOrigin("");
       setTargets([]);
       setConversations("");
+      setSelectedLists([]);
       setActiveStep(0);
       fetchJobs();
     } catch (err) {
@@ -172,6 +193,9 @@ const ChipMaturation = () => {
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_targets")}</StepLabel>
                 <StepContent>
+                  <Typography variant="body2" gutterBottom>
+                    {i18n.t("chipMaturation.selectListsLabel")}
+                  </Typography>
                   <Select
                     multiple
                     fullWidth
@@ -211,6 +235,27 @@ const ChipMaturation = () => {
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_messages")}</StepLabel>
                 <StepContent>
+                  <Select
+                    multiple
+                    fullWidth
+                    value={selectedLists}
+                    onChange={(e) => setSelectedLists(e.target.value)}
+                    renderValue={(selected) =>
+                      selected
+                        .map((id) => {
+                          const l = conversationLists.find((c) => c.id === id);
+                          return l ? l.name : id;
+                        })
+                        .join(", ")
+                    }
+                  >
+                    {conversationLists.map((list) => (
+                      <MenuItem key={list.id} value={list.id}>
+                        <Checkbox checked={selectedLists.indexOf(list.id) > -1} />
+                        <ListItemText primary={list.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
                   <TextField
                     multiline
                     rows={4}
@@ -238,7 +283,7 @@ const ChipMaturation = () => {
                   color="primary"
                   variant="contained"
                   onClick={handleStart}
-                  disabled={!origin || targets.length === 0 || conversations.trim() === ""}
+                  disabled={!origin || targets.length === 0 || (conversations.trim() === "" && selectedLists.length === 0)}
                 >
                   {i18n.t("chipMaturation.startButton")}
                 </Button>
