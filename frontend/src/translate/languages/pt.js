@@ -1552,7 +1552,7 @@ const messages = {
         step_messages: "Mensagens",
         daysLabel: "Dias",
         conversationLabel: "Conversas (uma por linha)",
-        intervalLabel: "Intervalo (horas)",
+        intervalLabel: "Intervalo (minutos)",
         startButton: "Iniciar Maturação",
         historyButton: "Ver histórico",
         cancelButton: "Interromper",

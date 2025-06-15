@@ -18,7 +18,7 @@ export const index = (req: Request, res: Response): Response => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { originChipId, targetChipIds, days, intervalHours, conversations, companyId } = req.body;
+  const { originChipId, targetChipIds, days, intervalHours, intervalMinutes, conversations, companyId } = req.body;
   if (!originChipId || !targetChipIds?.length || !conversations || !Array.isArray(conversations) || !days) {
     return res.status(400).json({ error: "Invalid data" });
   }
@@ -26,7 +26,8 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     originChipId,
     targetChipIds,
     days: Number(days),
-    intervalHours: Number(intervalHours) || 1,
+    intervalHours: Number(intervalHours) || 0,
+    intervalMinutes: Number(intervalMinutes) || ((Number(intervalHours) || 1) * 60),
     conversations,
     companyId
   });

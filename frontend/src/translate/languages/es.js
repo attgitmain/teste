@@ -1478,7 +1478,7 @@ const messages = {
         step_schedule: "Defina Días e Intervalo",
         daysLabel: "Días",
         conversationLabel: "Conversaciones (una por línea)",
-        intervalLabel: "Intervalo (horas)",
+        intervalLabel: "Intervalo (minutos)",
         startButton: "Iniciar Maduración",
         cancelButton: "Interrumpir",
         started: "Maduración iniciada",
