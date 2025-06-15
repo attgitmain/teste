@@ -36,7 +36,7 @@ const ChipMaturation = () => {
   const [origin, setOrigin] = useState("");
   const [targets, setTargets] = useState([]);
   const [days, setDays] = useState(1);
-  const [intervalHours, setIntervalHours] = useState(1);
+  const [intervalMinutes, setIntervalMinutes] = useState(60);
   const [conversations, setConversations] = useState("");
   const [jobs, setJobs] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
@@ -67,10 +67,10 @@ const ChipMaturation = () => {
   }, [targets]);
 
   useEffect(() => {
-    if (activeStep === 2 && days && intervalHours) {
+    if (activeStep === 2 && days && intervalMinutes) {
       setActiveStep(3);
     }
-  }, [days, intervalHours]);
+  }, [days, intervalMinutes]);
 
   useEffect(() => {
     fetchJobs();
@@ -99,7 +99,7 @@ const ChipMaturation = () => {
         originChipId: origin,
         targetChipIds: targets,
         days: Number(days),
-        intervalHours: Number(intervalHours),
+        intervalMinutes: Number(intervalMinutes),
         conversations: conversations
           .split(/\r?\n/)
           .map((l) => l.trim())
@@ -203,8 +203,8 @@ const ChipMaturation = () => {
                     style={{ marginTop: 8 }}
                     label={i18n.t("chipMaturation.intervalLabel")}
                     fullWidth
-                    value={intervalHours}
-                    onChange={(e) => setIntervalHours(e.target.value)}
+                    value={intervalMinutes}
+                    onChange={(e) => setIntervalMinutes(e.target.value)}
                   />
                 </StepContent>
               </Step>

@@ -28,6 +28,9 @@ class ChipMaturation extends Model<ChipMaturation> {
   @Column
   intervalHours: number;
 
+  @Column
+  intervalMinutes: number;
+
   @Column({ type: DataType.JSONB })
   conversations: string[];
 
