@@ -3,8 +3,7 @@ import * as ChipConversationService from "../services/ChipConversationService";
 import { getIO } from "../libs/socket";
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
-  const { companyId } = req.user;
-  const data = await ChipConversationService.listLists(companyId);
+  const data = await ChipConversationService.listLists();
   return res.json(data);
 };
 

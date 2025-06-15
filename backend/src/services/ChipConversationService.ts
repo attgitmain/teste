@@ -14,8 +14,8 @@ export const createList = async ({ name, messages, companyId }: CreateData) => {
   return list;
 };
 
-export const listLists = async (companyId: number) => {
-  return ChipConversationList.findAll({ where: { companyId } });
+export const listLists = async () => {
+  return ChipConversationList.findAll();
 };
 
 export const deleteList = async (id: string): Promise<void> => {
