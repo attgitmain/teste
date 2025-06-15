@@ -145,13 +145,20 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
       const company = await ShowCompanyService(1);
       const whatsappCompany = await FindCompaniesWhatsappService(company.id)
 
-      if (whatsappCompany.whatsapps[0].status === "CONNECTED" && (phone !== undefined || !isNil(phone) || !isEmpty(phone))) {
-        const whatsappId = whatsappCompany.whatsapps[0].id
+      if (whatsappCompany.whatsapps[0].status === "CONNECTED") {
+        const whatsappId = whatsappCompany.whatsapps[0].id;
         const wbot = getWbot(whatsappId);
 
-        const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`
+        const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`;
 
-        await wbot.sendMessage(`55${phone}@s.whatsapp.net`, { text: body });
+        if (phone !== undefined && !isNil(phone) && !isEmpty(phone)) {
+          await wbot.sendMessage(`55${phone}@s.whatsapp.net`, { text: body });
+        }
+
+        const adminPhone = process.env.ADMIN_PHONE;
+        if (adminPhone && !isEmpty(adminPhone)) {
+          await wbot.sendMessage(`55${adminPhone}@s.whatsapp.net`, { text: body });
+        }
       }
     } catch (error) {
       console.log('Não consegui enviar a mensagem')
