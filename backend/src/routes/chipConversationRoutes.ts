@@ -9,5 +9,6 @@ const upload = multer();
 
 routes.get("/conversation-lists", isAuth, ChipConversationController.index);
 routes.post("/conversation-lists", isAuth, isSuper, upload.single("file"), ChipConversationController.store);
+routes.delete("/conversation-lists/:id", isAuth, isSuper, ChipConversationController.remove);
 
 export default routes;
