@@ -23,8 +23,7 @@ function loadTextFileAjaxSync(filePath, mimeType)
     return xmlhttp.responseText;
   }
   else {
-    // TODO Throw exception
-    return null;
+    throw new Error('Failed to load file');
   }
 }
 
