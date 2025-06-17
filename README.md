@@ -94,3 +94,15 @@ cd ../frontend
 npm test
 ```
 
+
+## Landing Page
+
+Para executar ou gerar o build da landing page criada em `landing/`:
+
+```bash
+cd landing
+npm install
+npm run build
+```
+
+O conteúdo de produção pode ser servido com `npm start` ou a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para esse build estático. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
