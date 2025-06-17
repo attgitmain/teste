@@ -140,9 +140,7 @@ const App = () => {
   }, [prefersDarkMode]);
 
   useEffect(() => {
-    console.log("|=========== handleSaveSetting ==========|")
-    console.log("APP START")
-    console.log("|========================================|")
+    console.info("App initialization")
    
     
     getPublicSetting("primaryColorLight")
@@ -150,42 +148,42 @@ const App = () => {
         setPrimaryColorLight(color || "#0000FF");
       })
       .catch((error) => {
-        console.log("Error reading setting", error);
+        console.error("Error reading setting", error);
       });
     getPublicSetting("primaryColorDark")
       .then((color) => {
         setPrimaryColorDark(color || "#39ACE7");
       })
       .catch((error) => {
-        console.log("Error reading setting", error);
+        console.error("Error reading setting", error);
       });
     getPublicSetting("appLogoLight")
       .then((file) => {
         setAppLogoLight(file ? getBackendUrl() + "/public/" + file : defaultLogoLight);
       })
       .catch((error) => {
-        console.log("Error reading setting", error);
+        console.error("Error reading setting", error);
       });
     getPublicSetting("appLogoDark")
       .then((file) => {
         setAppLogoDark(file ? getBackendUrl() + "/public/" + file : defaultLogoDark);
       })
       .catch((error) => {
-        console.log("Error reading setting", error);
+        console.error("Error reading setting", error);
       });
     getPublicSetting("appLogoFavicon")
       .then((file) => {
         setAppLogoFavicon(file ? getBackendUrl() + "/public/" + file : defaultLogoFavicon);
       })
       .catch((error) => {
-        console.log("Error reading setting", error);
+        console.error("Error reading setting", error);
       });
     getPublicSetting("appName")
       .then((name) => {
         setAppName(name || "Chat-flow");
       })
       .catch((error) => {
-        console.log("!==== Erro ao carregar temas: ====!", error);
+        console.error("Erro ao carregar temas:", error);
         setAppName("chat-flow");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -203,7 +201,7 @@ const App = () => {
         const { data } = response;
         window.localStorage.setItem("frontendVersion", data.version);
       } catch (error) {
-        console.log("Error fetching data", error);
+        console.error("Error fetching data", error);
       }
     }
     fetchVersionData();
