@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // gera HTML estático para hospedar a partir da pasta out/
+  output: "export",
 };
 
 export default nextConfig;

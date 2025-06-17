@@ -103,6 +103,7 @@ Para executar ou gerar o build da landing page criada em `landing/`:
 cd landing
 npm install
 npm run build
+npm run export
 ```
 
-O conteúdo de produção pode ser servido com `npm start` ou a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para esse build estático. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
+Os arquivos estáticos serão gerados em `out/`. Sirva esse diretório em **atendesolucao.com** e **www.atendesolucao.com**, mantendo **app.atendesolucao.com** para a aplicação React existente em `frontend`.
