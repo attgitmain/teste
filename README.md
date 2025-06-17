@@ -105,4 +105,4 @@ npm install
 npm run build
 ```
 
-O conteúdo de produção pode ser servido com `npm start` ou a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para esse build estático. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
+O conteúdo de produção pode ser iniciado com `npm start`, que executa o servidor Next.js a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para essa aplicação. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
