@@ -2,7 +2,7 @@
 
 export default function Navbar() {
   return (
-    <nav className="absolute top-4 left-0 right-0 flex justify-between items-center px-6 z-20 text-white font-[family-name:var(--font-geist-sans)]">
+    <nav className="absolute top-4 left-0 right-0 flex justify-between items-center px-6 z-20 text-white font-[family-name:var(--font-geist-sans)] backdrop-blur-md bg-white/10 rounded-xl mx-4 py-2">
       <span className="text-xl font-semibold">Atende Solução</span>
       <div className="space-x-4">
         <a
