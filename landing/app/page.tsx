@@ -2,16 +2,15 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Header from "./components/Header";
+import CTA from "./components/CTA";
+import Footer from "./components/Footer";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
-    <div className="bg-gradient-to-br from-primary to-secondary min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-1 container mx-auto flex flex-col-reverse md:flex-row items-center">
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-1 container mx-auto flex flex-col-reverse md:flex-row items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,10 +39,11 @@ export default function Home() {
           className="md:w-1/2 mb-8 md:mb-0"
         >
           <Image
-            src="/assets/hero-illustration.svg"
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80"
             width={500}
             height={400}
             alt="Dashboard Loopchat"
+            className="rounded-xl shadow-xl"
           />
         </motion.div>
       </main>
@@ -67,17 +67,8 @@ export default function Home() {
         ))}
       </section>
 
-      <footer className="bg-primary py-8 sticky bottom-0">
-        <div className="container mx-auto text-center text-white">
-          <h3 className="text-2xl mb-4">Pronto para turbinar seu atendimento?</h3>
-          <a
-            href="#"
-            className="px-8 py-3 bg-accent text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition"
-          >
-            Teste Grátis Agora
-          </a>
-        </div>
-      </footer>
+      <CTA />
+      <Footer />
     </div>
   );
 }
