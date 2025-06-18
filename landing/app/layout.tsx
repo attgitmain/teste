@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`bg-gradient-to-br from-primary to-secondary ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`bg-gradient-to-br from-primary to-secondary ${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <Header />
         <main>{children}</main>

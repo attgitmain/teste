@@ -21,7 +21,7 @@ export default function Features() {
   ]
 
   return (
-    <section className="bg-white text-gray-800 py-16 font-[family-name:var(--font-geist-sans)]">
+    <section className="bg-white text-gray-800 py-16 font-sans">
       <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-center">
         {features.map((f) => (
           <div key={f.title} className="flex flex-col items-center">
