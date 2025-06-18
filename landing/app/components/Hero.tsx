@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center text-center text-white font-[family-name:var(--font-geist-sans)] overflow-hidden">
+    <section className="relative min-h-screen flex flex-col justify-center items-center text-center text-white font-sans overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-500 to-blue-400" />
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center opacity-30" />
       <motion.div
