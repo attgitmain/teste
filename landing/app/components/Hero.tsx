@@ -1,52 +1,33 @@
-'use client'
-
-import { motion } from 'framer-motion'
+"use client";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center text-center text-white font-sans overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-500 to-blue-400" />
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center opacity-30" />
+    <section
+      id="hero"
+      className="relative flex items-center justify-center text-center min-h-screen px-4"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary z-0" />
       <motion.div
-        className="absolute -left-20 -top-20 w-[30rem] h-[30rem] bg-blue-300 rounded-full blur-3xl opacity-40"
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
-      />
-      <motion.div
-        className="absolute right-0 -bottom-20 w-[40rem] h-[40rem] bg-blue-800 rounded-full blur-3xl opacity-30"
-        animate={{ rotate: -360 }}
-        transition={{ repeat: Infinity, duration: 40, ease: 'linear' }}
-      />
-      <motion.h1
-        initial={{ opacity: 0, y: 40 }}
+        className="relative z-10 space-y-6 max-w-2xl"
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="text-5xl sm:text-6xl font-bold mb-6 z-10"
+        transition={{ duration: 1 }}
       >
-        Bem-vindo ao Atende Solução
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
-        className="text-xl max-w-2xl z-10"
-      >
-        A plataforma completa para atendimento e autómação de conversas.
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.4 }}
-        className="mt-8 z-10"
-      >
+        <h1 className="text-5xl sm:text-6xl font-extrabold text-white">
+          O CRM que fala a língua da sua empresa
+        </h1>
+        <p className="text-lg text-white/90">
+          Automatize atendimentos, monitore em tempo real e integre seu WhatsApp com
+          inteligência artificial.
+        </p>
         <a
-          href="https://app.atendesolucao.com/signup"
-          className="px-6 py-3 rounded-md bg-blue-600 hover:bg-blue-700"
+          href="#how"
+          className="inline-block px-8 py-3 bg-white text-primary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition"
         >
-          Comece agora
+          Saiba Como
         </a>
       </motion.div>
     </section>
-  )
+  );
 }
-

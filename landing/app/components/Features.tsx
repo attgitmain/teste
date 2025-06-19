@@ -1,36 +1,49 @@
-'use client'
-import Image from 'next/image'
+"use client";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Features() {
-  const features = [
+  const items = [
     {
-      icon: '/globe.svg',
-      title: 'Integração',
-      description: 'Conecte seus canais em um único lugar.'
+      icon: "/assets/globe.svg",
+      title: "Integração",
+      desc: "Centralize WhatsApp, Instagram e mais.",
     },
     {
-      icon: '/window.svg',
-      title: 'Automação',
-      description: 'Crie fluxos inteligentes e aumente a produtividade.'
+      icon: "/assets/window.svg",
+      title: "Automação",
+      desc: "Respostas e fluxos inteligentes.",
     },
     {
-      icon: '/file.svg',
-      title: 'Relatórios',
-      description: 'Analise métricas e tome decisões embasadas.'
-    }
-  ]
-
+      icon: "/assets/file.svg",
+      title: "Relatórios",
+      desc: "Métricas acionáveis em tempo real.",
+    },
+  ];
   return (
-    <section className="bg-white text-gray-800 py-16 font-sans">
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-center">
-        {features.map((f) => (
-          <div key={f.title} className="flex flex-col items-center">
-            <Image src={f.icon} alt="" width={48} height={48} className="mb-4" />
+    <section id="features" className="container mx-auto px-4 py-20 bg-gray-50">
+      <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+        Principais Recursos
+      </h2>
+      <div className="grid sm:grid-cols-3 gap-8">
+        {items.map((f, i) => (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.05 }}
+            className="bg-white rounded-2xl p-8 shadow-lg flex flex-col items-center text-center"
+          >
+            <Image
+              src={f.icon}
+              alt={f.title}
+              width={64}
+              height={64}
+              className="mb-4"
+            />
             <h3 className="text-2xl font-semibold mb-2">{f.title}</h3>
-            <p>{f.description}</p>
-          </div>
+            <p className="text-gray-600">{f.desc}</p>
+          </motion.div>
         ))}
       </div>
     </section>
-  )
+  );
 }
