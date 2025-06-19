@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div as any;
 
 export default function Hero() {
   return (
@@ -8,7 +9,7 @@ export default function Hero() {
       className="relative flex items-center justify-center text-center min-h-screen px-4"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary z-0" />
-      <motion.div
+      <MotionDiv
         className="relative z-10 space-y-6 max-w-2xl"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -27,7 +28,7 @@ export default function Hero() {
         >
           Saiba Como
         </a>
-      </motion.div>
+      </MotionDiv>
     </section>
   );
 }

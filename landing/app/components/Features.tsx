@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div as any;
 
 export default function Features() {
   const items = [
@@ -27,7 +28,7 @@ export default function Features() {
       </h2>
       <div className="grid sm:grid-cols-3 gap-8">
         {items.map((f, i) => (
-          <motion.div
+          <MotionDiv
             key={i}
             whileHover={{ scale: 1.05 }}
             className="bg-white rounded-2xl p-8 shadow-lg flex flex-col items-center text-center"
@@ -41,7 +42,7 @@ export default function Features() {
             />
             <h3 className="text-2xl font-semibold mb-2">{f.title}</h3>
             <p className="text-gray-600">{f.desc}</p>
-          </motion.div>
+          </MotionDiv>
         ))}
       </div>
     </section>
