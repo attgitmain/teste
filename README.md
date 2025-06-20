@@ -20,6 +20,10 @@ npm install # ou yarn
 # Frontend
 cd ../frontend
 npm install # ou yarn
+
+# Landing (para compilar o Tailwind)
+cd ../landing
+npm install
 ```
 
 ## Configurando variáveis de ambiente
@@ -79,8 +83,13 @@ Para gerar uma versão pronta para produção:
    cd ../frontend
    npm run build
    ```
-3. Certifique-se de que os arquivos `.env` contêm as configurações corretas no servidor.
-4. Inicie ambos os serviços usando `node` ou o gerenciador de processos de sua preferência.
+3. Gere o CSS da landing page:
+   ```bash
+   cd ../landing
+   npm run build
+   ```
+4. Certifique-se de que os arquivos `.env` contêm as configurações corretas no servidor.
+5. Inicie ambos os serviços usando `node` ou o gerenciador de processos de sua preferência.
 
 ## Executando os testes
 
@@ -97,12 +106,13 @@ npm test
 
 ## Landing Page
 
-Para executar ou gerar o build da landing page criada em `landing/`:
+A pasta `landing/` contém arquivos HTML estáticos que utilizam Tailwind CSS.
+Gere o CSS e sirva-o junto com os HTMLs:
 
 ```bash
 cd landing
 npm install
-npm run build
+npm run build  # cria build.css
 ```
 
-O conteúdo de produção pode ser iniciado com `npm start`, que executa o servidor Next.js a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para essa aplicação. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
+O arquivo `build.css` resultante deve ser disponibilizado pelo servidor web junto com os demais arquivos da pasta.
