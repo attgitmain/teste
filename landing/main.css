@@ -1,0 +1,26 @@
+/* main.css - utilidades personalizadas */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-full shadow-xl transform transition-transform duration-300 hover:-translate-y-2 hover:scale-105;
+  }
+  .feature-card {
+    @apply bg-gray-50 p-6 rounded-xl shadow hover:shadow-xl transition;
+  }
+  .plan-card {
+    @apply bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center;
+  }
+  .icon-check {
+    @apply w-4 h-4 text-primary mr-2 inline-block;
+    background: url('check.svg') no-repeat center/contain;
+  }
+  .faq-item > summary {
+    @apply cursor-pointer font-medium flex justify-between items-center;
+  }
+  .faq-item[open] > summary {
+    @apply text-primary;
+  }
+}
