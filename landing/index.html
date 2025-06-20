@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Logyca Tecnologia – Plataforma de Multi-Atendimento</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Plataforma Multi Atendimento com IA para WhatsApp."/>
+  <meta property="og:title" content="Logyca Chat – Multi Atendimento com IA"/>
+  <meta property="og:description" content="Automatize seu atendimento via WhatsApp com chatbot e IA."/>
+  <meta property="og:image" content="https://seusite.com.br/og-image.png"/>
+  <meta property="og:url" content="https://seusite.com.br"/>
+  <meta name="twitter:card" content="summary_large_image"/>
 </head>
 <body class="antialiased text-gray-800">
 
@@ -16,8 +22,14 @@
       <a href="#" class="flex-shrink-0">
         <img src="logo.svg" alt="Logyca Tecnologia" class="h-10" />
       </a>
+      <!-- botão mobile -->
+      <button id="btn-menu" class="md:hidden p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <!-- Nav -->
-      <nav class="hidden md:flex space-x-8 text-sm font-medium">
+      <nav id="menu" class="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-sm font-medium">
         <a href="#como-funciona" class="hover:text-blue-600">Como Funciona</a>
         <a href="#planos" class="hover:text-blue-600">Planos</a>
         <a href="#funcionalidades" class="hover:text-blue-600">Funcionalidades</a>
@@ -127,27 +139,27 @@
         <!-- perguntas -->
         <div>
           <div class="space-y-4">
-            <details class="group bg-blue-600 text-white p-4 rounded-lg">
-              <summary class="cursor-pointer flex justify-between items-center">
+            <details aria-expanded="false" class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary tabindex="0" class="cursor-pointer flex justify-between items-center">
                 <span>O Que é o Chatbot?</span>
                 <span class="group-open:rotate-180 transition-transform">−</span>
               </summary>
               <p class="mt-2 text-gray-100">Chatbot é uma plataforma de multi atendimento para o WhatsApp.</p>
             </details>
-            <details class="group bg-blue-600 text-white p-4 rounded-lg">
-              <summary class="cursor-pointer flex justify-between items-center">
+            <details aria-expanded="false" class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary tabindex="0" class="cursor-pointer flex justify-between items-center">
                 <span>O Celular precisa estar online?</span>
                 <span class="group-open:rotate-180 transition-transform">+</span>
               </summary>
             </details>
-            <details class="group bg-blue-600 text-white p-4 rounded-lg">
-              <summary class="cursor-pointer flex justify-between items-center">
+            <details aria-expanded="false" class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary tabindex="0" class="cursor-pointer flex justify-between items-center">
                 <span>Existe fidelidade nos planos?</span>
                 <span class="group-open:rotate-180 transition-transform">+</span>
               </summary>
             </details>
-            <details class="group bg-blue-600 text-white p-4 rounded-lg">
-              <summary class="cursor-pointer flex justify-between items-center">
+            <details aria-expanded="false" class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary tabindex="0" class="cursor-pointer flex justify-between items-center">
                 <span>Preciso instalar algo?</span>
                 <span class="group-open:rotate-180 transition-transform">+</span>
               </summary>
@@ -382,6 +394,10 @@
     </section>
 
   </main>
+  <a href="https://wa.me/5511XXXXXXXXX" target="_blank"
+     class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 p-4 rounded-full shadow-lg">
+    <img src="icon-whatsapp.svg" alt="WhatsApp" class="w-8 h-8"/>
+  </a>
 
   <!-- ================ Footer ================ -->
   <footer class="bg-black text-gray-400 py-6">
@@ -396,6 +412,16 @@
       </nav>
     </div>
   </footer>
+  <script>
+    document.getElementById("btn-menu").addEventListener("click", () => {
+      document.getElementById("menu").classList.toggle("hidden");
+    });
+    document.querySelectorAll("details").forEach(d => {
+      d.addEventListener("toggle", () => {
+        d.setAttribute("aria-expanded", d.open);
+      });
+    });
+  </script>
 
 </body>
 </html>
