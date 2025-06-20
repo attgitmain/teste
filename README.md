@@ -97,12 +97,14 @@ npm test
 
 ## Landing Page
 
-Para executar ou gerar o build da landing page criada em `landing/`:
+Para compilar os estilos da landing page em `landing/`, utilize o pacote recém-adicionado:
 
 ```bash
 cd landing
 npm install
 npm run build
 ```
+
+O comando acima gera o arquivo `build.css` a partir de `main.css`, que é usado pelas páginas HTML.
 
 O conteúdo de produção pode ser iniciado com `npm start`, que executa o servidor Next.js a partir da pasta `.next`. Configure o servidor web para que **atendesolucao.com** e **www.atendesolucao.com** apontem para essa aplicação. O subdomínio **app.atendesolucao.com** deve continuar servindo a aplicação React existente em `frontend`.
