@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Logyca Tecnologia – Plataforma de Multi-Atendimento</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="antialiased text-gray-800">
+
+  <!-- ================= Header / Navbar ================= -->
+  <header class="fixed inset-x-0 top-0 bg-white shadow z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+      <!-- Logo -->
+      <a href="#" class="flex-shrink-0">
+        <img src="logo.svg" alt="Logyca Tecnologia" class="h-10" />
+      </a>
+      <!-- Nav -->
+      <nav class="hidden md:flex space-x-8 text-sm font-medium">
+        <a href="#como-funciona" class="hover:text-blue-600">Como Funciona</a>
+        <a href="#planos" class="hover:text-blue-600">Planos</a>
+        <a href="#funcionalidades" class="hover:text-blue-600">Funcionalidades</a>
+        <a href="#white-label" class="hover:text-blue-600">White Label</a>
+        <a href="#contato" class="hover:text-blue-600">Contato</a>
+      </nav>
+      <!-- CTA button -->
+      <div>
+        <a href="#" class="inline-block bg-blue-600 text-white py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">
+          Teste Grátis
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-24">
+
+    <!-- ================ Hero ================ -->
+    <section id="hero" class="bg-white">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center px-6 py-16">
+        <!-- Texto -->
+        <div>
+          <h1 class="text-4xl font-bold leading-tight mb-4">Conheça a Plataforma <span class="text-blue-600">Logyca Chat</span></h1>
+          <p class="mb-6 text-gray-600">Plataforma Multi Atendimento com IA, para fazer a gestão e automação do WhatsApp.</p>
+          <a href="#" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-medium hover:bg-blue-700 transition">
+            Teste nossa demo
+          </a>
+          <!-- bullets -->
+          <ul class="mt-8 space-y-2 text-gray-700">
+            <li>👉 Construtor de Fluxo</li>
+            <li>👉 ChatBot – Auto Atendimento</li>
+            <li>👉 Multi Atendimento</li>
+            <li>👉 Automatize seu Financeiro com <strong>Notificações de Faturas</strong></li>
+          </ul>
+        </div>
+        <!-- Imagem / Card -->
+        <div>
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-lg">
+            <img src="card-hero.png" alt="Descubra o Poder da Nossa IA" class="w-full rounded-lg" />
+            <div class="mt-4">
+              <h3 class="text-xl font-semibold">Descubra o Poder da Nossa IA</h3>
+              <p class="text-gray-600 mt-2">Transforme seus leads em clientes com respostas instantâneas e inteligentes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ Como Funciona ================ -->
+    <section id="como-funciona" class="bg-white py-20">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold mb-12">Como Funciona</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- card 1 -->
+          <div class="bg-blue-600 text-white p-8 rounded-xl shadow-lg">
+            <div class="w-12 h-12 mx-auto mb-4">
+              <img src="icon-whatsapp.svg" alt="Automatizações" />
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Automações</h3>
+            <p>Diversas integrações para auxiliar sua empresa.</p>
+          </div>
+          <!-- card 2 -->
+          <div class="bg-blue-600 text-white p-8 rounded-xl shadow-lg">
+            <div class="w-12 h-12 mx-auto mb-4">
+              <img src="icon-chatbot.svg" alt="Chatbot" />
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Chatbot</h3>
+            <p>Filtra o atendimento e direciona ao setor correto.</p>
+          </div>
+          <!-- card 3 -->
+          <div class="bg-blue-600 text-white p-8 rounded-xl shadow-lg">
+            <div class="w-12 h-12 mx-auto mb-4">
+              <img src="icon-openai.svg" alt="Open.AI" />
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Open.AI</h3>
+            <p>Respostas mais humanas e naturais.</p>
+          </div>
+        </div>
+        <!-- subtítulos abaixo -->
+        <div class="mt-12 grid md:grid-cols-3 gap-8 text-left">
+          <div>
+            <h4 class="font-semibold">Crie Departamentos</h4>
+            <p class="text-gray-600">Direcione seu cliente para o time certo.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold">Crie Os Fluxos</h4>
+            <p class="text-gray-600">Fluxos de atendimento infinitos.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold">Atendimento Humano</h4>
+            <p class="text-gray-600">Transfira para agentes reais quando quiser.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ FAQ / Vídeo ================ -->
+    <section id="faq" class="bg-gray-50 py-20">
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-start">
+        <!-- vídeo -->
+        <div>
+          <div class="w-full aspect-video bg-black rounded-lg flex items-center justify-center text-white">
+            <!-- se for público, troque a div pelo iframe do YouTube -->
+            <span>Vídeo indisponível – privado</span>
+          </div>
+        </div>
+        <!-- perguntas -->
+        <div>
+          <div class="space-y-4">
+            <details class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary class="cursor-pointer flex justify-between items-center">
+                <span>O Que é o Chatbot?</span>
+                <span class="group-open:rotate-180 transition-transform">−</span>
+              </summary>
+              <p class="mt-2 text-gray-100">Chatbot é uma plataforma de multi atendimento para o WhatsApp.</p>
+            </details>
+            <details class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary class="cursor-pointer flex justify-between items-center">
+                <span>O Celular precisa estar online?</span>
+                <span class="group-open:rotate-180 transition-transform">+</span>
+              </summary>
+            </details>
+            <details class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary class="cursor-pointer flex justify-between items-center">
+                <span>Existe fidelidade nos planos?</span>
+                <span class="group-open:rotate-180 transition-transform">+</span>
+              </summary>
+            </details>
+            <details class="group bg-blue-600 text-white p-4 rounded-lg">
+              <summary class="cursor-pointer flex justify-between items-center">
+                <span>Preciso instalar algo?</span>
+                <span class="group-open:rotate-180 transition-transform">+</span>
+              </summary>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ Flow Builder ================ -->
+    <section id="flow-builder" class="bg-white py-20">
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+        <img src="screenshot-flow.png" alt="Desenhe seu fluxo" class="rounded-lg shadow-lg" />
+        <div>
+          <h2 class="text-3xl font-bold mb-4">A Plataforma – Conheça a LogycaChat</h2>
+          <p class="mb-4 text-gray-600">Prepare-se para interagir com uma inteligência artificial avançada que vai além das respostas convencionais...</p>
+          <p class="text-gray-600">Nosso chatbot é mais do que uma simples ferramenta de interação. É a chave para desbloquear uma experiência personalizada e ágil...</p>
+          <a href="#" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full mt-6 hover:bg-blue-700 transition">
+            Teste nossa demo
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ Planos ================ -->
+    <section id="planos" class="bg-gray-50 py-20">
+      <div class="max-w-7xl mx-auto px-6 text-center mb-12">
+        <h2 class="text-3xl font-bold">Planos</h2>
+      </div>
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+        <!-- cartão Light -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col">
+          <h3 class="text-2xl font-bold mb-2">Plano LIGHT</h3>
+          <span class="inline-block bg-blue-600 text-white text-sm py-1 px-4 rounded-full mb-4">MENSAL</span>
+          <p class="text-4xl font-extrabold mb-6">R$249,90</p>
+          <ul class="flex-1 space-y-2 text-gray-700 mb-6">
+            <li>1 Whatsapp</li>
+            <li>3 Atendentes</li>
+            <li>Dashboard Facilitada</li>
+            <li>Auto Atendimento/Robô</li>
+            <li>Construtor de Fluxo</li>
+            <li>Relatórios</li>
+            <li>Agendamentos</li>
+            <li>Notificação de Faturas ASAAS, SGA, EVO, Siprov</li>
+            <li>Segunda Via de Boleto; Asaas, MK-Auth e IXC, Siprov</li>
+          </ul>
+          <a href="#" class="mt-auto bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition">
+            Teste Grátis por 3 dias!
+          </a>
+        </div>
+        <!-- cartão Master -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col">
+          <h3 class="text-2xl font-bold mb-2">Plano Master</h3>
+          <span class="inline-block bg-blue-600 text-white text-sm py-1 px-4 rounded-full mb-4">MENSAL</span>
+          <p class="text-4xl font-extrabold mb-6">R$429,90</p>
+          <ul class="flex-1 space-y-2 text-gray-700 mb-6">
+            <li>2 Whatsapp</li>
+            <li>7 Atendentes</li>
+            <li>Dashboard Facilitada</li>
+            <li>Facebook / Instagram</li>
+            <li>Telegram</li>
+            <li>Construtor de Fluxo</li>
+            <li>Integrações</li>
+            <li>Relatórios</li>
+            <li>Auto Atendimento/Robô</li>
+            <li>Inteligência Artificial</li>
+            <li>Agendamentos</li>
+            <li>Notificação de Faturas ASAAS, SGA, EVO, Siprov</li>
+            <li>Segunda Via de Boleto; Asaas, MK-Auth e IXC, Siprov</li>
+            <li>Disparos em Massa</li>
+          </ul>
+          <a href="#" class="mt-auto bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition">
+            Teste Grátis por 3 dias!
+          </a>
+        </div>
+        <!-- cartão Diamante -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col">
+          <h3 class="text-2xl font-bold mb-2">Plano Diamante</h3>
+          <span class="inline-block bg-blue-600 text-white text-sm py-1 px-4 rounded-full mb-4">MENSAL</span>
+          <p class="text-4xl font-extrabold mb-6">R$689,90</p>
+          <ul class="flex-1 space-y-2 text-gray-700 mb-6">
+            <li>3 Whatsapp</li>
+            <li>20 Atendentes</li>
+            <li>Dashboard Facilitada</li>
+            <li>Facebook / Instagram</li>
+            <li>Telegram</li>
+            <li>API Oficial Whatsapp</li>
+            <li>Construtor de Fluxo</li>
+            <li>Integrações</li>
+            <li>Relatórios</li>
+            <li>Auto Atendimento/Robô</li>
+            <li>Inteligência Artificial</li>
+            <li>Agendamentos</li>
+            <li>Notificação de Faturas ASAAS, SGA, EVO, Siprov</li>
+            <li>Segunda Via de Boleto; Asaas, MK-Auth e IXC, Siprov</li>
+            <li>Disparos em Massa</li>
+          </ul>
+          <a href="#" class="mt-auto bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition">
+            Teste Grátis por 3 dias!
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ Funcionalidades ================ -->
+    <section id="funcionalidades" class="bg-white py-20">
+      <div class="max-w-7xl mx-auto px-6 text-center mb-12">
+        <h2 class="text-3xl font-bold">Funcionalidades</h2>
+      </div>
+      <div class="max-w-7xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- cada funcionalidade -->
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-atendentes.svg" alt="Vários Atendentes" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Vários Atendentes</h4>
+          <p class="text-gray-600">Cadastre toda a sua equipe no painel, dividindo por departamentos.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-respostas.svg" alt="Respostas Rápidas" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Respostas Rápidas</h4>
+          <p class="text-gray-600">Inclua arquivos nas respostas e digite “/” para acessar as pré-cadastradas.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-chatgpt.svg" alt="ChatGpt" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">ChatGpt</h4>
+          <p class="text-gray-600">Integração para melhorar a experiência de atendimento de forma natural.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-massa.svg" alt="Envios Em Massa" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Envios Em Massa</h4>
+          <p class="text-gray-600">Envie mensagens para todos os seus contatos com nosso módulo de campanha.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-agendamentos.svg" alt="Agendamentos" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Agendamentos</h4>
+          <p class="text-gray-600">Agende envios e garanta o retorno e acompanhamento.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-kanban.svg" alt="Kanban" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Kanban</h4>
+          <p class="text-gray-600">Abordagem visual e flexível para gerir processos e projetos.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-transferencia.svg" alt="Transferência" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Transferência</h4>
+          <p class="text-gray-600">Transfira atendimentos entre agentes sem perder contexto.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-flow-builder.svg" alt="Flow Builder" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Flow Builder</h4>
+          <p class="text-gray-600">Criação de fluxos inteligentes para agilizar seu atendimento.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-tags.svg" alt="Tags" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Tags</h4>
+          <p class="text-gray-600">Classifique atendimentos para melhor gestão dos clientes.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-protocolo.svg" alt="Protocolo" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Protocolo</h4>
+          <p class="text-gray-600">Gere automaticamente o número de protocolo do atendimento.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-pesquisa.svg" alt="Pesquisa de Atendimento" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Pesquisa De Atendimento</h4>
+          <p class="text-gray-600">Inclua pesquisa ao final do chamado para colher feedback.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl shadow">
+          <div class="flex items-center justify-center mb-4">
+            <img src="icon-horarios.svg" alt="Horários" class="w-12 h-12" />
+          </div>
+          <h4 class="font-semibold mb-2">Horários</h4>
+          <p class="text-gray-600">Defina horários de atendimento conforme sua operação.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ White Label ================ -->
+    <section id="white-label" class="bg-gray-50 py-20 text-center">
+      <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">White Label</h2>
+        <p class="text-gray-600 mb-6">Personalize totalmente a plataforma com sua marca, domínio e identidade visual.</p>
+        <a href="#" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition">
+          Saiba mais
+        </a>
+      </div>
+    </section>
+
+    <!-- ================ Contato / Newsletter ================ -->
+    <section id="contato" class="bg-blue-600 py-20 text-white">
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+        <!-- newsletter -->
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Receba novidades e promoções.</h3>
+          <form class="flex max-w-md">
+            <input type="email" placeholder="Email" class="flex-1 px-4 py-3 rounded-l-full text-gray-800" />
+            <button type="submit" class="bg-black px-6 rounded-r-full">OK</button>
+          </form>
+        </div>
+        <!-- dados de contato -->
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Contato</h3>
+          <p><strong>0800 042 0516</strong></p>
+          <p class="mt-2 flex items-center"><img src="icon-whatsapp.svg" alt="" class="w-5 h-5 mr-2" /> (11) 9 1838-9540</p>
+          <p class="mt-2 flex items-center"><img src="icon-mail.svg" alt="" class="w-5 h-5 mr-2" /> comercial@logycatecnologia.com.br</p>
+          <a href="#" class="inline-block mt-4 bg-white text-blue-600 py-2 px-5 rounded-full font-medium hover:bg-gray-100 transition">
+            Área do Cliente
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================ Footer ================ -->
+  <footer class="bg-black text-gray-400 py-6">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-sm">© 2023 Logyca Tecnologia. CNPJ 49.554.559/0001-52 • Avenida Paulista, nº 1471 – São Paulo SP.</p>
+      <nav class="mt-4 md:mt-0 space-x-4 text-sm">
+        <a href="#" class="hover:text-white">Início</a>
+        <a href="#como-funciona" class="hover:text-white">Como Funciona</a>
+        <a href="#funcionalidades" class="hover:text-white">Funcionalidades</a>
+        <a href="#planos" class="hover:text-white">Quanto custa</a>
+        <a href="#contato" class="hover:text-white">Contato</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
