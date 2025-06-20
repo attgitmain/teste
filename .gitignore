@@ -4,6 +4,7 @@ node_modules/
 # Build directories
 build/
 dist/
+landing/build.css
 
 # Environment files
 .env
