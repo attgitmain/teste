@@ -1,0 +1,11 @@
+{
+  "name": "landing",
+  "private": true,
+  "devDependencies": {
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.3"
+  },
+  "scripts": {
+    "build": "tailwindcss -i main.css -o build.css --minify"
+  }
+}
