@@ -64,10 +64,15 @@ const HeroSection = () => {
                 </span>
               </button>
               
-              <button className="group border-3 border-sky-500 text-sky-600 px-10 py-5 rounded-2xl text-xl font-bold hover:bg-sky-500 hover:text-white transition-all duration-300 flex items-center justify-center space-x-3 hover:scale-105 transform">
+              <a
+                href="https://app.atendesolucao.com/signup"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group border-3 border-sky-500 text-sky-600 px-10 py-5 rounded-2xl text-xl font-bold hover:bg-sky-500 hover:text-white transition-all duration-300 flex items-center justify-center space-x-3 hover:scale-105 transform"
+              >
                 <MessageCircle className="h-6 w-6" />
                 <span>Teste Grátis 7 Dias</span>
-              </button>
+              </a>
             </div>
 
             {/* Trust Indicators */}
