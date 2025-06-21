@@ -456,12 +456,17 @@ const Funcionalidades = () => {
                   e veja a transformação no seu negócio
                 </p>
                 
-                <button className="group relative bg-white text-purple-600 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl">
+                <a
+                  href="https://app.atendesolucao.com/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative bg-white text-purple-600 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl"
+                >
                   <span className="relative z-10 flex items-center justify-center space-x-3">
                     <Sparkles className="h-6 w-6" />
                     <span>Começar Teste Grátis</span>
                   </span>
-                </button>
+                </a>
 
                 <div className="mt-8 text-sm text-purple-200">
                   ✅ Sem cartão de crédito • ✅ Configuração em 5 minutos • ✅ Suporte 24/7

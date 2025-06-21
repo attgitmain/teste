@@ -18,14 +18,13 @@ const Contato = () => {
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
               <Phone className="h-12 w-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-4">Telefone</h3>
-              <p className="text-gray-600">0800 042 0516</p>
-              <p className="text-gray-600">(11) 9 1838-9540</p>
+              <p className="text-gray-600">44988270151</p>
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
               <Mail className="h-12 w-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-4">Email</h3>
-              <p className="text-gray-600">comercial@loopchat.com.br</p>
+              <p className="text-gray-600">aatendesolucao@gmail.com</p>
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center">

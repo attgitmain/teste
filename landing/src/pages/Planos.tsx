@@ -186,9 +186,14 @@ const Planos = () => {
                     ))}
                   </ul>
 
-                  <button className={`w-full bg-gradient-to-r ${plano.gradient} text-white py-4 rounded-2xl font-black text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}>
+                  <a
+                    href="https://app.atendesolucao.com/signup"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-full bg-gradient-to-r ${plano.gradient} text-white py-4 rounded-2xl font-black text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 block text-center`}
+                  >
                     Teste Grátis por 7 dias!
-                  </button>
+                  </a>
                 </div>
               );
             })}

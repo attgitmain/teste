@@ -202,12 +202,17 @@ const FeaturesSection = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button className="group relative bg-white text-sky-600 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl pulse-button">
+                <a
+                  href="https://app.atendesolucao.com/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative bg-white text-sky-600 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-2xl pulse-button"
+                >
                   <span className="relative z-10 flex items-center justify-center space-x-3">
                     <Sparkles className="h-6 w-6" />
                     <span>Começar Teste Grátis</span>
                   </span>
-                </button>
+                </a>
                 
                 <button className="group border-3 border-white text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-white hover:text-sky-600 transition-all duration-300 flex items-center justify-center space-x-3 hover:scale-105 transform">
                   <Globe className="h-6 w-6" />

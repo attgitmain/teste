@@ -44,26 +44,36 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>0800 042 0516</span>
+                <span>44988270151</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MessageCircle className="h-4 w-4" />
-                <span>(11) 9 1838-9540</span>
+                <span>44988270151</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>comercial@loopchat.com.br</span>
+                <span>aatendesolucao@gmail.com</span>
               </div>
             </div>
           </div>
 
           <div>
-            <button className="bg-white text-blue-600 px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors mb-4">
+            <a
+              href="https://app.atendesolucao.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-blue-600 px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors mb-4 inline-block text-center"
+            >
               ÁREA DO CLIENTE
-            </button>
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-400 transition-colors block w-full">
+            </a>
+            <a
+              href="https://app.atendesolucao.com/signup"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-500 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-400 transition-colors block w-full text-center"
+            >
               Teste grátis 3 dias!
-            </button>
+            </a>
           </div>
         </div>
 

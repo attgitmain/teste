@@ -105,12 +105,12 @@ const Header = () => {
                     </div>
                     <div>
                       <div className="font-bold text-gray-800 text-base">Contato</div>
-                      <div className="text-sm text-gray-500">comercial@loopchat.com.br</div>
+                      <div className="text-sm text-gray-500">aatendesolucao@gmail.com</div>
                     </div>
                   </Link>
                   
-                  <a 
-                    href="tel:08000420516"
+                  <a
+                    href="tel:44988270151"
                     className="flex items-center space-x-4 px-6 py-4 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 rounded-2xl transition-all duration-300 group/item"
                   >
                     <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
@@ -118,12 +118,12 @@ const Header = () => {
                     </div>
                     <div>
                       <div className="font-bold text-gray-800 text-base">Telefone</div>
-                      <div className="text-sm text-gray-500">0800 042 0516</div>
+                      <div className="text-sm text-gray-500">44988270151</div>
                     </div>
                   </a>
                   
-                  <a 
-                    href="https://wa.me/5511918389540"
+                  <a
+                    href="https://wa.me/5544988270151"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-4 px-6 py-4 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 rounded-2xl transition-all duration-300 group/item"
@@ -133,7 +133,7 @@ const Header = () => {
                     </div>
                     <div>
                       <div className="font-bold text-gray-800 text-base">WhatsApp</div>
-                      <div className="text-sm text-gray-500">(11) 9 1838-9540</div>
+                      <div className="text-sm text-gray-500">44988270151</div>
                     </div>
                   </a>
                 </div>
@@ -142,13 +142,26 @@ const Header = () => {
           </nav>
 
           <div className="hidden lg:flex items-center space-x-4">
-            <button className="relative bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white px-8 py-3 rounded-2xl font-black text-sm tracking-wide hover:from-sky-600 hover:via-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-2xl hover:shadow-sky-500/30 transform hover:scale-105 overflow-hidden group">
+            <a
+              href="https://app.atendesolucao.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-sky-500 text-sky-600 px-8 py-3 rounded-2xl font-bold text-sm tracking-wide hover:bg-sky-50 transition-all duration-300"
+            >
+              ÁREA DO CLIENTE
+            </a>
+            <a
+              href="https://app.atendesolucao.com/signup"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white px-8 py-3 rounded-2xl font-black text-sm tracking-wide hover:from-sky-600 hover:via-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-2xl hover:shadow-sky-500/30 transform hover:scale-105 overflow-hidden group"
+            >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <span className="relative z-10 flex items-center space-x-2">
                 <span>TESTE GRÁTIS 7 DIAS</span>
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
               </span>
-            </button>
+            </a>
           </div>
 
           <button 
@@ -191,17 +204,31 @@ const Header = () => {
               >
                 WHITE LABEL
               </Link>
-              <Link 
-                to="/contato" 
+              <Link
+                to="/contato"
                 className="text-gray-700 hover:text-sky-600 font-bold py-4 px-6 rounded-2xl hover:bg-sky-50 transition-all text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 SUPORTE
               </Link>
+              <a
+                href="https://app.atendesolucao.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-sky-600 font-bold py-4 px-6 rounded-2xl hover:bg-sky-50 transition-all text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                ÁREA DO CLIENTE
+              </a>
               <div className="px-4 pt-4">
-                <button className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl font-black hover:from-sky-600 hover:to-blue-700 transition-all duration-300 shadow-2xl">
+                <a
+                  href="https://app.atendesolucao.com/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl font-black hover:from-sky-600 hover:to-blue-700 transition-all duration-300 shadow-2xl block text-center"
+                >
                   TESTE GRÁTIS 7 DIAS
-                </button>
+                </a>
               </div>
             </nav>
           </div>
