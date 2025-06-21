@@ -17,8 +17,8 @@ const Header = () => {
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="flex items-center space-x-4 group">
             <div className="relative">
-              <img 
-                src="/lovable-uploads/0a4ed3fa-67d6-40a4-a5c4-1b104d56f358.png" 
+              <img
+                src="/uploads/0a4ed3fa-67d6-40a4-a5c4-1b104d56f358.png"
                 alt="Loopchat Logo" 
                 className="w-12 h-12 group-hover:scale-110 transition-transform duration-300 drop-shadow-xl"
               />
