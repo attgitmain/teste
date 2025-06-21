@@ -146,7 +146,7 @@ const Header = () => {
               href="https://app.atendesolucao.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="border-2 border-sky-500 text-sky-600 px-8 py-3 rounded-2xl font-bold text-sm tracking-wide hover:bg-sky-50 transition-all duration-300"
+              className="bg-white text-sky-600 px-8 py-3 rounded-2xl font-bold text-sm tracking-wide hover:bg-gray-100 transition-all duration-300 shadow-2xl transform hover:scale-105"
             >
               ÁREA DO CLIENTE
             </a>
@@ -215,7 +215,7 @@ const Header = () => {
                 href="https://app.atendesolucao.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 hover:text-sky-600 font-bold py-4 px-6 rounded-2xl hover:bg-sky-50 transition-all text-center"
+                className="bg-white text-sky-600 font-bold py-4 px-6 rounded-2xl hover:bg-gray-100 transition-all text-center shadow-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 ÁREA DO CLIENTE
