@@ -105,7 +105,7 @@ const HeroSection = () => {
                 {/* Header */}
                 <div className="flex items-center space-x-4 mb-8">
                   <img 
-                    src="/lovable-uploads/c708d5eb-cee4-459c-8430-62d08e173534.png" 
+                    src="/uploads/c708d5eb-cee4-459c-8430-62d08e173534.png"
                     alt="Loopchat" 
                     className="w-16 h-16 drop-shadow-2xl"
                   />
