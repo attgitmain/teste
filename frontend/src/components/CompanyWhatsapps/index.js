@@ -451,7 +451,12 @@ const WhatsAppModalCompany = ({
                           scope="public_profile,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagementnt,business_management"
                           callback={responseFacebook}
                           render={renderProps => (
-                            <MenuItem onClick={renderProps.onClick}>
+                            <MenuItem
+                              onClick={() => {
+                                renderProps.onClick();
+                                popupState.close();
+                              }}
+                            >
                               <Facebook
                                 fontSize="small"
                                 style={{
@@ -471,7 +476,12 @@ const WhatsAppModalCompany = ({
                           scope="public_profile,instagram_basic,instagram_manage_messages,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
                           callback={responseInstagram}
                           render={renderProps => (
-                            <MenuItem onClick={renderProps.onClick}>
+                            <MenuItem
+                              onClick={() => {
+                                renderProps.onClick();
+                                popupState.close();
+                              }}
+                            >
                               <Instagram
                                 fontSize="small"
                                 style={{

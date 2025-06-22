@@ -151,25 +151,26 @@ const Leads = () => {
     }
   }, [results]);
 
-  const handleSearch = async () => {
-    if (!cep || cep.length !== 8) return;
+  const handleSearch = async (searchCep = cep) => {
+    if (!searchCep || searchCep.length !== 8) return;
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(async () => {
       setLoading(true);
       setTokenError(false);
       try {
-        const { data } = await api.get(`/consult/cep/${cep}?page=1`);
+        const { data } = await api.get(`/consult/cep/${searchCep}?page=1`);
         setResults(data.leads || []);
         if (data.leads && data.leads.length > 0) {
-          localStorage.setItem(`leads_${cep}`, JSON.stringify(data.leads));
+          localStorage.setItem(`leads_${searchCep}`, JSON.stringify(data.leads));
         }
+        setCep(searchCep);
         setPageApi(1);
         setHasMore(data.hasMore);
         if (typeof data.credits === "number") {
           setCredits(data.credits);
         }
         if (!data.leads || data.leads.length === 0) {
-          const stored = localStorage.getItem(`leads_${cep}`);
+          const stored = localStorage.getItem(`leads_${searchCep}`);
           if (data.allShown && stored) {
             toast.info("Todos os leads deste CEP já foram consultados");
             setResults(JSON.parse(stored));
@@ -217,12 +218,14 @@ const Leads = () => {
   };
 
   const handleHistoryClick = (hCep) => {
-    setCep(hCep);
     const stored = localStorage.getItem(`leads_${hCep}`);
     if (stored) {
+      setCep(hCep);
       setResults(JSON.parse(stored));
       setHasMore(false);
       setPageApi(1);
+    } else {
+      handleSearch(hCep);
     }
   };
 
