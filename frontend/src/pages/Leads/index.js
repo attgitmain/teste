@@ -305,12 +305,13 @@ const Leads = () => {
     }
   };
 
-  const handleCpf = async (cpf) => {
+  const handleCpf = async (cpf, fromCep = false) => {
     setDetailLoading(true);
     setDetailError("");
     setDetailOpen(true);
     try {
-      const { data } = await api.get(`/consult/cpf/${cpf}`);
+      const url = fromCep ? `/consult/cpf/${cpf}?from=cep` : `/consult/cpf/${cpf}`;
+      const { data } = await api.get(url);
       if (typeof data.credits === "number") {
         setCredits(data.credits);
       }
@@ -531,7 +532,7 @@ const Leads = () => {
                           <TableCell>{item.uf}</TableCell>
                           <TableCell>
                             {item.dados_pessoais.nome}
-                            <IconButton size="small" onClick={() => handleCpf(item.dados_pessoais.cpf)}>
+                            <IconButton size="small" onClick={() => handleCpf(item.dados_pessoais.cpf, true)}>
                               <InfoOutlinedIcon fontSize="small" />
                             </IconButton>
                           </TableCell>
