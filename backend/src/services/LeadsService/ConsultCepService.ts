@@ -36,9 +36,14 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   });
   const viewedCpfs = viewed.map(v => v.cpf);
 
-  const freshLeads = allLeads.filter(
+  let freshLeads = allLeads.filter(
     (l: any) => !viewedCpfs.includes(l.dados_pessoais.cpf)
   );
+
+  if (freshLeads.length === 0 && page === 1 && allLeads.length > 0) {
+    await LeadView.destroy({ where: { companyId, queryOrigin: `CEP ${cep}` } });
+    freshLeads = allLeads;
+  }
 
   const start = (page - 1) * PAGE_SIZE;
   const slice = freshLeads.slice(start, start + PAGE_SIZE);
