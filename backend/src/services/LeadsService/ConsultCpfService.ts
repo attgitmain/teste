@@ -5,9 +5,10 @@ import ConsumeCreditsService from "../CreditService/ConsumeCreditsService";
 interface Request {
   cpf: string;
   companyId: number;
+  free?: boolean;
 }
 
-const ConsultCpfService = async ({ cpf, companyId }: Request) => {
+const ConsultCpfService = async ({ cpf, companyId, free = false }: Request) => {
   const token = process.env.API_TOKEN_CPF;
   if (!token) {
     throw new AppError(
@@ -17,7 +18,7 @@ const ConsultCpfService = async ({ cpf, companyId }: Request) => {
   }
   const url = `https://api.dbconsultas.com/api/v1/${token}/datalinkcpf/${cpf}`;
 
-  const balance = await ConsumeCreditsService(companyId, 3);
+  const balance = await ConsumeCreditsService(companyId, free ? 0 : 3);
 
   try {
     const { data } = await axios.get(url);

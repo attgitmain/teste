@@ -21,7 +21,8 @@ export const consultCep = async (req: Request, res: Response): Promise<Response>
 export const consultCpf = async (req: Request, res: Response): Promise<Response> => {
   const { cpf } = req.params;
   const { companyId } = req.user;
+  const fromCep = req.query.from === "cep";
 
-  const result = await ConsultCpfService({ cpf, companyId });
+  const result = await ConsultCpfService({ cpf, companyId, free: fromCep });
   return res.status(200).json(result);
 };
