@@ -13,11 +13,13 @@ import {
   CircularProgress,
   Typography,
   MenuItem,
+  Menu,
   Fade,
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import ReactInputMask from "react-input-mask";
 import { CSVLink } from "react-csv";
+import html2pdf from "html2pdf.js";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
@@ -97,6 +99,8 @@ const Leads = () => {
   const [canConsultCpf, setCanConsultCpf] = useState(false);
   const { dateToClient } = useDate();
   const searchTimeout = useRef(null);
+  const [downloadAnchorEl, setDownloadAnchorEl] = useState(null);
+  const csvLinkRef = useRef();
 
   useEffect(() => {
     async function fetchPermission() {
@@ -156,13 +160,22 @@ const Leads = () => {
       try {
         const { data } = await api.get(`/consult/cep/${cep}?page=1`);
         setResults(data.leads || []);
+        if (data.leads && data.leads.length > 0) {
+          localStorage.setItem(`leads_${cep}`, JSON.stringify(data.leads));
+        }
         setPageApi(1);
         setHasMore(data.hasMore);
         if (typeof data.credits === "number") {
           setCredits(data.credits);
         }
         if (!data.leads || data.leads.length === 0) {
-          toast.error("CEP não encontrado");
+          const stored = localStorage.getItem(`leads_${cep}`);
+          if (data.allShown && stored) {
+            toast.info("Todos os leads deste CEP já foram consultados");
+            setResults(JSON.parse(stored));
+          } else {
+            toast.error("CEP não encontrado");
+          }
         }
       } catch (err) {
         if (err.response) {
@@ -201,6 +214,70 @@ const Leads = () => {
     setHistory([]);
     localStorage.removeItem("leadsHistory");
     toast.success(i18n.t("leads.historyCleared"));
+  };
+
+  const handleHistoryClick = (hCep) => {
+    setCep(hCep);
+    const stored = localStorage.getItem(`leads_${hCep}`);
+    if (stored) {
+      setResults(JSON.parse(stored));
+      setHasMore(false);
+      setPageApi(1);
+    }
+  };
+
+  const handleDownloadClick = (e) => {
+    setDownloadAnchorEl(e.currentTarget);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadAnchorEl(null);
+  };
+
+  const handleDownloadCsv = () => {
+    if (csvLinkRef.current) {
+      csvLinkRef.current.link.click();
+    }
+    handleDownloadClose();
+  };
+
+  const handleDownloadLoopchat = () => {
+    const content = results
+      .map((l) => `${l.dados_pessoais?.nome || ''};${l.dados_pessoais?.cpf || ''}`)
+      .join('\n');
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `leads-loopchat-${cep}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    handleDownloadClose();
+  };
+
+  const handleDownloadPdf = () => {
+    const container = document.createElement('div');
+    container.style.padding = '16px';
+    results.forEach((lead) => {
+      const card = document.createElement('div');
+      card.style.border = '1px solid #ccc';
+      card.style.marginBottom = '12px';
+      card.style.padding = '12px';
+      card.innerHTML = `<h3>${lead.dados_pessoais?.nome || ''}</h3>
+        <p><strong>CPF:</strong> ${lead.dados_pessoais?.cpf || ''}</p>
+        <p><strong>Renda:</strong> ${lead.dados_pessoais?.renda || ''}</p>`;
+      container.appendChild(card);
+    });
+    html2pdf()
+      .from(container)
+      .set({
+        margin: 10,
+        filename: `leads-${cep}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      })
+      .save();
+    handleDownloadClose();
   };
 
   const handleLoadMore = async () => {
@@ -375,7 +452,7 @@ const Leads = () => {
       {history.length > 0 && (
         <div className={classes.history}>
           {history.map((h) => (
-            <span key={h.cep} onClick={() => setCep(h.cep)}>
+            <span key={h.cep} onClick={() => handleHistoryClick(h.cep)}>
               <ReplayIcon fontSize="small" /> {h.cep} - {h.count} resultados
             </span>
           ))}
@@ -390,14 +467,25 @@ const Leads = () => {
           <Typography variant="subtitle2" gutterBottom>
             {results.length} resultados encontrados para o CEP {cep}
           </Typography>
-          <Button
-            variant="outlined"
-            component={CSVLink}
+          <Button variant="outlined" onClick={handleDownloadClick}>
+            Baixar Leads
+          </Button>
+          <Menu
+            anchorEl={downloadAnchorEl}
+            keepMounted
+            open={Boolean(downloadAnchorEl)}
+            onClose={handleDownloadClose}
+          >
+            <MenuItem onClick={handleDownloadPdf}>Baixar em PDF</MenuItem>
+            <MenuItem onClick={handleDownloadLoopchat}>Baixar Loopchat</MenuItem>
+            <MenuItem onClick={handleDownloadCsv}>Baixar CSV Completo</MenuItem>
+          </Menu>
+          <CSVLink
             data={results}
             filename={`leads-${cep}.csv`}
-          >
-            Exportar CSV
-          </Button>
+            ref={csvLinkRef}
+            style={{ display: "none" }}
+          />
           <Fade in>
             <Paper className={classes.tableWrapper} variant="outlined">
               <Table size="small">

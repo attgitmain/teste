@@ -53,10 +53,20 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
         queryOrigin: `CEP ${cep}`
       }))
     );
-    return { leads: slice, hasMore: start + PAGE_SIZE < freshLeads.length, credits: balance };
+    return {
+      leads: slice,
+      hasMore: start + PAGE_SIZE < freshLeads.length,
+      credits: balance
+    };
   }
 
-  return { leads: [], hasMore: false, credits: await ConsumeCreditsService(companyId, 0) };
+  const allShown = allLeads.length > 0;
+  return {
+    leads: [],
+    hasMore: false,
+    credits: await ConsumeCreditsService(companyId, 0),
+    allShown
+  };
 };
 
 export default ConsultCepService;
