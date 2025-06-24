@@ -10,10 +10,11 @@ type Params = {
   column:string
 };
 
-const FindCompanySettingOneService = async ({companyId, column}:Params): Promise<any> => {
-    
-    const [results, metadata] = await sequelize.query(`SELECT "${column}" FROM "CompaniesSettings" WHERE "companyId"=${companyId}`)
-    return results;
+const FindCompanySettingOneService = async ({ companyId, column }: Params): Promise<any[]> => {
+  const [results] = await sequelize.query(
+    `SELECT "${column}" FROM "CompaniesSettings" WHERE "companyId"=${companyId}`
+  );
+  return Array.isArray(results) ? results : [];
 };
 
 export default FindCompanySettingOneService;
