@@ -19,6 +19,7 @@ import TicketTraking from "./TicketTraking";
 @Table
 class Message extends Model<Message> {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
 
