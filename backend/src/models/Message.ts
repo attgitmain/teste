@@ -124,7 +124,7 @@ class Message extends Model<Message> {
   isEdited: boolean;
 
   @Default(false)
-  @Column
+  @Column({ field: "isforwarded" })
   isForwarded: boolean;
 }
 
