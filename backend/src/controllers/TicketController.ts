@@ -356,14 +356,23 @@ export const update = async (
   const { companyId } = req.user;
 
   const mutex = new Mutex();
-  const { ticket } = await mutex.runExclusive(async () => {
-    const result = await UpdateTicketService({
+  const result = await mutex.runExclusive(async () => {
+    const serviceResult = await UpdateTicketService({
       ticketData,
       ticketId,
       companyId
     });
-    return result;
+    return serviceResult;
   });
+
+  if (!result) {
+    console.log(
+      `Ticket ${ticketId} não encontrado ou erro no UpdateTicketService`
+    );
+    return res.status(404).json({ error: "Ticket não encontrado" });
+  }
+
+  const { ticket } = result;
 
   return res.status(200).json(ticket);
 };
