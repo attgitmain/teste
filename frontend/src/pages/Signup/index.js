@@ -1,310 +1,376 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { toast } from "sonner";
-import { Eye, EyeOff, Building2, User, Mail, Phone, CreditCard } from "lucide-react";
+import qs from 'query-string'
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import * as Yup from "yup";
+import { useHistory } from "react-router-dom";
+import usePlans from "../../hooks/usePlans";
+import { Link as RouterLink } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Formik, Form, Field } from "formik";
+import Avatar from "@material-ui/core/Avatar";
+import { versionSystem } from "../../../package.json";
+import { nomeEmpresa } from "../../../package.json";
+import Button from "@material-ui/core/Button";
+import {
+    IconButton,
+    InputAdornment,
+  } from "@material-ui/core";
+  import Visibility from "@material-ui/icons/Visibility";
+  import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import {
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
-const signupSchema = z.object({
-  companyName: z.string().min(2, "Nome da empresa muito curto").max(100, "Nome da empresa muito longo"),
-  name: z.string().min(2, "Nome muito curto").max(50, "Nome muito longo"),
-  email: z.string().email("Email inválido"),
-  password: z.string().min(5, "Senha muito curta").max(50, "Senha muito longa"),
-  phone: z.string().min(10, "Telefone inválido"),
-  planId: z.string().min(1, "Selecione um plano"),
+import { i18n } from "../../translate/i18n";
+
+import { openApi } from "../../services/api";
+import toastError from "../../errors/toastError";
+import moment from "moment";
+import logo from "../../assets/logo.png";
+import bk from "../../assets/bk.jpg";
+import ReactInputMask from 'react-input-mask';
+
+const Copyright = () => {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center" style={{ marginTop: "-21px" }}>
+        © {new Date().getFullYear()}
+        {" - "}
+        <Link color="inherit" href="#">
+          { nomeEmpresa } - v { versionSystem }
+        </Link>
+        {"."}
+      </Typography>
+    );
+  };
+
+const randomImageURL = "https://source.unsplash.com/random/?tech";
+const useStyles = makeStyles(theme => ({
+    root: {
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: `url(${bk})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+    },
+    paper: {
+        backgroundColor: theme.palette.type === 'dark' ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.8)", // Fundo semi-transparente
+        borderRadius: "35px",
+        padding: theme.spacing(2),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        border: "6px solid transparent", // Adiciona uma borda transparente
+        boxShadow: "0 0 180px rgba(0, 0, 0, 0.3)", // Adiciona um efeito de sombra azul
+      },
+    avatar: {
+        margin: theme.spacing(1),  
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: "100%",
+        marginTop: theme.spacing(2),
+    },
+    inputLabel: {
+        color: "#ffffff",
+    },
+    underline: {
+        "&::before": {
+            borderBottom: "1px solid #ffffff",
+        },
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    powered: {
+        color: "#666666",
+        textAlign: "center",
+        marginTop: "20px",
+    },
+    whatsappButton: {
+        background: "#00826a",
+        color: "#ffffff",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        textDecoration: "none",
+        display: "flex",
+        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "8px",
+        "&:hover": {
+            background: "#0c6a58",
+            textAlign: "center",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+    },
+    logo: {
+        marginBottom: theme.spacing(4), // Espaço entre o logo e o título
+        width: "220px", // ou a largura desejada
+        height: "auto", // ou a altura desejada
+      },
+}));
+
+const handleNewUserMessage = newMessage => {
+    window.open(
+        `https://api.whatsapp.com/send?phone=5544997098335&text=${encodeURIComponent(newMessage)}`,
+      "_blank"
+    );
+};
+
+const UserSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(2, "Muito curto!")
+        .max(50, "Muito extenso!")
+        .required("Obrigatório"),
+    password: Yup.string().min(5, "Muito curto!").max(50, "Muito extenso!"),
+    email: Yup.string().email("Email inválido").required("Obrigatório"),
 });
 
-type SignupFormData = z.infer<typeof signupSchema>;
-
-const mockPlans = [
-  { id: "1", name: "Básico", users: 2, connections: 1, queues: 2, amount: "29.90" },
-  { id: "2", name: "Profissional", users: 5, connections: 3, queues: 5, amount: "59.90" },
-  { id: "3", name: "Empresarial", users: 10, connections: 5, queues: 10, amount: "99.90" },
-];
-
 const SignUp = () => {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [plans, setPlans] = useState(mockPlans);
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    const [showPassword, setShowPassword] = useState(false);
+    const classes = useStyles();
+    const history = useHistory();
+    const { getPlanList } = usePlans();
+    const [loading, setLoading] = useState(false);
+    let companyId = null;
 
-  const form = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      companyName: "",
-      name: "",
-      email: "",
-      password: "",
-      phone: "",
-      planId: "",
-    },
-  });
-
-  const onSubmit = async (data: SignupFormData) => {
-    setIsLoading(true);
-    try {
-      console.log("Signup data:", data);
-      
-      // Simular API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast.success("Conta criada com sucesso! Redirecionando para o login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (error) {
-      toast.error("Erro ao criar conta. Tente novamente.");
-    } finally {
-      setIsLoading(false);
+    const params = qs.parse(window.location.search);
+    if (params.companyId !== undefined) {
+        companyId = params.companyId;
     }
-  };
 
-  const formatPhone = (value: string) => {
-    const numbers = value.replace(/\D/g, "");
-    const match = numbers.match(/^(\d{2})(\d{5})(\d{4})$/);
-    if (match) {
-      return `(${match[1]}) ${match[2]}-${match[3]}`;
-    }
-    return value;
-  };
+    const initialState = { name: "", email: "", password: "", phone: "", companyId, companyName: "", planId: "" };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 opacity-40" 
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}
-      />
-      
-      <Card className="w-full max-w-md relative backdrop-blur-sm bg-white/80 shadow-2xl border-0">
-        <CardHeader className="space-y-4 text-center pb-6">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-            <Building2 className="w-8 h-8 text-white" />
-          </div>
-          <div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Criar Conta
-            </CardTitle>
-            <CardDescription className="text-gray-600 mt-2">
-              Preencha os dados para começar sua jornada
-            </CardDescription>
-          </div>
-        </CardHeader>
+    const [user] = useState(initialState);
 
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="companyName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2 text-gray-700">
-                      <Building2 className="w-4 h-4" />
-                      Nome da Empresa
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Digite o nome da empresa"
-                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    // Defina um estado para a variável 'plans'
+    const [plans, setPlans] = useState([]);
 
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2 text-gray-700">
-                      <User className="w-4 h-4" />
-                      Nome Completo
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Digite seu nome completo"
-                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            const planList = await getPlanList();
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2 text-gray-700">
-                      <Mail className="w-4 h-4" />
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="email"
-                        placeholder="seu@email.com"
-                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            setPlans(planList);
+            setLoading(false);
+        };
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
+    const dueDate = moment().add(7, "day").format();
+    const handleSignUp = async values => {
+        Object.assign(values, { recurrence: "MENSAL" });
+        Object.assign(values, { dueDate: dueDate });
+        Object.assign(values, { status: "t" });
+        Object.assign(values, { campaignsEnabled: true });
+        Object.assign(values, { phone: values.phone.replace(/\D/g, '') });
+        try {
+            
+            await openApi.post("/auth/signup", values);
+            toast.success(i18n.t("signup.toasts.success", { autoClose: 10000 }));
+            history.push("/login");
+        } catch (err) {
+            toastError(err);
+        }
+    };
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Senha</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input 
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Digite sua senha"
-                          className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors pr-10"
-                          {...field} 
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="w-4 h-4 text-gray-400" />
-                          ) : (
-                            <Eye className="w-4 h-4 text-gray-400" />
-                          )}
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    const { list: listPlans } = usePlans();
 
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2 text-gray-700">
-                      <Phone className="w-4 h-4" />
-                      Telefone
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="(11) 99999-9999"
-                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                        {...field}
-                        onChange={(e) => {
-                          const formatted = formatPhone(e.target.value);
-                          field.onChange(formatted);
+    useEffect(() => {
+        async function fetchData() {
+            const list = await listPlans({listPublic: "false"});
+            setPlans(list);
+        }
+        fetchData();
+    }, []);
+
+    return (
+        <div className={classes.root} >
+            <img src={logo} alt="Logo da Empresa" className={classes.logo} />
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    
+                    <Typography component="h1" variant="h5">
+                        {i18n.t("signup.title")}
+                    </Typography>
+                    <Formik
+                        initialValues={user}
+                        enableReinitialize={true}
+                        validationSchema={UserSchema}
+                        onSubmit={(values, actions) => {
+                            setTimeout(() => {
+                                handleSignUp(values);
+                                actions.setSubmitting(false);
+                            }, 400);
                         }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    >
+                        {({ touched, errors, isSubmitting }) => (
+                            <Form className={classes.form}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            as={TextField}
+                                            variant="outlined"
+                                            fullWidth
+                                            id="companyName"
+                                            label={i18n.t("signup.form.company")}
+                                            error={touched.companyName && Boolean(errors.companyName)}
+                                            helperText={touched.companyName && errors.companyName}
+                                            name="companyName"
+                                            autoComplete="companyName"
+                                            autoFocus
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            as={TextField}
+                                            autoComplete="name"
+                                            name="name"
+                                            error={touched.name && Boolean(errors.name)}
+                                            helperText={touched.name && errors.name}
+                                            variant="outlined"
+                                            fullWidth
+                                            id="name"
+                                            label={i18n.t("signup.form.name")}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            as={TextField}
+                                            variant="outlined"
+                                            fullWidth
+                                            id="email"
+                                            label={i18n.t("signup.form.email")}
+                                            name="email"
+                                            error={touched.email && Boolean(errors.email)}
+                                            helperText={touched.email && errors.email}
+                                            autoComplete="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    <Field
+                                    as={TextField}
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    error={touched.password && Boolean(errors.password)}
+                                    helperText={touched.password && errors.password}
+                                    label={i18n.t("signup.form.password")}
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    autoComplete="current-password"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={toggleShowPassword}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    <Field name="phone">
+                                        {({ field }) => (
+                                        <ReactInputMask
+                                            {...field}
+                                            mask="(99) 99999-9999"
+                                        >
+                                            {(inputProps) => (
+                                            <TextField
+                                                {...inputProps}
+                                                variant="outlined"
+                                                fullWidth
+                                                id="phone"
+                                                label={i18n.t("signup.form.phone")}
+                                                autoComplete="phone"
+                                            />
+                                            )}
+                                        </ReactInputMask>
+                                        )}
+                                    </Field>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <InputLabel htmlFor="plan-selection">Plano</InputLabel>
+                                        <Field
+                                            as={Select}
+                                            variant="outlined"
+                                            fullWidth
+                                            id="plan-selection"
+                                            label="Plano"
+                                            name="planId"
+                                            required
+                                        >
+                                            {plans.map((plan, key) => (
+                                                <MenuItem key={key} value={plan.id}>
+                                                    {plan.name} - Atendentes: {plan.users} - Conexões: {plan.connections} - Filas: {plan.queues} - $ {plan.amount}
+                                                </MenuItem>
+                                            ))}
+                                        </Field>
+                                    </Grid>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        style={{ borderRadius: "10px", padding: "5px 12px", fontSize: "1em", marginTop: "20px" }}
+                                        className={classes.submit}
+                                    >
+                                        {i18n.t("signup.buttons.submit")}
+                                    </Button>
+                                    <Grid container justify="flex-end">
+                                        <Grid item>
+                                            <Link
+                                                href="#"
+                                                variant="body2"
+                                                component={RouterLink}
+                                                to="/login"
+                                            >
+                                                {i18n.t("signup.buttons.login")}
+                                            </Link>
+                                        </Grid>
+                                    </Grid>
+                                    
+                                </Grid>
 
-              <FormField
-                control={form.control}
-                name="planId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2 text-gray-700">
-                      <CreditCard className="w-4 h-4" />
-                      Plano
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                          <SelectValue placeholder="Selecione um plano" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {plans.map((plan) => (
-                          <SelectItem key={plan.id} value={plan.id}>
-                            <div className="flex flex-col">
-                              <span className="font-medium">{plan.name}</span>
-                              <span className="text-sm text-gray-500">
-                                {plan.users} usuários • {plan.connections} conexões • R$ {plan.amount}
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                    Criando conta...
-                  </div>
-                ) : (
-                  "Criar Conta"
-                )}
-              </Button>
-            </form>
-          </Form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Já tem uma conta?{" "}
-              <Link 
-                to="/login" 
-                className="text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
-              >
-                Fazer login
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-4 text-center">
-            <Link 
-              to="/" 
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              ← Voltar ao início
-            </Link>
-          </div>
-
-          <div className="mt-4 text-center">
-            <p className="text-xs text-gray-500">
-              © {new Date().getFullYear()} Sua Empresa - Todos os direitos reservados
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+                            </Form>
+                        )}
+                    </Formik>
+                    <Box mt={8}><Copyright /></Box>
+                </div>
+            </Container>
+        </div>
+    );
 };
 
 export default SignUp;
