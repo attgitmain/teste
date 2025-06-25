@@ -7,10 +7,10 @@ module.exports = {
       'CREATE SEQUENCE IF NOT EXISTS "Messages_id_seq"'
     );
     await queryInterface.sequelize.query(
-      'ALTER TABLE "Messages" ALTER COLUMN "id" SET DEFAULT nextval(''"Messages_id_seq"''::regclass)'
+      'ALTER TABLE "Messages" ALTER COLUMN "id" SET DEFAULT nextval(\'"Messages_id_seq"\'::regclass)'
     );
     await queryInterface.sequelize.query(
-      'SELECT setval(''"Messages_id_seq"'', COALESCE((SELECT MAX("id") FROM "Messages"), 0))'
+      'SELECT setval(\'"Messages_id_seq"\', COALESCE((SELECT MAX("id") FROM "Messages"), 0))'
     );
   },
 
