@@ -10,7 +10,7 @@ module.exports = {
       'ALTER TABLE "Messages" ALTER COLUMN "id" SET DEFAULT nextval(\'"Messages_id_seq"\'::regclass)'
     );
     await queryInterface.sequelize.query(
-      'SELECT setval(\'"Messages_id_seq"\', COALESCE((SELECT MAX("id") FROM "Messages"), 0))'
+      'SELECT setval(\'"Messages_id_seq"\'::regclass, COALESCE((SELECT MAX("id")::bigint FROM "Messages"), 0))'
     );
   },
 
