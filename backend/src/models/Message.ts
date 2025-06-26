@@ -6,6 +6,7 @@ import {
   Model,
   DataType,
   PrimaryKey,
+  AutoIncrement,
   Default,
   BelongsTo,
   ForeignKey
