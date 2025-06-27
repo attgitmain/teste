@@ -8,25 +8,23 @@ import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Form, Field } from "formik";
 import Avatar from "@material-ui/core/Avatar";
-import { versionSystem } from "../../../package.json";
-import { nomeEmpresa } from "../../../package.json";
 import Button from "@material-ui/core/Button";
 import {
-    IconButton,
-    InputAdornment,
-  } from "@material-ui/core";
-  import Visibility from "@material-ui/icons/Visibility";
-  import VisibilityOff from "@material-ui/icons/VisibilityOff";
+  IconButton,
+  InputAdornment,
+} from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import {
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -41,6 +39,9 @@ import moment from "moment";
 import logo from "../../assets/logo.png";
 import bk from "../../assets/bk.jpg";
 import ReactInputMask from 'react-input-mask';
+import packageJson from "../../../package.json";
+
+const { versionSystem, nomeEmpresa } = packageJson;
 
 const Copyright = () => {
     return (
