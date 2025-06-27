@@ -39,7 +39,7 @@ import {
   WhatsApp,
 } from "@material-ui/icons";
 
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import FacebookLogin from "@greatsumini/react-facebook-login";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
@@ -632,11 +632,11 @@ const Connections = () => {
                               fields="name,email,picture"
                               version="9.0"
                               scope="public_profile,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
-                              callback={responseFacebook}
-                              render={(renderProps) => (
+                              onSuccess={responseFacebook}
+                              render={({ onClick }) => (
                                 <MenuItem
                                   disabled={planConfig?.plan?.useFacebook ? false : true}
-                                  onClick={renderProps.onClick}
+                                  onClick={onClick}
                                 >
                                   <Facebook
                                     fontSize="small"
@@ -656,11 +656,11 @@ const Connections = () => {
                               fields="name,email,picture"
                               version="9.0"
                               scope="public_profile,instagram_basic,instagram_manage_messages,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
-                              callback={responseInstagram}
-                              render={(renderProps) => (
+                              onSuccess={responseInstagram}
+                              render={({ onClick }) => (
                                 <MenuItem
                                   disabled={planConfig?.plan?.useInstagram ? false : true}
-                                  onClick={renderProps.onClick}
+                                  onClick={onClick}
                                 >
                                   <Instagram
                                     fontSize="small"
