@@ -8,8 +8,6 @@ import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Form, Field } from "formik";
 import Avatar from "@material-ui/core/Avatar";
-import packageJson from "../../../package.json";
-const { versionSystem, nomeEmpresa } = packageJson;
 import Button from "@material-ui/core/Button";
 import {
     IconButton,
@@ -41,6 +39,9 @@ import moment from "moment";
 import logo from "../../assets/logo.png";
 import bk from "../../assets/bk.jpg";
 import ReactInputMask from 'react-input-mask';
+import packageJson from "../../../package.json";
+
+const { versionSystem, nomeEmpresa } = packageJson;
 
 const Copyright = () => {
     return (
