@@ -8,8 +8,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Form, Field } from "formik";
 import Avatar from "@material-ui/core/Avatar";
-import { versionSystem } from "../../../package.json";
-import { nomeEmpresa } from "../../../package.json";
+import packageJson from "../../../package.json";
+const { versionSystem, nomeEmpresa } = packageJson;
 import Button from "@material-ui/core/Button";
 import {
     IconButton,
