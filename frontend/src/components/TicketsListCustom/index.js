@@ -290,27 +290,24 @@ const TicketsListCustom = (props) => {
                 });
             }
             // console.log(shouldUpdateTicket(data.ticket))
-            if (data.action === "update" &&
-                shouldUpdateTicket(data.ticket) && data.ticket.status === status) {
-                dispatch({
-                    type: "UPDATE_TICKET",
-                    payload: data.ticket,
-                    status: status,
-                    sortDir: sortTickets
-                });
-            }
+            if (data.action === "update" && data.ticket) {
+                if (shouldUpdateTicket(data.ticket) && data.ticket.status === status) {
+                    dispatch({
+                        type: "UPDATE_TICKET",
+                        payload: data.ticket,
+                        status: status,
+                        sortDir: sortTickets
+                    });
+                }
 
-            // else if (data.action === "update" && shouldUpdateTicketUser(data.ticket) && data.ticket.status === status) {
-            //     dispatch({
-            //         type: "UPDATE_TICKET",
-            //         payload: data.ticket,
-            //     });
-            // }
-            if (data.action === "update" && notBelongsToUserQueues(data.ticket)) {
-                dispatch({
-                    type: "DELETE_TICKET", payload: data.ticket?.id, status: status,
-                    sortDir: sortTickets
-                });
+                if (notBelongsToUserQueues(data.ticket)) {
+                    dispatch({
+                        type: "DELETE_TICKET",
+                        payload: data.ticket.id,
+                        status: status,
+                        sortDir: sortTickets
+                    });
+                }
             }
 
             if (data.action === "delete") {
@@ -323,7 +320,7 @@ const TicketsListCustom = (props) => {
         };
 
         const onCompanyAppMessageTicketsList = (data) => {
-            if (data.action === "create" &&
+            if (data.action === "create" && data.ticket &&
                 shouldUpdateTicket(data.ticket) && data.ticket.status === status) {
                 dispatch({
                     type: "UPDATE_TICKET_UNREAD_MESSAGES",
