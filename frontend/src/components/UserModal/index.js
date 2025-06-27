@@ -33,7 +33,6 @@ import TabPanel from "../TabPanel";
 import AvatarUploader from "../AvatarUpload";
 
 const backendUrl = getBackendUrl();
-const path = require('path');
 
 const useStyles = makeStyles(theme => ({
 	root: {

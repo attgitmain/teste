@@ -990,7 +990,7 @@ const renderMessageDivider = (message, index) => {
   }
 };
 
-const path = require('path');
+const getBasename = (filePath) => filePath?.split(/[/\\\\]/).pop();
 
 const renderQuotedMessage = (message) => {
 
@@ -1220,7 +1220,7 @@ const renderMessages = () => {
                 {message.quotedMsg && renderQuotedMessage(message)}
                 {
                   (
-                    (message.mediaUrl !== null && (message.mediaType === "image" || message.mediaType === "video") && path.basename(message.mediaUrl).trim() !== message.body.trim()) ||
+                    (message.mediaUrl !== null && (message.mediaType === "image" || message.mediaType === "video") && getBasename(message.mediaUrl).trim() !== message.body.trim()) ||
                     message.mediaType !== "audio" &&
                     message.mediaType !== "image" &&
                     message.mediaType !== "video" &&
@@ -1326,7 +1326,7 @@ const renderMessages = () => {
                 {message.quotedMsg && renderQuotedMessage(message)}
 
                 {
-                  ((message.mediaType === "image" || message.mediaType === "video") && path.basename(message.mediaUrl) === message.body) ||
+                  ((message.mediaType === "image" || message.mediaType === "video") && getBasename(message.mediaUrl) === message.body) ||
                   (message.mediaType !== "audio" && message.mediaType != "reactionMessage" && message.mediaType != "locationMessage" && message.mediaType !== "contactMessage" && message.mediaType != "pollCreationMessageV3" && message.mediaType != "eventMessage" &&
                     message.mediaType != "listMessage" &&
                     message.mediaType != "viewOnceMessage" &&
