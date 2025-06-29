@@ -119,6 +119,10 @@ class Schedule extends Model<Schedule> {
   @Column
   contadorEnvio: number;
 
+  @Default(0)
+  @Column
+  notifyBeforeDays: number;
+
   @Default(false)
   @Column
   assinar: boolean;
