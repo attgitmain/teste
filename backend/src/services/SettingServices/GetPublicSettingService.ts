@@ -1,9 +1,5 @@
 import Setting from "../../models/Setting";
 
-interface Request {
-  key: string;
-}
-
 const publicSettingsKeys = [
   "allowSignup",
   "primaryColorLight",
@@ -12,29 +8,30 @@ const publicSettingsKeys = [
   "appLogoDark",
   "appLogoFavicon",
   "appName"
-]
+] as const;
 
-const GetPublicSettingService = async ({
-  key
-}: Request): Promise<string | undefined> => {
-  
+type PublicSettingKey = typeof publicSettingsKeys[number];
 
-  console.log("|======== GetPublicSettingService ========|")
-  console.log("key", key)
-  console.log("|=========================================|")
+interface Request {
+  key: string;
+}
 
-  if (!publicSettingsKeys.includes(key)) {
-    return null;
+const GetPublicSettingService = async ({ key }: Request): Promise<string | undefined> => {
+  if (!publicSettingsKeys.includes(key as PublicSettingKey)) return undefined;
+
+  try {
+    const setting = await Setting.findOne({
+      where: {
+        companyId: 1,
+        key
+      }
+    });
+
+    return setting?.value;
+  } catch (error) {
+    console.error(`Erro ao buscar a configuração pública: ${key}`, error);
+    return undefined;
   }
-  
-  const setting = await Setting.findOne({
-    where: {
-      companyId: 1,
-      key
-    }
-  });
-
-  return setting?.value;
 };
 
 export default GetPublicSettingService;
