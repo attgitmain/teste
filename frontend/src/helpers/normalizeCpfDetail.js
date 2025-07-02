@@ -129,13 +129,16 @@ export default function normalizeCpfDetail(detail) {
       : "Não";
   }
 
-  if (!normalized.poder_aquisitivo && normalized.poder_aquisitivo !== undefined) {
+  if (normalized.poder_aquisitivo && typeof normalized.poder_aquisitivo === "object") {
     normalized.poder_aquisitivo = {
       cod_poder_aquisitivo: normalized.poder_aquisitivo.cod_poder_aquisitivo,
       poder_aquisitivo: normalized.poder_aquisitivo.poder_aquisitivo,
-      renda_poder_aquisitivo: normalized.poder_aquisitivo.renda_poder_aquisitivo,
+      renda_poder_aquisitivo:
+        normalized.poder_aquisitivo.renda_poder_aquisitivo,
       fx_poder_aquisitivo: normalized.poder_aquisitivo.fx_poder_aquisitivo,
     };
+  } else {
+    normalized.poder_aquisitivo = {};
   }
 
   if (!normalized.fgts) {
