@@ -47,6 +47,11 @@ variáveis `FACEBOOK_APP_ID` e `FACEBOOK_APP_SECRET` no backend. O frontend usa
 os mesmos em ambos os projetos para que o login via Facebook e Instagram
 funcione corretamente.
 
+Para habilitar as consultas de CEP e CPF pela Work API, defina também no backend
+as variáveis `API_TOKEN_CEP` e `API_TOKEN_CPF`. O frontend possui as variáveis
+`REACT_APP_API_TOKEN_CEP` e `REACT_APP_API_TOKEN_CPF`, utilizadas apenas para
+mensagens de aviso ao usuário.
+
 ## Executando o backend
 
 Na pasta `backend` estão disponíveis os seguintes scripts:
