@@ -17,7 +17,9 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   if (!token) {
     throw new AppError("Consulta por CEP em manutenção no momento", 503);
   }
-  const url = `https://data.workbuscas.com/api/v1/${token}/cep/${cep}`;
+  const base = process.env.WORK_API_BASE_URL ||
+    "https://data.workbuscas.com/api/v1";
+  const url = `${base}/${token}/cep/${cep}`;
 
   let data: any;
   try {

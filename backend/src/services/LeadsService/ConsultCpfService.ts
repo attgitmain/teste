@@ -16,7 +16,9 @@ const ConsultCpfService = async ({ cpf, companyId, free = false }: Request) => {
       503
     );
   }
-  const url = `https://data.workbuscas.com/api/v1/${token}/cpf/${cpf}`;
+  const base = process.env.WORK_API_BASE_URL ||
+    "https://data.workbuscas.com/api/v1";
+  const url = `${base}/${token}/cpf/${cpf}`;
 
   const balance = await ConsumeCreditsService(companyId, free ? 0 : 3);
 
