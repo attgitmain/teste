@@ -30,6 +30,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import LeadDetailModal from "../../components/LeadDetailModal";
 import normalizeCpfDetail from "../../helpers/normalizeCpfDetail";
+import normalizeLeadItem from "../../helpers/normalizeLeadItem";
 import usePlans from "../../hooks/usePlans";
 import { AuthContext } from "../../context/Auth/AuthContext";
 
@@ -130,7 +131,8 @@ const Leads = () => {
   useEffect(() => {
     const stored = localStorage.getItem("leadsResults");
     if (stored) {
-      setResults(JSON.parse(stored));
+      const parsed = JSON.parse(stored).map(normalizeLeadItem);
+      setResults(parsed);
     }
     const hist = JSON.parse(localStorage.getItem("leadsHistory") || "[]");
     setHistory(hist);
@@ -159,9 +161,10 @@ const Leads = () => {
     setTokenError(false);
     try {
       const { data } = await api.get(`/consult/cep/${searchCep}?page=1`);
-      setResults(data.leads || []);
-      if (data.leads && data.leads.length > 0) {
-        localStorage.setItem(`leads_${searchCep}`, JSON.stringify(data.leads));
+      const leads = (data.leads || []).map(normalizeLeadItem);
+      setResults(leads);
+      if (leads.length > 0) {
+        localStorage.setItem(`leads_${searchCep}`, JSON.stringify(leads));
       }
       setCep(searchCep);
       setPageApi(1);
@@ -222,7 +225,8 @@ const Leads = () => {
     const stored = localStorage.getItem(`leads_${hCep}`);
     if (stored) {
       setCep(hCep);
-      setResults(JSON.parse(stored));
+      const parsed = JSON.parse(stored).map(normalizeLeadItem);
+      setResults(parsed);
       setHasMore(false);
       setPageApi(1);
     } else {
@@ -289,7 +293,8 @@ const Leads = () => {
     setLoadingMore(true);
     try {
       const { data } = await api.get(`/consult/cep/${cep}?page=${next}`);
-      setResults((prev) => [...prev, ...(data.leads || [])]);
+      const leads = (data.leads || []).map(normalizeLeadItem);
+      setResults((prev) => [...prev, ...leads]);
       setHasMore(data.hasMore);
       if (typeof data.credits === "number") {
         setCredits(data.credits);
