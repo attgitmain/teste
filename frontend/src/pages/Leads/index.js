@@ -98,7 +98,6 @@ const Leads = () => {
   const [cpf, setCpf] = useState("");
   const [canConsultCpf, setCanConsultCpf] = useState(false);
   const { dateToClient } = useDate();
-  const searchTimeout = useRef(null);
   const [downloadAnchorEl, setDownloadAnchorEl] = useState(null);
   const csvLinkRef = useRef();
 
@@ -153,50 +152,49 @@ const Leads = () => {
 
   const handleSearch = async (searchCep = cep) => {
     if (!searchCep || searchCep.length !== 8) return;
-    if (searchTimeout.current) clearTimeout(searchTimeout.current);
-    searchTimeout.current = setTimeout(async () => {
-      setLoading(true);
-      setTokenError(false);
-      try {
-        const { data } = await api.get(`/consult/cep/${searchCep}?page=1`);
-        setResults(data.leads || []);
-        if (data.leads && data.leads.length > 0) {
-          localStorage.setItem(`leads_${searchCep}`, JSON.stringify(data.leads));
-        }
-        setCep(searchCep);
-        setPageApi(1);
-        setHasMore(data.hasMore);
-        if (typeof data.credits === "number") {
-          setCredits(data.credits);
-        }
-        if (!data.leads || data.leads.length === 0) {
-          const stored = localStorage.getItem(`leads_${searchCep}`);
-          if (data.allShown && stored) {
-            toast.info("Todos os leads deste CEP já foram consultados");
-            setResults(JSON.parse(stored));
-          } else {
-            toast.error("CEP não encontrado");
-          }
-        }
-      } catch (err) {
-        if (err.response) {
-          if (err.response.status === 401) {
-            setTokenError(true);
-            toast.error("Token expirado");
-          } else if (err.response.status === 404) {
-            toast.error("CEP não encontrado");
-          } else if (err.response.status === 402) {
-            toast.error(i18n.t("leads.noCredits"));
-          } else {
-            toast.error("Erro ao buscar dados");
-          }
-        } else {
-          toast.error("Erro de rede, verifique sua conexão");
-        }
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    setTokenError(false);
+    try {
+      const { data } = await api.get(`/consult/cep/${searchCep}?page=1`);
+      setResults(data.leads || []);
+      if (data.leads && data.leads.length > 0) {
+        localStorage.setItem(`leads_${searchCep}`, JSON.stringify(data.leads));
       }
-    }, 300);
+      setCep(searchCep);
+      setPageApi(1);
+      setHasMore(data.hasMore);
+      if (typeof data.credits === "number") {
+        setCredits(data.credits);
+      }
+      if (!data.leads || data.leads.length === 0) {
+        const stored = localStorage.getItem(`leads_${searchCep}`);
+        if (data.allShown && stored) {
+          toast.info("Todos os leads deste CEP já foram consultados");
+          setResults(JSON.parse(stored));
+        } else {
+          toast.error("CEP não encontrado");
+        }
+      }
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 401) {
+          setTokenError(true);
+          toast.error("Token expirado");
+        } else if (err.response.status === 404) {
+          toast.error("CEP não encontrado");
+        } else if (err.response.status === 402) {
+          toast.error(i18n.t("leads.noCredits"));
+        } else if (err.response.status === 503) {
+          toast.error("Consulta de CEP indisponível");
+        } else {
+          toast.error("Erro ao buscar dados");
+        }
+      } else {
+        toast.error("Erro de rede, verifique sua conexão");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClear = () => {
