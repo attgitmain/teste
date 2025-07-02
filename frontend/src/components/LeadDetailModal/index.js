@@ -111,6 +111,20 @@ const renderValue = (value, placeholderClass) => {
 const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
   const classes = useStyles();
 
+  const dadosBasicos = React.useMemo(
+    () => (lead ? lead.dados_basicos || lead : {}),
+    [lead],
+  );
+
+  const endereco = React.useMemo(
+    () =>
+      lead
+        ? lead.endereco ||
+          (Array.isArray(lead.enderecos) ? lead.enderecos[0] : undefined)
+        : undefined,
+    [lead],
+  );
+
   const [copySnackOpen, setCopySnackOpen] = React.useState(false);
   const [loadingDelay, setLoadingDelay] = React.useState(true);
   const firstSummaryRef = React.useRef();
@@ -197,8 +211,8 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
         {!loading && !error && lead && (
           <>
             <Box className={classes.tagsBox}>
-              {lead.dados_basicos?.faixa_renda && (
-                <Chip label={`💸 ${lead.dados_basicos.faixa_renda}`} />
+              {dadosBasicos?.faixa_renda && (
+                <Chip label={`💸 ${dadosBasicos.faixa_renda}`} />
               )}
               {lead.dados_pessoais?.nasc &&
                 differenceInYears(new Date(), new Date(lead.dados_pessoais.nasc)) >= 60 && (
@@ -233,9 +247,9 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <LabelImportantIcon fontSize="small" /> Safra:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.dados_basicos?.safra, classes.placeholder)}
+                      {renderValue(dadosBasicos?.safra, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.safra)}>
+                    <IconButton size="small" onClick={() => copyField(dadosBasicos?.safra)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -299,18 +313,18 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <BusinessIcon fontSize="small" /> CBO:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.dados_basicos?.cbo, classes.placeholder)}
+                      {renderValue(dadosBasicos?.cbo, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.cbo)}>
+                    <IconButton size="small" onClick={() => copyField(dadosBasicos?.cbo)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Status Receita:</Typography>
-                    {lead.dados_basicos?.status_receita ? (
+                    {dadosBasicos?.status_receita ? (
                       <Chip
-                        label={lead.dados_basicos.status_receita}
-                        style={{ backgroundColor: /regular/i.test(lead.dados_basicos.status_receita) ? '#4caf50' : '#f44336', color: '#fff' }}
+                        label={dadosBasicos.status_receita}
+                        style={{ backgroundColor: /regular/i.test(dadosBasicos.status_receita) ? '#4caf50' : '#f44336', color: '#fff' }}
                         size="small"
                       />
                     ) : (
@@ -322,9 +336,9 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <BusinessIcon fontSize="small" /> % Cargo Societário:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.dados_basicos?.pct_cargo_societario, classes.placeholder)}
+                      {renderValue(dadosBasicos?.pct_cargo_societario, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.pct_cargo_societario)}>
+                    <IconButton size="small" onClick={() => copyField(dadosBasicos?.pct_cargo_societario)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -333,9 +347,9 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <DriveEtaIcon fontSize="small" /> Qt. Veículos:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.dados_basicos?.qt_veiculos, classes.placeholder)}
+                      {renderValue(dadosBasicos?.qt_veiculos, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.qt_veiculos)}>
+                    <IconButton size="small" onClick={() => copyField(dadosBasicos?.qt_veiculos)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -344,21 +358,21 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <AttachMoneyIcon fontSize="small" /> Faixa Renda:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.dados_basicos?.faixa_renda, classes.placeholder)}
+                      {renderValue(dadosBasicos?.faixa_renda, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.dados_basicos?.faixa_renda)}>
+                    <IconButton size="small" onClick={() => copyField(dadosBasicos?.faixa_renda)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Óbito:</Typography>
-                    {lead.dados_basicos?.obito?.status === 'Vivo' ? (
+                    {dadosBasicos?.obito?.status === 'Vivo' ? (
                       <CheckCircleIcon style={{ color: 'green' }} />
-                    ) : lead.dados_basicos?.obito ? (
+                    ) : dadosBasicos?.obito ? (
                       <>
                         <CancelIcon style={{ color: 'red' }} />
                         <Typography style={{ marginLeft: 4 }}>
-                          {lead.dados_basicos.obito.data || ''}
+                          {dadosBasicos.obito.data || ''}
                         </Typography>
                       </>
                     ) : (
@@ -378,9 +392,9 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Tipo:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.tipo, classes.placeholder)}
+                      {renderValue(endereco?.tipo || endereco?.tipo_logradouro, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.tipo)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.tipo || endereco?.tipo_logradouro)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -389,36 +403,36 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                       <HomeIcon fontSize="small" /> Logradouro:
                     </Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.logradouro, classes.placeholder)}
+                      {renderValue(endereco?.logradouro, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.logradouro)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.logradouro)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Número:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.numero, classes.placeholder)}
+                      {renderValue(endereco?.numero, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.numero)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.numero)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Complemento:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.complemento, classes.placeholder)}
+                      {renderValue(endereco?.complemento, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.complemento)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.complemento)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>Bairro:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.bairro, classes.placeholder)}
+                      {renderValue(endereco?.bairro, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.bairro)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.bairro)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -426,29 +440,29 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                     <Typography className={classes.fieldLabel}>Cidade/Estado:</Typography>
                     <Typography>
                       {renderValue(
-                        lead.endereco?.cidade ? `${lead.endereco.cidade} / ${lead.endereco.estado}` : null,
+                        endereco?.cidade ? `${endereco.cidade} / ${endereco.estado || endereco.uf}` : null,
                         classes.placeholder
                       )}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.cidade ? `${lead.endereco.cidade} / ${lead.endereco.estado}` : '')}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.cidade ? `${endereco.cidade} / ${endereco.estado || endereco.uf}` : '')}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>CEP:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.cep, classes.placeholder)}
+                      {renderValue(endereco?.cep, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.cep)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.cep)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
                   <Grid item className={classes.fieldRow}>
                     <Typography className={classes.fieldLabel}>UF:</Typography>
                     <Typography>
-                      {renderValue(lead.endereco?.uf, classes.placeholder)}
+                      {renderValue(endereco?.uf || endereco?.estado, classes.placeholder)}
                     </Typography>
-                    <IconButton size="small" onClick={() => copyField(lead.endereco?.uf)}>
+                    <IconButton size="small" onClick={() => copyField(endereco?.uf || endereco?.estado)}>
                       <FileCopyOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Grid>
@@ -468,8 +482,8 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                         <Typography className={classes.fieldLabel}>
                           <BusinessCenterIcon fontSize="small" /> Empregador:
                         </Typography>
-                        <Typography>{renderValue(job.nome_empregador, classes.placeholder)}</Typography>
-                        <IconButton size="small" onClick={() => copyField(job.nome_empregador)}>
+                        <Typography>{renderValue(job.empresa, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.empresa)}>
                           <FileCopyOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Grid>
@@ -477,8 +491,8 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                         <Typography className={classes.fieldLabel}>
                           <WorkOutlineIcon fontSize="small" /> Setor:
                         </Typography>
-                        <Typography>{renderValue(job.setor, classes.placeholder)}</Typography>
-                        <IconButton size="small" onClick={() => copyField(job.setor)}>
+                        <Typography>{renderValue(job.cargo || job.setor, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(job.cargo || job.setor)}>
                           <FileCopyOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Grid>
