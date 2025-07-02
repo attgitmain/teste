@@ -74,6 +74,26 @@ export const sendListMessage = async (req: Request, res: Response): Promise<Resp
   const { title, text, buttonText, footer, sections } = req.body;
 
   try {
+    if (!buttonText) {
+      throw new AppError("'buttonText' is required", 400);
+    }
+
+    if (!Array.isArray(sections) || sections.length === 0 || !sections[0].rows || !sections[0].rows.length) {
+      throw new AppError("'sections' with rows is required", 400);
+    }
+
+    const ids = new Set();
+    for (const section of sections) {
+      for (const row of section.rows) {
+        if (!row.rowId) {
+          throw new AppError("rowId is required", 400);
+        }
+        if (ids.has(row.rowId)) {
+          throw new AppError("rowId must be unique", 400);
+        }
+        ids.add(row.rowId);
+      }
+    }
     const ticket = await Ticket.findByPk(ticketId);
 
     if (!ticket) {

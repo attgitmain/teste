@@ -1570,7 +1570,7 @@ const verifyQueue = async (
           });
         }
       } catch (error) {
-        logger.info(error);
+        logger.error(error);
       }
     }
 
@@ -1950,7 +1950,7 @@ const verifyQueue = async (
             // debouncedSentMessagePosicao();
           }
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
       }
 
@@ -1969,7 +1969,7 @@ const verifyQueue = async (
             companyId
           });
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
 
         return;
@@ -2312,10 +2312,17 @@ const verifyQueue = async (
             rowId: `${index + 1}`
           });
         });
+
         sectionsRows.push({
           title: "Voltar Menu Inicial",
           rowId: "#"
         });
+
+        const hasRows = sectionsRows.length > 0;
+        const idSet = new Set(sectionsRows.map(r => r.rowId));
+        if (idSet.size !== sectionsRows.length) {
+          logger.warn("rowId duplicado em botList");
+        }
         const sections = [
           {
             title: 'Lista de Botões',
@@ -2327,10 +2334,13 @@ const verifyQueue = async (
           text: formatBody(`\u200e${queue.greetingMessage}\n`),
           title: "Lista\n",
           buttonText: "Clique aqui",
-          //footer: ".",
-          //listType: 2,
           sections
-        };
+        } as any;
+
+        if (!listMessage.buttonText || !hasRows) {
+          logger.error("Estrutura de lista inválida");
+          return;
+        }
         const sendMsg = await wbot.sendMessage(
           `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
           listMessage
@@ -2402,7 +2412,7 @@ const verifyQueue = async (
 
 
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
       }
 
@@ -2423,7 +2433,7 @@ const verifyQueue = async (
             companyId,
           });
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
 
         return;
@@ -2775,10 +2785,14 @@ const verifyQueue = async (
 
               const buttons = [];
 
-              // Adiciona os chatbots como botões
-              choosenQueue.chatbots.forEach((chatbot, index) => {
+              if (choosenQueue.chatbots.length > 2) {
+                logger.warn("Mais de 2 chatbots encontrados, limitando botões a 3");
+              }
+
+              // Adiciona no máximo dois chatbots como botões
+              choosenQueue.chatbots.slice(0, 2).forEach((chatbot, index) => {
                 buttons.push({
-                  name: 'quick_reply',  // Substitua por 'quick_reply' se necessário, dependendo do contexto
+                  name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
                     display_text: chatbot.name,
                     id: `${index + 1}`
@@ -2890,7 +2904,7 @@ const verifyQueue = async (
 
 
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
       }
 
@@ -2911,7 +2925,7 @@ const verifyQueue = async (
             companyId,
           });
         } catch (error) {
-          logger.info(error);
+          logger.error(error);
         }
 
         return;
@@ -3274,17 +3288,17 @@ const verifyQueue = async (
   if (typeBot === "text") {
     return botText();
   }
-  
-   if (typeBot === "list") {
+
+  if (typeBot === "list") {
+    return botList();
+  }
+
+  if (typeBot === "button" && queues.length > 3) {
     return botList();
   }
 
   if (typeBot === "button") {
     return botButton();
-  }
-
-  if (typeBot === "button" && queues.length > 3) {
-    return botText();
   }
 };
 
