@@ -76,6 +76,7 @@
     "react-player": "^2.13.0",
     "react-qr-code": "^2.0.11",
     "react-query": "^3.39.3",
+    "framer-motion": "^12.23.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-softphone": "^1.7.0",
