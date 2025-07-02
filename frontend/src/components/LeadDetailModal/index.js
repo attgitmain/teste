@@ -46,6 +46,7 @@ import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import Skeleton from '@material-ui/lab/Skeleton';
 import copy from 'clipboard-copy';
 import { differenceInYears } from 'date-fns';
+import { useDate } from '../../hooks/useDate';
 
 const useStyles = makeStyles((theme) => ({
   sectionTitle: {
@@ -124,6 +125,7 @@ const renderList = (list, renderItem, placeholderClass) => {
 
 const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
   const classes = useStyles();
+  const { dateToClient } = useDate();
 
   const dadosBasicos = React.useMemo(
     () => (lead ? lead.dados_basicos || lead : {}),
@@ -396,6 +398,180 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                 </Grid>
             </AccordionDetails>
           </Accordion>
+
+          {lead.cd_sit_cad && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="sitcad-content"
+                id="sitcad-header"
+              >
+                <Typography className={classes.sectionTitle}>
+                  📑 Situação Cadastro
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  #{lead.cd_sit_cad}
+                  {lead.dt_sit_cad && ` em ${dateToClient(lead.dt_sit_cad)}`}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {(lead.cd_mosaic || lead.cd_mosaic_novo || lead.cd_mosaic_secundario) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="mosaic-content"
+                id="mosaic-header"
+              >
+                <Typography className={classes.sectionTitle}>🗺 Mosaic</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  {lead.cd_mosaic && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Primário:</Typography>
+                      <Typography>
+                        {renderValue(lead.cd_mosaic, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.cd_mosaic)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.cd_mosaic_novo && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Novo:</Typography>
+                      <Typography>
+                        {renderValue(lead.cd_mosaic_novo, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.cd_mosaic_novo)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.cd_mosaic_secundario && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Secundário:</Typography>
+                      <Typography>
+                        {renderValue(
+                          lead.cd_mosaic_secundario,
+                          classes.placeholder,
+                        )}
+                      </Typography>
+                      <IconButton
+                        size="small"
+                        onClick={() => copyField(lead.cd_mosaic_secundario)}
+                      >
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {(lead.nacionalid ||
+            lead.orgao_emissor ||
+            lead.uf_emissao ||
+            lead.dt_ob ||
+            lead.titulo_eleitor ||
+            lead.estciv ||
+            lead.dt_informacao) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="doc-content"
+                id="doc-header"
+              >
+                <Typography className={classes.sectionTitle}>📑 Documentos</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  {lead.nacionalid && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Nacionalidade:</Typography>
+                      <Typography>
+                        {renderValue(lead.nacionalid, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.nacionalid)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.orgao_emissor && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Orgão Emissor:</Typography>
+                      <Typography>
+                        {renderValue(lead.orgao_emissor, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.orgao_emissor)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.uf_emissao && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>UF Emissão:</Typography>
+                      <Typography>
+                        {renderValue(lead.uf_emissao, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.uf_emissao)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.dt_ob && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Data Óbito:</Typography>
+                      <Typography>
+                        {renderValue(lead.dt_ob, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.dt_ob)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.titulo_eleitor && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Título Eleitor:</Typography>
+                      <Typography>
+                        {renderValue(lead.titulo_eleitor, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.titulo_eleitor)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.estciv && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Estado Civil:</Typography>
+                      <Typography>
+                        {renderValue(lead.estciv, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.estciv)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                  {lead.dt_informacao && (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>Data Informação:</Typography>
+                      <Typography>
+                        {renderValue(lead.dt_informacao, classes.placeholder)}
+                      </Typography>
+                      <IconButton size="small" onClick={() => copyField(lead.dt_informacao)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  )}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
 
           {Array.isArray(lead.emails) && (
             <Accordion className={classes.accordion}>
