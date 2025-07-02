@@ -1539,6 +1539,7 @@ const messages = {
         addCredits: "Creditar créditos",
         historyCleared: "Histórico apagado com sucesso",
         noCredits: "Você não possui créditos suficientes",
+        invalidCep: "Digite um CEP válido com 8 dígitos",
         message: "Página em desenvolvimento."
       },
       chipMaturation: {

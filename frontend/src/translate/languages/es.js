@@ -1467,6 +1467,7 @@ const messages = {
         cpfCreditInfo: "Cada consulta de CPF cuesta 3 créditos",
         addCredits: "Acreditar créditos",
         noCredits: "No tienes créditos suficientes",
+        invalidCep: "Ingrese un código postal válido de 8 dígitos",
         historyCleared: "Historial borrado correctamente",
         message: "Página en desarrollo."
       },

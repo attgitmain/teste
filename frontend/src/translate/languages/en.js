@@ -343,6 +343,7 @@ const messages = {
                                 addCredits: "Add credits",
                                 historyCleared: "History cleared successfully",
                                 noCredits: "You do not have enough credits",
+                                invalidCep: "Please enter a valid 8-digit postal code",
                                 message: "Page under development."
                         },
                        chipMaturation: {

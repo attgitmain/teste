@@ -151,7 +151,10 @@ const Leads = () => {
   }, [results]);
 
   const handleSearch = async (searchCep = cep) => {
-    if (!searchCep || searchCep.length !== 8) return;
+    if (!searchCep || searchCep.length !== 8) {
+      toast.error(i18n.t("leads.invalidCep"));
+      return;
+    }
     setLoading(true);
     setTokenError(false);
     try {
