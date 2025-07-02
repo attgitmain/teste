@@ -50,6 +50,7 @@ export const deleteAndCreateDialogStage = async (
       queueId: bots.queueId
     });
   } catch (error) {
+    console.error("Erro ao criar diálogo do chatbot:", error);
     await ticket.update({ isBot: false });
   }
 };
@@ -88,6 +89,7 @@ const sendMessageLink = async (
       }
     );
   } catch (error) {
+    console.error("Erro ao enviar PDF:", error);
     sentMessage = await wbot.sendMessage(
       `${contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
       {
@@ -118,6 +120,7 @@ const sendMessageImage = async (
       }
     );
   } catch (error) {
+    console.error("Erro ao enviar imagem:", error);
     sentMessage = await wbot.sendMessage(
       `${contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
       {
@@ -323,12 +326,20 @@ const sendDialog = async (
 
     const botButton = async () => {
       const buttons = [];
-      showChatBots.options.forEach((option, index) => {
+      if (showChatBots.options.length > 2) {
+        console.warn("Mais de 2 opções, exibindo apenas as 3 primeiras");
+      }
+      showChatBots.options.slice(0, 2).forEach((option, index) => {
         buttons.push({
           buttonId: `${index + 1}`,
           buttonText: { displayText: option.name },
           type: 1
         });
+      });
+      buttons.push({
+        buttonId: "#",
+        buttonText: { displayText: "Voltar Menu Inicial" },
+        type: 1
       });
 
       if (buttons.length > 0) {
@@ -399,11 +410,11 @@ const sendDialog = async (
       return await botText();
     }
 
-    if (typeBot === "button" && showChatBots.options.length > 4) {
+    if (typeBot === "button" && showChatBots.options.length + 1 > 3) {
       return await botText();
     }
 
-    if (typeBot === "button" && showChatBots.options.length <= 4) {
+    if (typeBot === "button") {
       return await botButton();
     }
 
