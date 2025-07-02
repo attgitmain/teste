@@ -1,5 +1,5 @@
 export default function normalizeLeadItem(item) {
-  if (!item || typeof item !== 'object') {
+  if (!item || typeof item !== "object") {
     return item;
   }
 
@@ -38,9 +38,17 @@ export default function normalizeLeadItem(item) {
     };
   }
 
+  if (!Array.isArray(lead.enderecos)) {
+    const addr =
+      lead.endereco ||
+      lead.endereco_residencial ||
+      (typeof lead.enderecos === "object" ? lead.enderecos : null);
+    lead.enderecos = addr ? [addr] : [];
+  }
+
   if (!lead.logradouro && Array.isArray(lead.enderecos) && lead.enderecos[0]) {
     const addr = lead.enderecos[0];
-    lead.logradouro = addr.logradouro;
+    lead.logradouro = addr.logradouro || addr.endereco || "";
     lead.numero = addr.numero;
     lead.bairro = addr.bairro;
     lead.cidade = addr.cidade;
