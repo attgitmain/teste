@@ -102,6 +102,11 @@ export default function normalizeCpfDetail(detail) {
   if (!normalized.avaliacao_score) {
     if (normalized.avalicao_score) {
       normalized.avaliacao_score = normalized.avalicao_score;
+    } else if (normalized.dados_score) {
+      normalized.avaliacao_score = {
+        csba: normalized.dados_score.score,
+        csba_faixa: normalized.dados_score.faixa_risco,
+      };
     } else {
       normalized.avaliacao_score = normalized.score || {};
     }
