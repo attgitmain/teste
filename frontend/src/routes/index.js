@@ -33,6 +33,7 @@ import CampaignReport from "../pages/CampaignReport";
 import Annoucements from "../pages/Annoucements";
 import Chat from "../pages/Chat";
 import Prompts from "../pages/Prompts";
+import PainelTV from "../pages/PainelTV";
 import ForgetPassword from "../pages/ForgetPassWord/";
 import AllConnections from "../pages/AllConnections";
 import Reports from "../pages/Reports";
@@ -111,6 +112,7 @@ const Routes = () => {
                 <Route exact path="/chats/:id?" component={Chat} isPrivate />
                 <Route exact path="/files" component={Files} isPrivate />
                 <Route exact path="/moments" component={ChatMoments} isPrivate />
+                <Route exact path="/painel-tv" component={PainelTV} isPrivate />
                 <Route exact path="/leads" component={Leads} isPrivate />
                 <Route exact path="/chip-maturation" component={ChipMaturation} isPrivate />
                 <Route exact path="/Kanban" component={Kanban} isPrivate />
