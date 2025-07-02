@@ -1532,6 +1532,7 @@ const messages = {
           nomeMae: "Nome da Mãe",
           renda: "Renda",
           dataNascimento: "Data de Nascimento",
+          score: "Score",
         },
         creditsAvailable: "Créditos disponíveis",
         creditInfo: "Cada consulta de 15 leads consome 1 crédito",

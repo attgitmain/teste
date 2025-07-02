@@ -55,5 +55,18 @@ export default function normalizeLeadItem(item) {
     lead.uf = addr.uf;
   }
 
+  if (!lead.avaliacao_score) {
+    if (lead.avalicao_score) {
+      lead.avaliacao_score = lead.avalicao_score;
+    } else if (lead.dados_score) {
+      lead.avaliacao_score = {
+        csba: lead.dados_score.score,
+        csba_faixa: lead.dados_score.faixa_risco,
+      };
+    } else {
+      lead.avaliacao_score = lead.score || {};
+    }
+  }
+
   return lead;
 }
