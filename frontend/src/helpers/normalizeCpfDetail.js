@@ -3,11 +3,30 @@ export default function normalizeCpfDetail(detail) {
     return detail;
   }
 
+  const raw = (detail.data && detail.data.data) || detail.data || detail;
+
   let normalized = detail;
 
   if (normalized.data && !normalized.dados_pessoais && !normalized.dados_basicos) {
     normalized = normalized.data;
   }
+
+  [
+    "cd_sit_cad",
+    "cd_mosaic",
+    "cd_mosaic_novo",
+    "cd_mosaic_secundario",
+    "dt_sit_cad",
+    "dt_informacao",
+    "nacionalid",
+    "orgao_emissor",
+    "uf_emissao",
+    "dt_ob",
+    "titulo_eleitor",
+    "estciv",
+  ].forEach((key) => {
+    if (raw[key] !== undefined) normalized[key] = raw[key];
+  });
 
   if (normalized.dados_basicos && !normalized.dados_pessoais) {
     const basics = normalized.dados_basicos;
