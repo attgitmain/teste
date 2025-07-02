@@ -68,7 +68,11 @@ export default function normalizeCpfDetail(detail) {
   // merge celulares array into telefones if needed
   let phones = [];
   if (Array.isArray(normalized.telefones)) {
-    phones = normalized.telefones;
+    phones = normalized.telefones.map((tel) => ({
+      numero: tel.numero || tel.telefone || "",
+      tipo: tel.tipo || tel.operadora || "",
+      whatsapp: tel.whatsapp || false,
+    }));
   }
   if (Array.isArray(normalized.celulares)) {
     phones = phones.concat(
