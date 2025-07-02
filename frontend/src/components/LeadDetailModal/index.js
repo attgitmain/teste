@@ -108,6 +108,20 @@ const renderValue = (value, placeholderClass) => {
   return value;
 };
 
+const renderList = (list, renderItem, placeholderClass) => {
+  if (Array.isArray(list) && list.length > 0) {
+    return list.map((item, idx) => (
+      <Grid key={idx} container direction="column" style={{ marginBottom: 8 }}>
+        {renderItem(item)}
+        {idx < list.length - 1 && <Divider />}
+      </Grid>
+    ));
+  }
+  return (
+    <Typography className={placeholderClass}>Não há informação 🚫</Typography>
+  );
+};
+
 const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
   const classes = useStyles();
 
@@ -380,8 +394,388 @@ const LeadDetailModal = ({ open, onClose, lead, loading, error }) => {
                     )}
                   </Grid>
                 </Grid>
+            </AccordionDetails>
+          </Accordion>
+
+          {Array.isArray(lead.emails) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="emails-content"
+                id="emails-header"
+              >
+                <Typography className={classes.sectionTitle}>📧 Emails</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {renderList(
+                  lead.emails,
+                  (email) => (
+                    <>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Email:</Typography>
+                        <Typography>
+                          {renderValue(email.email, classes.placeholder)}
+                        </Typography>
+                        <IconButton size="small" onClick={() => copyField(email.email)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Score:</Typography>
+                        <Typography>
+                          {renderValue(email.email_score, classes.placeholder)}
+                        </Typography>
+                        <IconButton size="small" onClick={() => copyField(email.email_score)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                    </>
+                  ),
+                  classes.placeholder
+                )}
               </AccordionDetails>
             </Accordion>
+          )}
+
+          {Array.isArray(lead.empresas) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="empresas-content"
+                id="empresas-header"
+              >
+                <Typography className={classes.sectionTitle}>🏢 Empresas</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {renderList(
+                  lead.empresas,
+                  (emp) => (
+                    <>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>CNPJ:</Typography>
+                        <Typography>{renderValue(emp.cnpj, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(emp.cnpj)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Nome:</Typography>
+                        <Typography>{renderValue(emp.nome, classes.placeholder)}</Typography>
+                        <IconButton size="small" onClick={() => copyField(emp.nome)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Relação:</Typography>
+                        <Typography>
+                          {renderValue(emp.tipo_relacao, classes.placeholder)}
+                        </Typography>
+                        <IconButton size="small" onClick={() => copyField(emp.tipo_relacao)}>
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                    </>
+                  ),
+                  classes.placeholder
+                )}
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.avaliacao_score && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="score-content"
+                id="score-header"
+              >
+                <Typography className={classes.sectionTitle}>📊 Avaliação Score</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>CSBA:</Typography>
+                    <Typography>
+                      {renderValue(lead.avaliacao_score.csba, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.avaliacao_score.csba)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Faixa:</Typography>
+                    <Typography>
+                      {renderValue(lead.avaliacao_score.csba_faixa, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.avaliacao_score.csba_faixa)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.interesses && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="interesses-content"
+                id="interesses-header"
+              >
+                <Typography className={classes.sectionTitle}>⭐ Interesses</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  {Object.entries(lead.interesses).map(([key, val]) => (
+                    <Grid key={key} item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>{key}:</Typography>
+                      <Typography>{renderValue(val, classes.placeholder)}</Typography>
+                      <IconButton size="small" onClick={() => copyField(val)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  ))}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {Array.isArray(lead.irpf) && lead.irpf.length > 0 && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="irpf-content"
+                id="irpf-header"
+              >
+                <Typography className={classes.sectionTitle}>🧾 IRPF</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {renderList(
+                  lead.irpf,
+                  (ir) => (
+                    <>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Banco:</Typography>
+                        <Typography>
+                          {renderValue(ir.instituicao_bancaria, classes.placeholder)}
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.fieldRow}>
+                        <Typography className={classes.fieldLabel}>Situação:</Typography>
+                        <Typography>
+                          {renderValue(ir.sit_receita_federal, classes.placeholder)}
+                        </Typography>
+                      </Grid>
+                    </>
+                  ),
+                  classes.placeholder
+                )}
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.detalhes_irpf && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="det-irpf-content"
+                id="det-irpf-header"
+              >
+                <Typography className={classes.sectionTitle}>📄 Detalhes IRPF</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Banco:</Typography>
+                    <Typography>
+                      {renderValue(lead.detalhes_irpf.instituicao_bancaria, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Situação:</Typography>
+                    <Typography>
+                      {renderValue(lead.detalhes_irpf.sit_receita_federal, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Ano:</Typography>
+                    <Typography>
+                      {renderValue(lead.detalhes_irpf.ano_referencia, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.pis && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="pis-content"
+                id="pis-header"
+              >
+                <Typography className={classes.sectionTitle}>🆔 PIS</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>PIS:</Typography>
+                    <Typography>{renderValue(lead.pis.pis, classes.placeholder)}</Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.pis.pis)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.detalhes_pis && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="det-pis-content"
+                id="det-pis-header"
+              >
+                <Typography className={classes.sectionTitle}>📄 Detalhes PIS</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>PIS:</Typography>
+                    <Typography>
+                      {renderValue(lead.detalhes_pis.pis, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.detalhes_pis.pis)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Cadastro ID:</Typography>
+                    <Typography>
+                      {renderValue(lead.detalhes_pis.cadastro_id, classes.placeholder)}
+                    </Typography>
+                    <IconButton size="small" onClick={() => copyField(lead.detalhes_pis.cadastro_id)}>
+                      <FileCopyOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {Array.isArray(lead.fgts) && lead.fgts.length > 0 && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="fgts-content"
+                id="fgts-header"
+              >
+                <Typography className={classes.sectionTitle}>💰 FGTS</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {renderList(
+                  lead.fgts,
+                  (f) => (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography className={classes.fieldLabel}>PIS:</Typography>
+                      <Typography>{renderValue(f.pis, classes.placeholder)}</Typography>
+                      <IconButton size="small" onClick={() => copyField(f.pis)}>
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Grid>
+                  ),
+                  classes.placeholder
+                )}
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {lead.poder_aquisitivo && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="poder-content"
+                id="poder-header"
+              >
+                <Typography className={classes.sectionTitle}>💳 Poder Aquisitivo</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="column">
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Código:</Typography>
+                    <Typography>
+                      {renderValue(lead.poder_aquisitivo.cod_poder_aquisitivo, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Descrição:</Typography>
+                    <Typography>
+                      {renderValue(lead.poder_aquisitivo.poder_aquisitivo, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                  <Grid item className={classes.fieldRow}>
+                    <Typography className={classes.fieldLabel}>Renda:</Typography>
+                    <Typography>
+                      {renderValue(lead.poder_aquisitivo.renda_poder_aquisitivo, classes.placeholder)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {Array.isArray(lead.beneficios) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="beneficios-content"
+                id="beneficios-header"
+              >
+                <Typography className={classes.sectionTitle}>🎁 Benefícios</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {renderList(
+                  lead.beneficios,
+                  (b) => (
+                    <Grid item className={classes.fieldRow}>
+                      <Typography>{JSON.stringify(b)}</Typography>
+                    </Grid>
+                  ),
+                  classes.placeholder
+                )}
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {Array.isArray(lead.ordens_de_compras) && (
+            <Accordion className={classes.accordion}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="ordens-content"
+                id="ordens-header"
+              >
+                <Typography className={classes.sectionTitle}>🛒 Ordens de Compras</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {lead.ordens_de_compras.length > 0 ? (
+                  renderList(
+                    lead.ordens_de_compras,
+                    (o) => (
+                      <Grid item className={classes.fieldRow}>
+                        <Typography>{JSON.stringify(o)}</Typography>
+                      </Grid>
+                    ),
+                    classes.placeholder
+                  )
+                ) : (
+                  <Typography className={classes.placeholder}>Não há informação 🚫</Typography>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          )}
 
             <Accordion className={classes.accordion}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="endereco-content" id="endereco-header">
