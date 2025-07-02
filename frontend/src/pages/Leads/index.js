@@ -382,7 +382,7 @@ const Leads = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleSearch}
+          onClick={() => handleSearch()}
           startIcon={!loading && <SearchIcon />}
           disabled={loading}
         >
