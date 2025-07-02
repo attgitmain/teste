@@ -29,6 +29,20 @@ export default function normalizeCpfDetail(detail) {
     };
   }
 
+  // map root level fields -> dados_pessoais when needed
+  if (!normalized.dados_pessoais && normalized.cpf) {
+    normalized.dados_pessoais = {
+      cpf: normalized.cpf,
+      nome: normalized.nome,
+      nome_mae: normalized.nome_mae,
+      nome_pai: normalized.nome_pai,
+      nasc: normalized.nasc || normalized.data_nascimento,
+      sexo: normalized.sexo,
+      email: normalized.email,
+      renda: normalized.renda,
+    };
+  }
+
   // ensure enderecos is an array
   if (!Array.isArray(normalized.enderecos)) {
     const addr =
@@ -69,7 +83,11 @@ export default function normalizeCpfDetail(detail) {
   }
 
   if (!normalized.avaliacao_score) {
-    normalized.avaliacao_score = normalized.score || {};
+    if (normalized.avalicao_score) {
+      normalized.avaliacao_score = normalized.avalicao_score;
+    } else {
+      normalized.avaliacao_score = normalized.score || {};
+    }
   }
 
   if (!normalized.interesses) {
