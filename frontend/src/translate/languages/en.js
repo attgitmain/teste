@@ -336,6 +336,7 @@ const messages = {
                                         nomeMae: "Mother's Name",
                                         renda: "Income",
                                         dataNascimento: "Birth Date",
+                                        score: "Score",
                                 },
                                 creditsAvailable: "Available credits",
                                 creditInfo: "Each batch of 15 leads costs 1 credit",

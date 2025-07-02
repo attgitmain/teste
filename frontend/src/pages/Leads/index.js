@@ -511,6 +511,7 @@ const Leads = () => {
                     <TableCell>{i18n.t("leads.table.nomeMae")}</TableCell>
                     <TableCell>{i18n.t("leads.table.renda")}</TableCell>
                     <TableCell>{i18n.t("leads.table.dataNascimento")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.score")}</TableCell>
                     <TableCell>Tags</TableCell>
                   </TableRow>
                 </TableHead>
@@ -548,6 +549,7 @@ const Leads = () => {
                           <TableCell>
                             {dateToClient(item.dados_pessoais.nasc)}
                           </TableCell>
+                          <TableCell>{item.avaliacao_score?.csba || ''}</TableCell>
                           <TableCell>{tags.join(" ")}</TableCell>
                         </TableRow>
                       );
