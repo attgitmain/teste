@@ -26,6 +26,8 @@ export default function normalizeCpfDetail(detail) {
       sexo: basics.sexo,
       email: basics.email,
       renda: basics.renda || basics.renda_presumida,
+      faixa_renda: basics.faixa_renda_id,
+      cbo: basics.cbo,
     };
   }
 
@@ -40,7 +42,18 @@ export default function normalizeCpfDetail(detail) {
       sexo: normalized.sexo,
       email: normalized.email,
       renda: normalized.renda,
+      faixa_renda: normalized.faixa_renda_id,
+      cbo: normalized.cbo,
     };
+  }
+
+  if (
+    Array.isArray(normalized.emails) &&
+    (!normalized.dados_pessoais || !normalized.dados_pessoais.email)
+  ) {
+    const item = normalized.emails.find((e) => !!e.email) || {};
+    if (!normalized.dados_pessoais) normalized.dados_pessoais = {};
+    normalized.dados_pessoais.email = item.email || "";
   }
 
   // ensure enderecos is an array
@@ -98,6 +111,21 @@ export default function normalizeCpfDetail(detail) {
     const orders =
       normalized.ordens_de_compras || normalized.compras || normalized.orders;
     normalized.ordens_de_compras = Array.isArray(orders) ? orders : [];
+  }
+
+  if (!normalized.status_receita) {
+    normalized.status_receita =
+      (normalized.detalhes_irpf && normalized.detalhes_irpf.sit_receita_federal) ||
+      (Array.isArray(normalized.irpf) && normalized.irpf[0]?.sit_receita_federal) ||
+      "";
+  }
+
+  if (!normalized.cargo_societario) {
+    normalized.cargo_societario = Array.isArray(normalized.empresas)
+      ? normalized.empresas.some((emp) => emp.tipo_relacao === "QSA")
+        ? "Sim"
+        : "Não"
+      : "Não";
   }
 
   return normalized;
