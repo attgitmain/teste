@@ -5,16 +5,10 @@ export default function normalizeCpfDetail(detail) {
 
   let normalized = detail;
 
-  // handle nested structures: {status: 200, data: {...}}
-  if (
-    normalized.data &&
-    !normalized.dados_pessoais &&
-    !normalized.dados_basicos
-  ) {
+  if (normalized.data && !normalized.dados_pessoais && !normalized.dados_basicos) {
     normalized = normalized.data;
   }
 
-  // map dados_basicos -> dados_pessoais
   if (normalized.dados_basicos && !normalized.dados_pessoais) {
     const basics = normalized.dados_basicos;
     normalized.dados_pessoais = {
@@ -31,7 +25,6 @@ export default function normalizeCpfDetail(detail) {
     };
   }
 
-  // map root level fields -> dados_pessoais when needed
   if (!normalized.dados_pessoais && normalized.cpf) {
     normalized.dados_pessoais = {
       cpf: normalized.cpf,
@@ -56,7 +49,6 @@ export default function normalizeCpfDetail(detail) {
     normalized.dados_pessoais.email = item.email || "";
   }
 
-  // ensure enderecos is an array
   if (!Array.isArray(normalized.enderecos)) {
     const addr =
       normalized.endereco ||
@@ -65,7 +57,6 @@ export default function normalizeCpfDetail(detail) {
     normalized.enderecos = addr ? [addr] : [];
   }
 
-  // merge celulares array into telefones if needed
   let phones = [];
   if (Array.isArray(normalized.telefones)) {
     phones = normalized.telefones.map((tel) => ({
@@ -76,7 +67,7 @@ export default function normalizeCpfDetail(detail) {
   }
   if (Array.isArray(normalized.celulares)) {
     phones = phones.concat(
-      normalized.celulares.map((c) => ({ numero: c, tipo: "Celular" })),
+      normalized.celulares.map((c) => ({ numero: c, tipo: "Celular" }))
     );
   }
   if (!phones.length && normalized.telefone) {
@@ -84,18 +75,19 @@ export default function normalizeCpfDetail(detail) {
   }
   normalized.telefones = phones;
 
-  // normalize empregos fields
   if (!Array.isArray(normalized.empregos)) {
     const job = normalized.emprego;
     normalized.empregos = job ? [job] : [];
   }
   if (Array.isArray(normalized.empregos)) {
     normalized.empregos = normalized.empregos.map((job) => ({
-      empresa: job.empresa || job.nome_empregador,
-      cargo: job.cargo || job.profissao,
+      empresa: job.empresa || job.nome_empregador || job.nome_fantasia || job.razao_possivel_ultimo_emprego,
+      cargo: job.cargo || job.profissao || job.cbo,
       admissao: job.admissao || job.data_inicio_trabalho || job.data_admissao,
-      termino: job.termino || job.data_termino_trabalho || job.data_termino,
-      remuneracao: job.remuneracao || job.remuneracao_estimada,
+      termino: job.termino || job.data_termino_trabalho || job.data_termino || job.data_demissao,
+      remuneracao: job.remuneracao || job.remuneracao_estimada || job.salario_mensal,
+      municipio: job.municipio,
+      uf: job.uf,
     }));
   }
 
@@ -135,6 +127,35 @@ export default function normalizeCpfDetail(detail) {
         ? "Sim"
         : "Não"
       : "Não";
+  }
+
+  if (!normalized.poder_aquisitivo && normalized.poder_aquisitivo !== undefined) {
+    normalized.poder_aquisitivo = {
+      cod_poder_aquisitivo: normalized.poder_aquisitivo.cod_poder_aquisitivo,
+      poder_aquisitivo: normalized.poder_aquisitivo.poder_aquisitivo,
+      renda_poder_aquisitivo: normalized.poder_aquisitivo.renda_poder_aquisitivo,
+      fx_poder_aquisitivo: normalized.poder_aquisitivo.fx_poder_aquisitivo,
+    };
+  }
+
+  if (!normalized.fgts) {
+    normalized.fgts = [];
+  }
+
+  if (!normalized.detalhes_pis) {
+    normalized.detalhes_pis = {};
+  }
+
+  if (!normalized.beneficios) {
+    normalized.beneficios = [];
+  }
+
+  if (!normalized.veiculos) {
+    normalized.veiculos = [];
+  }
+
+  if (!normalized.escolaridade) {
+    normalized.escolaridade = {};
   }
 
   return normalized;
