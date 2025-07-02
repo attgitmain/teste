@@ -153,27 +153,28 @@ const Leads = () => {
   }, [results]);
 
   const handleSearch = async (searchCep = cep) => {
-    if (!searchCep || searchCep.length !== 8) {
+    const cleanCep = String(searchCep).replace(/\D/g, "");
+    if (!cleanCep || cleanCep.length !== 8) {
       toast.error(i18n.t("leads.invalidCep"));
       return;
     }
     setLoading(true);
     setTokenError(false);
     try {
-      const { data } = await api.get(`/consult/cep/${searchCep}?page=1`);
+      const { data } = await api.get(`/consult/cep/${cleanCep}?page=1`);
       const leads = (data.leads || []).map(normalizeLeadItem);
       setResults(leads);
       if (leads.length > 0) {
-        localStorage.setItem(`leads_${searchCep}`, JSON.stringify(leads));
+        localStorage.setItem(`leads_${cleanCep}`, JSON.stringify(leads));
       }
-      setCep(searchCep);
+      setCep(cleanCep);
       setPageApi(1);
       setHasMore(data.hasMore);
       if (typeof data.credits === "number") {
         setCredits(data.credits);
       }
       if (!data.leads || data.leads.length === 0) {
-        const stored = localStorage.getItem(`leads_${searchCep}`);
+        const stored = localStorage.getItem(`leads_${cleanCep}`);
         if (data.allShown && stored) {
           toast.info("Todos os leads deste CEP já foram consultados");
           setResults(JSON.parse(stored));
@@ -367,7 +368,7 @@ const Leads = () => {
         <ReactInputMask
           mask="99999999"
           value={cep}
-          onChange={(e) => setCep(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) => setCep(e.target.value)}
         >
           {(inputProps) => (
             <TextField
