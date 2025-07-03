@@ -25,6 +25,7 @@ import FlashOnIcon from "@material-ui/icons/FlashOn";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import CodeRoundedIcon from "@material-ui/icons/CodeRounded";
 import ViewKanban from "@mui/icons-material/ViewKanban";
+import LiveTvIcon from "@mui/icons-material/LiveTv";
 import Schedule from "@material-ui/icons/Schedule";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
@@ -454,15 +455,27 @@ const MainListItems = ({ collapsed, drawerClose }) => {
                 )}
               />
               <Can
-                role={user.profile === "user" && user.allowRealTime === "enabled" ? "admin" : user.profile}
+                role={
+                  user.profile === "user" && user.allowRealTime === "enabled"
+                    ? "admin"
+                    : user.profile
+                }
                 perform={"drawer-admin-items:view"}
                 yes={() => (
-                  <ListItemLink
-                    to="/moments"
-                    primary={i18n.t("mainDrawer.listItems.chatsTempoReal")}
-                    icon={<GridOn />}
-                    tooltip={collapsed}
-                  />
+                  <>
+                    <ListItemLink
+                      to="/moments"
+                      primary={i18n.t("mainDrawer.listItems.chatsTempoReal")}
+                      icon={<GridOn />}
+                      tooltip={collapsed}
+                    />
+                    <ListItemLink
+                      to="/painel-tv"
+                      primary={i18n.t("mainDrawer.listItems.painelTV")}
+                      icon={<LiveTvIcon />}
+                      tooltip={collapsed}
+                    />
+                  </>
                 )}
               />
             </Collapse>

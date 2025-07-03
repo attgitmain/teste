@@ -847,6 +847,7 @@ const messages = {
           dashboard: "Dashboard",
           connections: "Conexiones",
           chatsTempoReal: "Panel de Asistencia",
+          painelTV: "Panel TV",
           tickets: "Inbox",
           quickMessages: "Respuestas Rápidas",
           contacts: "Contactos",

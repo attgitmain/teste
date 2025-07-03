@@ -250,8 +250,9 @@ const messages = {
 			mainDrawer: {
 				listItems: {
 					dashboard: "Dashboard",
-					connections: "Connections",
-					tickets: "Tickets",
+                                        connections: "Connections",
+                                        painelTV: "TV Panel",
+                                        tickets: "Tickets",
 					contacts: "Contacts",
 					queues: "Queues",
 					administration: "Administration",
