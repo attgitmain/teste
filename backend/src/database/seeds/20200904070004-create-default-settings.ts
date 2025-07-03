@@ -20,6 +20,8 @@ module.exports = {
       { key: "enableLGPD", value: "disabled", companyId: "1" },
       { key: "requiredTag", value: "disabled", companyId: "1" },
       { key: "downloadLimit", value: "64", companyId: "1" },
+      { key: "dailyReportNumber", value: "", companyId: "1" },
+      { key: "dailyReportTime", value: "19", companyId: "1" },
       { key: "wtV", value: "disabled" }
     ];
 

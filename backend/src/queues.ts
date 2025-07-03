@@ -33,9 +33,12 @@ import SendWhatsAppMessage from "./services/WbotServices/SendWhatsAppMessage";
 import UpdateTicketService from "./services/TicketServices/UpdateTicketService";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import { GetWhatsapp } from "./helpers/GetWhatsapp";
-const CronJob = require('cron').CronJob;
+const CronJob = require("cron").CronJob;
 import CompaniesSettings from "./models/CompaniesSettings";
-import { verifyMediaMessage, verifyMessage } from "./services/WbotServices/wbotMessageListener";
+import {
+  verifyMediaMessage,
+  verifyMessage
+} from "./services/WbotServices/wbotMessageListener";
 import FindOrCreateTicketService from "./services/TicketServices/FindOrCreateTicketService";
 import CreateLogTicketService from "./services/TicketServices/CreateLogTicketService";
 import formatBody from "./helpers/Mustache";
@@ -43,6 +46,8 @@ import TicketTag from "./models/TicketTag";
 import Tag from "./models/Tag";
 import { delay } from "@whiskeysockets/baileys";
 import Plan from "./models/Plan";
+import Setting from "./models/Setting";
+import DailyWhatsappReport from "./services/ReportService/DailyWhatsappReport";
 
 const connection = process.env.REDIS_URI || "";
 const limiterMax = process.env.REDIS_OPT_LIMITER_MAX || 1;
@@ -75,7 +80,10 @@ interface DispatchCampaignData {
 
 export const userMonitor = new BullQueue("UserMonitor", connection);
 export const scheduleMonitor = new BullQueue("ScheduleMonitor", connection);
-export const sendScheduledMessages = new BullQueue("SendSacheduledMessages", connection);
+export const sendScheduledMessages = new BullQueue(
+  "SendSacheduledMessages",
+  connection
+);
 export const campaignQueue = new BullQueue("CampaignQueue", connection);
 export const queueMonitor = new BullQueue("QueueMonitor", connection);
 
@@ -119,7 +127,10 @@ async function handleVerifySchedules(job) {
           [Op.lte]: moment().add("30", "seconds").format("YYYY-MM-DD HH:mm:ss")
         }
       },
-      include: [{ model: Contact, as: "contact" }, { model: User, as: "user", attributes: ["name"] }],
+      include: [
+        { model: Contact, as: "contact" },
+        { model: User, as: "user", attributes: ["name"] }
+      ],
       distinct: true,
       subQuery: false
     });
@@ -158,15 +169,14 @@ async function handleSendScheduledMessage(job) {
   }
 
   try {
-    let whatsapp
+    let whatsapp;
 
     if (!isNil(schedule.whatsappId)) {
       whatsapp = await Whatsapp.findByPk(schedule.whatsappId);
     }
 
     if (!whatsapp)
-      whatsapp = await GetDefaultWhatsApp(whatsapp.id,schedule.companyId);
-
+      whatsapp = await GetDefaultWhatsApp(whatsapp.id, schedule.companyId);
 
     // const settings = await CompaniesSettings.findOne({
     //   where: {
@@ -176,7 +186,11 @@ async function handleSendScheduledMessage(job) {
 
     let filePath = null;
     if (schedule.mediaPath) {
-      filePath = path.resolve("public", `company${schedule.companyId}`, schedule.mediaPath);
+      filePath = path.resolve(
+        "public",
+        `company${schedule.companyId}`,
+        schedule.mediaPath
+      );
     }
 
     if (schedule.openTicket === "enabled") {
@@ -187,7 +201,7 @@ async function handleSendScheduledMessage(job) {
           whatsappId: whatsapp.id,
           status: ["open", "pending"]
         }
-      })
+      });
 
       if (!ticket)
         ticket = await Ticket.create({
@@ -197,7 +211,7 @@ async function handleSendScheduledMessage(job) {
           queueId: schedule.queueId,
           userId: schedule.ticketUserId,
           status: schedule.statusTicket
-        })
+        });
 
       ticket = await ShowTicketService(ticket.id, schedule.companyId);
 
@@ -205,23 +219,40 @@ async function handleSendScheduledMessage(job) {
 
       // @ts-ignore: Unreachable code error
       if (schedule.assinar && !isNil(schedule.userId)) {
-        bodyMessage = `*${schedule?.user?.name}:*\n${schedule.body.trim()}`
+        bodyMessage = `*${schedule?.user?.name}:*\n${schedule.body.trim()}`;
       } else {
         bodyMessage = schedule.body.trim();
       }
-      const sentMessage = await SendMessage(whatsapp, {
-        number: schedule.contact.number,
-        body: `\u200e ${formatBody(bodyMessage, ticket)}`,
-        mediaPath: filePath,
-        companyId: schedule.companyId
-      },
+      const sentMessage = await SendMessage(
+        whatsapp,
+        {
+          number: schedule.contact.number,
+          body: `\u200e ${formatBody(bodyMessage, ticket)}`,
+          mediaPath: filePath,
+          companyId: schedule.companyId
+        },
         schedule.contact.isGroup
       );
 
       if (schedule.mediaPath) {
-        await verifyMediaMessage(sentMessage, ticket, ticket.contact, null, true, false, whatsapp);
+        await verifyMediaMessage(
+          sentMessage,
+          ticket,
+          ticket.contact,
+          null,
+          true,
+          false,
+          whatsapp
+        );
       } else {
-        await verifyMessage(sentMessage, ticket, ticket.contact, null, true, false);
+        await verifyMessage(
+          sentMessage,
+          ticket,
+          ticket.contact,
+          null,
+          true,
+          false
+        );
       }
       // if (ticket) {
       //   await UpdateTicketService({
@@ -236,32 +267,39 @@ async function handleSendScheduledMessage(job) {
       //   })
       // }
     } else {
-      await SendMessage(whatsapp, {
-        number: schedule.contact.number,
-        body: `\u200e ${schedule.body}`,
-        mediaPath: filePath,
-        companyId: schedule.companyId
-      },
-        schedule.contact.isGroup);
+      await SendMessage(
+        whatsapp,
+        {
+          number: schedule.contact.number,
+          body: `\u200e ${schedule.body}`,
+          mediaPath: filePath,
+          companyId: schedule.companyId
+        },
+        schedule.contact.isGroup
+      );
     }
 
-    if (schedule.valorIntervalo > 0 && (isNil(schedule.contadorEnvio) || schedule.contadorEnvio < schedule.enviarQuantasVezes)) {
+    if (
+      schedule.valorIntervalo > 0 &&
+      (isNil(schedule.contadorEnvio) ||
+        schedule.contadorEnvio < schedule.enviarQuantasVezes)
+    ) {
       let unidadeIntervalo;
       switch (schedule.intervalo) {
         case 1:
-          unidadeIntervalo = 'days';
+          unidadeIntervalo = "days";
           break;
         case 2:
-          unidadeIntervalo = 'weeks';
+          unidadeIntervalo = "weeks";
           break;
         case 3:
-          unidadeIntervalo = 'months';
+          unidadeIntervalo = "months";
           break;
         case 4:
-          unidadeIntervalo = 'minutes';
+          unidadeIntervalo = "minutes";
           break;
         default:
-          throw new Error('Intervalo inválido');
+          throw new Error("Intervalo inválido");
       }
 
       function isDiaUtil(date) {
@@ -272,7 +310,7 @@ async function handleSendScheduledMessage(job) {
       function proximoDiaUtil(date) {
         let proximoDia = date.clone();
         do {
-          proximoDia.add(1, 'day');
+          proximoDia.add(1, "day");
         } while (!isDiaUtil(proximoDia));
         return proximoDia;
       }
@@ -281,7 +319,7 @@ async function handleSendScheduledMessage(job) {
       function diaUtilAnterior(date) {
         let diaAnterior = date.clone();
         do {
-          diaAnterior.subtract(1, 'day');
+          diaAnterior.subtract(1, "day");
         } while (!isDiaUtil(diaAnterior));
         return diaAnterior;
       }
@@ -293,12 +331,22 @@ async function handleSendScheduledMessage(job) {
       // Realizar a soma da data com base no intervalo e valor do intervalo
       let novaData = new Date(dataExistente); // Clone da data existente para não modificar a original
 
-      console.log(unidadeIntervalo)
+      console.log(unidadeIntervalo);
       if (unidadeIntervalo !== "minutes") {
-        novaData.setDate(novaData.getDate() + schedule.valorIntervalo * (unidadeIntervalo === 'days' ? 1 : unidadeIntervalo === 'weeks' ? 7 : 30));
+        novaData.setDate(
+          novaData.getDate() +
+            schedule.valorIntervalo *
+              (unidadeIntervalo === "days"
+                ? 1
+                : unidadeIntervalo === "weeks"
+                  ? 7
+                  : 30)
+        );
       } else {
-        novaData.setMinutes(novaData.getMinutes() + Number(schedule.valorIntervalo));
-        console.log(novaData)
+        novaData.setMinutes(
+          novaData.getMinutes() + Number(schedule.valorIntervalo)
+        );
+        console.log(novaData);
       }
 
       if (schedule.tipoDias === 5 && !isDiaUtil(novaData)) {
@@ -313,8 +361,8 @@ async function handleSendScheduledMessage(job) {
       await scheduleRecord?.update({
         status: "PENDENTE",
         contadorEnvio: schedule.contadorEnvio + 1,
-        sendAt: new Date(novaData.toISOString().slice(0, 19).replace('T', ' ')) // Mantendo o formato de hora
-      })
+        sendAt: new Date(novaData.toISOString().slice(0, 19).replace("T", " ")) // Mantendo o formato de hora
+      });
     } else {
       await scheduleRecord?.update({
         sentAt: new Date(moment().format("YYYY-MM-DD HH:mm")),
@@ -353,7 +401,7 @@ async function handleVerifyCampaigns(job) {
     if (campaigns.length > 0) {
       logger.info(`Campanhas encontradas: ${campaigns.length}`);
 
-      const promises = campaigns.map(async (campaign) => {
+      const promises = campaigns.map(async campaign => {
         try {
           await sequelize.query(
             `UPDATE "Campaigns" SET status = 'EM_ANDAMENTO' WHERE id = ${campaign.id}`
@@ -369,9 +417,12 @@ async function handleVerifyCampaigns(job) {
           return campaignQueue.add(
             "ProcessCampaign",
             { id: campaign.id, delay },
-            { priority: 3, removeOnComplete: { age: 60 * 60, count: 10 }, removeOnFail: { age: 60 * 60, count: 10 } }
+            {
+              priority: 3,
+              removeOnComplete: { age: 60 * 60, count: 10 },
+              removeOnFail: { age: 60 * 60, count: 10 }
+            }
           );
-
         } catch (err) {
           Sentry.captureException(err);
         }
@@ -379,7 +430,7 @@ async function handleVerifyCampaigns(job) {
 
       await Promise.all(promises);
 
-      logger.info('Todas as campanhas foram processadas e adicionadas à fila.');
+      logger.info("Todas as campanhas foram processadas e adicionadas à fila.");
     }
   } catch (err) {
     Sentry.captureException(err);
@@ -388,7 +439,6 @@ async function handleVerifyCampaigns(job) {
     isProcessing = false;
   }
 }
-
 
 async function getCampaign(id) {
   return await Campaign.findOne({
@@ -402,7 +452,14 @@ async function getCampaign(id) {
           {
             model: ContactListItem,
             as: "contacts",
-            attributes: ["id", "name", "number", "email", "isWhatsappValid", "isGroup"],
+            attributes: [
+              "id",
+              "name",
+              "number",
+              "email",
+              "isWhatsappValid",
+              "isGroup"
+            ],
             where: { isWhatsappValid: true }
           }
         ]
@@ -411,7 +468,7 @@ async function getCampaign(id) {
         model: Whatsapp,
         as: "whatsapp",
         attributes: ["id", "name"]
-      },
+      }
       // {
       //   model: CampaignShipping,
       //   as: "shipping",
@@ -460,7 +517,6 @@ async function getSettings(campaign): Promise<CampaignSettings> {
       greaterInterval,
       variables
     };
-
   } catch (error) {
     console.log(error);
     throw error; // rejeita a Promise com o erro original
@@ -569,7 +625,7 @@ function getProcessedMessage(msg: string, variables: any[], contact: any) {
     finalMessage = finalMessage.replace(/{numero}/g, contact.number);
   }
 
-  if (variables[0]?.value !== '[]') {
+  if (variables[0]?.value !== "[]") {
     variables.forEach(variable => {
       if (finalMessage.includes(`{${variable.key}}`)) {
         const regex = new RegExp(`{${variable.key}}`, "g");
@@ -631,7 +687,6 @@ const checkTime = async () => {
     return true;
   }
 
-
   logger.info(
     `Envio inicia as ${hour} e termina as ${endHours}, hora atual ${timeNow} não está dentro do horário`
   );
@@ -652,14 +707,11 @@ const checkTime = async () => {
 //       where: { whatsappId: whatsappId }
 //     });
 
-
 //     const lastUpdate = moment(setting.dateStart);
 
 //     const now = moment();
 
 //     const passou = now.isAfter(lastUpdate, "day");
-
-
 
 //     if (setting.sendToday <= setting.limit) {
 //       await setting.update({
@@ -678,7 +730,6 @@ const checkTime = async () => {
 
 //       setting.reload();
 //     }
-
 
 //     setting.reload();
 
@@ -719,11 +770,10 @@ async function verifyAndFinalizeCampaign(campaign) {
   }
 
   const io = getIO();
-  io.of(companyId)
-    .emit(`company-${campaign.companyId}-campaign`, {
-      action: "update",
-      record: campaign
-    });
+  io.of(companyId).emit(`company-${campaign.companyId}-campaign`, {
+    action: "update",
+    record: campaign
+  });
 }
 
 async function handleProcessCampaign(job) {
@@ -742,7 +792,9 @@ async function handleProcessCampaign(job) {
         }));
 
         // const baseDelay = job.data.delay || 0;
-        const longerIntervalAfter = parseToMilliseconds(settings.longerIntervalAfter);
+        const longerIntervalAfter = parseToMilliseconds(
+          settings.longerIntervalAfter
+        );
         const greaterInterval = parseToMilliseconds(settings.greaterInterval);
         const messageInterval = settings.messageInterval;
 
@@ -753,10 +805,19 @@ async function handleProcessCampaign(job) {
 
         const queuePromises = [];
         for (let i = 0; i < contactData.length; i++) {
-          baseDelay = addSeconds(baseDelay, i > longerIntervalAfter ? greaterInterval : messageInterval);
+          baseDelay = addSeconds(
+            baseDelay,
+            i > longerIntervalAfter ? greaterInterval : messageInterval
+          );
 
           const { contactId, campaignId, variables } = contactData[i];
-          const delay = calculateDelay(i, baseDelay, longerIntervalAfter, greaterInterval, messageInterval);
+          const delay = calculateDelay(
+            i,
+            baseDelay,
+            longerIntervalAfter,
+            greaterInterval,
+            messageInterval
+          );
           // if (isOpen || !isFds) {
           const queuePromise = campaignQueue.add(
             "PrepareContact",
@@ -764,7 +825,9 @@ async function handleProcessCampaign(job) {
             { removeOnComplete: true }
           );
           queuePromises.push(queuePromise);
-          logger.info(`Registro enviado pra fila de disparo: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`);
+          logger.info(
+            `Registro enviado pra fila de disparo: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`
+          );
           // }
         }
         await Promise.all(queuePromises);
@@ -776,12 +839,18 @@ async function handleProcessCampaign(job) {
   }
 }
 
-function calculateDelay(index, baseDelay, longerIntervalAfter, greaterInterval, messageInterval) {
+function calculateDelay(
+  index,
+  baseDelay,
+  longerIntervalAfter,
+  greaterInterval,
+  messageInterval
+) {
   const diffSeconds = differenceInSeconds(baseDelay, new Date());
   if (index > longerIntervalAfter) {
-    return diffSeconds * 1000 + greaterInterval
+    return diffSeconds * 1000 + greaterInterval;
   } else {
-    return diffSeconds * 1000 + messageInterval
+    return diffSeconds * 1000 + messageInterval;
   }
 }
 
@@ -872,17 +941,23 @@ async function handleDispatchCampaign(job) {
     const wbot = await GetWhatsappWbot(campaign.whatsapp);
 
     if (!wbot) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: wbot not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: wbot not found`
+      );
       return;
     }
 
     if (!campaign.whatsapp) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: whatsapp not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: whatsapp not found`
+      );
       return;
     }
 
     if (!wbot?.user?.id) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: wbot user not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: wbot user not found`
+      );
       return;
     }
 
@@ -897,7 +972,9 @@ async function handleDispatchCampaign(job) {
       }
     );
 
-    const chatId = campaignShipping.contact.isGroup ? `${campaignShipping.number}@g.us` : `${campaignShipping.number}@s.whatsapp.net`;
+    const chatId = campaignShipping.contact.isGroup
+      ? `${campaignShipping.number}@g.us`
+      : `${campaignShipping.number}@s.whatsapp.net`;
 
     if (campaign.openTicket === "enabled") {
       const [contact] = await Contact.findOrCreate({
@@ -913,7 +990,7 @@ async function handleDispatchCampaign(job) {
           whatsappId: campaign.whatsappId,
           profilePicUrl: ""
         }
-      })
+      });
       const whatsapp = await Whatsapp.findByPk(campaign.whatsappId);
 
       let ticket = await Ticket.findOne({
@@ -923,7 +1000,7 @@ async function handleDispatchCampaign(job) {
           whatsappId: whatsapp.id,
           status: ["open", "pending"]
         }
-      })
+      });
 
       if (!ticket)
         ticket = await Ticket.create({
@@ -933,7 +1010,7 @@ async function handleDispatchCampaign(job) {
           queueId: campaign?.queueId,
           userId: campaign?.userId,
           status: campaign?.statusTicket
-        })
+        });
 
       ticket = await ShowTicketService(ticket.id, campaign.companyId);
 
@@ -943,37 +1020,74 @@ async function handleDispatchCampaign(job) {
             text: `\u200c ${campaignShipping.confirmationMessage}`
           });
 
-          await verifyMessage(confirmationMessage, ticket, contact, null, true, false);
+          await verifyMessage(
+            confirmationMessage,
+            ticket,
+            contact,
+            null,
+            true,
+            false
+          );
 
           await campaignShipping.update({ confirmationRequestedAt: moment() });
         } else {
-
           if (!campaign.mediaPath) {
             const sentMessage = await wbot.sendMessage(chatId, {
               text: `\u200c ${campaignShipping.message}`
             });
 
-            await verifyMessage(sentMessage, ticket, contact, null, true, false);
+            await verifyMessage(
+              sentMessage,
+              ticket,
+              contact,
+              null,
+              true,
+              false
+            );
           }
 
-
           if (campaign.mediaPath) {
-
             const publicFolder = path.resolve(__dirname, "..", "public");
-            const filePath = path.join(publicFolder, `company${campaign.companyId}`, campaign.mediaPath);
+            const filePath = path.join(
+              publicFolder,
+              `company${campaign.companyId}`,
+              campaign.mediaPath
+            );
 
-            const options = await getMessageOptions(campaign.mediaName, filePath, String(campaign.companyId), `\u200c ${campaignShipping.message}`);
+            const options = await getMessageOptions(
+              campaign.mediaName,
+              filePath,
+              String(campaign.companyId),
+              `\u200c ${campaignShipping.message}`
+            );
             if (Object.keys(options).length) {
               if (options.mimetype === "audio/mp4") {
                 const audioMessage = await wbot.sendMessage(chatId, {
                   text: `\u200c ${campaignShipping.message}`
                 });
 
-                await verifyMessage(audioMessage, ticket, contact, null, true, false);
+                await verifyMessage(
+                  audioMessage,
+                  ticket,
+                  contact,
+                  null,
+                  true,
+                  false
+                );
               }
-              const sentMessage = await wbot.sendMessage(chatId, { ...options });
+              const sentMessage = await wbot.sendMessage(chatId, {
+                ...options
+              });
 
-              await verifyMediaMessage(sentMessage, ticket, ticket.contact, null, false, true, wbot);
+              await verifyMediaMessage(
+                sentMessage,
+                ticket,
+                ticket.contact,
+                null,
+                false,
+                true,
+                wbot
+              );
             }
           }
           // if (campaign?.statusTicket === 'closed') {
@@ -992,18 +1106,13 @@ async function handleDispatchCampaign(job) {
         }
         await campaignShipping.update({ deliveredAt: moment() });
       }
-    }
-    else {
-
-
+    } else {
       if (campaign.confirmation && campaignShipping.confirmation === null) {
         await wbot.sendMessage(chatId, {
           text: campaignShipping.confirmationMessage
         });
         await campaignShipping.update({ confirmationRequestedAt: moment() });
-
       } else {
-
         if (!campaign.mediaPath) {
           await wbot.sendMessage(chatId, {
             text: campaignShipping.message
@@ -1012,9 +1121,18 @@ async function handleDispatchCampaign(job) {
 
         if (campaign.mediaPath) {
           const publicFolder = path.resolve(__dirname, "..", "public");
-          const filePath = path.join(publicFolder, `company${campaign.companyId}`, campaign.mediaPath);
+          const filePath = path.join(
+            publicFolder,
+            `company${campaign.companyId}`,
+            campaign.mediaPath
+          );
 
-          const options = await getMessageOptions(campaign.mediaName, filePath, String(campaign.companyId), campaignShipping.message);
+          const options = await getMessageOptions(
+            campaign.mediaName,
+            filePath,
+            String(campaign.companyId),
+            campaignShipping.message
+          );
           if (Object.keys(options).length) {
             if (options.mimetype === "audio/mp4") {
               await wbot.sendMessage(chatId, {
@@ -1027,16 +1145,17 @@ async function handleDispatchCampaign(job) {
       }
 
       await campaignShipping.update({ deliveredAt: moment() });
-
     }
     await verifyAndFinalizeCampaign(campaign);
 
     const io = getIO();
-    io.of(String(campaign.companyId))
-      .emit(`company-${campaign.companyId}-campaign`, {
+    io.of(String(campaign.companyId)).emit(
+      `company-${campaign.companyId}-campaign`,
+      {
         action: "update",
         record: campaign
-      });
+      }
+    );
 
     logger.info(
       `Campanha enviada para: Campanha=${campaignId};Contato=${campaignShipping.contact.name}`
@@ -1052,19 +1171,22 @@ async function handleLoginStatus(job) {
   const thresholdTime = new Date();
   thresholdTime.setMinutes(thresholdTime.getMinutes() - 5);
 
-  await User.update({ online: false }, {
-    where: {
-      updatedAt: { [Op.lt]: thresholdTime },
-      online: true,
-    },
-  });
+  await User.update(
+    { online: false },
+    {
+      where: {
+        updatedAt: { [Op.lt]: thresholdTime },
+        online: true
+      }
+    }
+  );
 }
 
 async function handleResumeTicketsOutOfHour(job) {
   // logger.info("Buscando atendimentos perdidos nas filas");
   try {
     const companies = await Company.findAll({
-      attributes: ['id', 'name'],
+      attributes: ["id", "name"],
       where: {
         status: true
       },
@@ -1075,14 +1197,12 @@ async function handleResumeTicketsOutOfHour(job) {
           where: {
             timeSendQueue: { [Op.gt]: 0 }
           }
-        },
+        }
       ]
     });
 
     companies.map(async c => {
-
       c.whatsapps.map(async w => {
-
         if (w.status === "CONNECTED") {
           var companyId = c.id;
 
@@ -1093,10 +1213,16 @@ async function handleResumeTicketsOutOfHour(job) {
           const timeQueue = moveQueueTime;
 
           if (moveQueue > 0) {
-
-            if (!isNaN(idQueue) && Number.isInteger(idQueue) && !isNaN(timeQueue) && Number.isInteger(timeQueue)) {
-
-              const tempoPassado = moment().subtract(timeQueue, "minutes").utc().format();
+            if (
+              !isNaN(idQueue) &&
+              Number.isInteger(idQueue) &&
+              !isNaN(timeQueue) &&
+              Number.isInteger(timeQueue)
+            ) {
+              const tempoPassado = moment()
+                .subtract(timeQueue, "minutes")
+                .utc()
+                .format();
               // const tempoAgora = moment().utc().format();
 
               const { count, rows: tickets } = await Ticket.findAndCountAll({
@@ -1108,14 +1234,26 @@ async function handleResumeTicketsOutOfHour(job) {
                   whatsappId: w.id,
                   updatedAt: {
                     [Op.lt]: tempoPassado
-                  },
+                  }
                   // isOutOfHour: false
                 },
                 include: [
                   {
                     model: Contact,
                     as: "contact",
-                    attributes: ["id", "name", "number", "email", "profilePicUrl", "acceptAudioMessage", "active", "disableBot", "urlPicture", "lgpdAcceptedAt", "companyId"],
+                    attributes: [
+                      "id",
+                      "name",
+                      "number",
+                      "email",
+                      "profilePicUrl",
+                      "acceptAudioMessage",
+                      "active",
+                      "disableBot",
+                      "urlPicture",
+                      "lgpdAcceptedAt",
+                      "companyId"
+                    ],
                     include: ["extraInfo", "tags"]
                   },
                   {
@@ -1154,7 +1292,9 @@ async function handleResumeTicketsOutOfHour(job) {
                   //   ticket,
                   // });
 
-                  logger.info(`Atendimento Perdido: ${ticket.id} - Empresa: ${companyId}`);
+                  logger.info(
+                    `Atendimento Perdido: ${ticket.id} - Empresa: ${companyId}`
+                  );
                 });
               }
             } else {
@@ -1169,13 +1309,13 @@ async function handleResumeTicketsOutOfHour(job) {
     logger.error("SearchForQueue -> VerifyQueue: error", e.message);
     throw e;
   }
-};
+}
 
 async function handleVerifyQueue(job) {
   // logger.info("Buscando atendimentos perdidos nas filas");
   try {
     const companies = await Company.findAll({
-      attributes: ['id', 'name'],
+      attributes: ["id", "name"],
       where: {
         status: true
       },
@@ -1183,14 +1323,12 @@ async function handleVerifyQueue(job) {
         {
           model: Whatsapp,
           attributes: ["id", "name", "status", "timeSendQueue", "sendIdQueue"]
-        },
+        }
       ]
     });
 
     companies.map(async c => {
-
       c.whatsapps.map(async w => {
-
         if (w.status === "CONNECTED") {
           var companyId = c.id;
 
@@ -1201,10 +1339,16 @@ async function handleVerifyQueue(job) {
           const timeQueue = moveQueueTime;
 
           if (moveQueue > 0) {
-
-            if (!isNaN(idQueue) && Number.isInteger(idQueue) && !isNaN(timeQueue) && Number.isInteger(timeQueue)) {
-
-              const tempoPassado = moment().subtract(timeQueue, "minutes").utc().format();
+            if (
+              !isNaN(idQueue) &&
+              Number.isInteger(idQueue) &&
+              !isNaN(timeQueue) &&
+              Number.isInteger(timeQueue)
+            ) {
+              const tempoPassado = moment()
+                .subtract(timeQueue, "minutes")
+                .utc()
+                .format();
               // const tempoAgora = moment().utc().format();
 
               const { count, rows: tickets } = await Ticket.findAndCountAll({
@@ -1216,14 +1360,26 @@ async function handleVerifyQueue(job) {
                   whatsappId: w.id,
                   updatedAt: {
                     [Op.lt]: tempoPassado
-                  },
+                  }
                   // isOutOfHour: false
                 },
                 include: [
                   {
                     model: Contact,
                     as: "contact",
-                    attributes: ["id", "name", "number", "email", "profilePicUrl", "acceptAudioMessage", "active", "disableBot", "urlPicture", "lgpdAcceptedAt", "companyId"],
+                    attributes: [
+                      "id",
+                      "name",
+                      "number",
+                      "email",
+                      "profilePicUrl",
+                      "acceptAudioMessage",
+                      "active",
+                      "disableBot",
+                      "urlPicture",
+                      "lgpdAcceptedAt",
+                      "companyId"
+                    ],
                     include: ["extraInfo", "tags"]
                   },
                   {
@@ -1269,7 +1425,9 @@ async function handleVerifyQueue(job) {
                   //   ticket,
                   // });
 
-                  logger.info(`Atendimento Perdido: ${ticket.id} - Empresa: ${companyId}`);
+                  logger.info(
+                    `Atendimento Perdido: ${ticket.id} - Empresa: ${companyId}`
+                  );
                 });
               }
             } else {
@@ -1284,16 +1442,15 @@ async function handleVerifyQueue(job) {
     logger.error("SearchForQueue -> VerifyQueue: error", e.message);
     throw e;
   }
-};
+}
 
 async function handleRandomUser() {
   // logger.info("Iniciando a randomização dos atendimentos...");
 
-  const jobR = new CronJob('0 */2 * * * *', async () => {
-
+  const jobR = new CronJob("0 */2 * * * *", async () => {
     try {
       const companies = await Company.findAll({
-        attributes: ['id', 'name'],
+        attributes: ["id", "name"],
         where: {
           status: true
         },
@@ -1307,7 +1464,7 @@ async function handleRandomUser() {
                 [Op.ne]: 0
               }
             }
-          },
+          }
         ]
       });
 
@@ -1318,13 +1475,13 @@ async function handleRandomUser() {
               where: {
                 companyId: c.id,
                 status: "pending",
-                queueId: q.id,
-              },
+                queueId: q.id
+              }
             });
 
             //logger.info(`Localizado: ${count} filas para randomização.`);
 
-            const getRandomUserId = (userIds) => {
+            const getRandomUserId = userIds => {
               const randomIndex = Math.floor(Math.random() * userIds.length);
               return userIds[randomIndex];
             };
@@ -1336,7 +1493,7 @@ async function handleRandomUser() {
                   where: {
                     id: userId,
                     companyId
-                  },
+                  }
                 });
 
                 if (user && user?.profile === "user") {
@@ -1350,10 +1507,12 @@ async function handleRandomUser() {
                   // logger.info("ADMIN");
                   return 0;
                 }
-
               } catch (errorV) {
                 Sentry.captureException(errorV);
-                logger.error("SearchForUsersRandom -> VerifyUsersRandom: error", errorV.message);
+                logger.error(
+                  "SearchForUsersRandom -> VerifyUsersRandom: error",
+                  errorV.message
+                );
                 throw errorV;
               }
             };
@@ -1365,16 +1524,22 @@ async function handleRandomUser() {
                 // Find all UserQueue records with the specific queueId
                 const userQueues = await UserQueue.findAll({
                   where: {
-                    queueId: queueId,
-                  },
+                    queueId: queueId
+                  }
                 });
 
-                const contact = await ShowContactService(ticket.contactId, ticket.companyId);
+                const contact = await ShowContactService(
+                  ticket.contactId,
+                  ticket.companyId
+                );
 
                 // Extract the userIds from the UserQueue records
-                const userIds = userQueues.map((userQueue) => userQueue.userId);
+                const userIds = userQueues.map(userQueue => userQueue.userId);
 
-                const tempoPassadoB = moment().subtract(tempoRoteador, "minutes").utc().toDate();
+                const tempoPassadoB = moment()
+                  .subtract(tempoRoteador, "minutes")
+                  .utc()
+                  .toDate();
                 const updatedAtV = new Date(ticket.updatedAt);
 
                 let settings = await CompaniesSettings.findOne({
@@ -1382,92 +1547,114 @@ async function handleRandomUser() {
                     companyId: ticket.companyId
                   }
                 });
-                const sendGreetingMessageOneQueues = settings.sendGreetingMessageOneQueues === "enabled" || false;
+                const sendGreetingMessageOneQueues =
+                  settings.sendGreetingMessageOneQueues === "enabled" || false;
 
                 if (!userId) {
                   // ticket.userId is null, randomly select one of the provided userIds
                   const randomUserId = getRandomUserId(userIds);
 
-
-                  if (randomUserId !== undefined && await findUserById(randomUserId, ticket.companyId) > 0) {
+                  if (
+                    randomUserId !== undefined &&
+                    (await findUserById(randomUserId, ticket.companyId)) > 0
+                  ) {
                     // Update the ticket with the randomly selected userId
                     //ticket.userId = randomUserId;
                     //ticket.save();
 
                     if (sendGreetingMessageOneQueues) {
-                      const ticketToSend = await ShowTicketService(ticket.id, ticket.companyId);
+                      const ticketToSend = await ShowTicketService(
+                        ticket.id,
+                        ticket.companyId
+                      );
 
-                      await SendWhatsAppMessage({ body: `\u200e *Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!`, ticket: ticketToSend });
-
+                      await SendWhatsAppMessage({
+                        body: `\u200e *Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!`,
+                        ticket: ticketToSend
+                      });
                     }
 
                     await UpdateTicketService({
                       ticketData: { status: "pending", userId: randomUserId },
                       ticketId: ticket.id,
-                      companyId: ticket.companyId,
-
+                      companyId: ticket.companyId
                     });
 
                     //await ticket.reload();
-                    logger.info(`Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`);
+                    logger.info(
+                      `Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`
+                    );
                   } else {
-                    //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);            
+                    //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);
                   }
-
                 } else if (userIds.includes(userId)) {
                   if (tempoPassadoB > updatedAtV) {
                     // ticket.userId is present and is in userIds, exclude it from random selection
-                    const availableUserIds = userIds.filter((id) => id !== userId);
+                    const availableUserIds = userIds.filter(
+                      id => id !== userId
+                    );
 
                     if (availableUserIds.length > 0) {
                       // Randomly select one of the remaining userIds
                       const randomUserId = getRandomUserId(availableUserIds);
 
-                      if (randomUserId !== undefined && await findUserById(randomUserId, ticket.companyId) > 0) {
+                      if (
+                        randomUserId !== undefined &&
+                        (await findUserById(randomUserId, ticket.companyId)) > 0
+                      ) {
                         // Update the ticket with the randomly selected userId
                         //ticket.userId = randomUserId;
                         //ticket.save();
 
                         if (sendGreetingMessageOneQueues) {
-
-                          const ticketToSend = await ShowTicketService(ticket.id, ticket.companyId);
-                          await SendWhatsAppMessage({ body: "*Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!", ticket: ticketToSend });
-                        };
+                          const ticketToSend = await ShowTicketService(
+                            ticket.id,
+                            ticket.companyId
+                          );
+                          await SendWhatsAppMessage({
+                            body: "*Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!",
+                            ticket: ticketToSend
+                          });
+                        }
 
                         await UpdateTicketService({
-                          ticketData: { status: "pending", userId: randomUserId },
+                          ticketData: {
+                            status: "pending",
+                            userId: randomUserId
+                          },
                           ticketId: ticket.id,
-                          companyId: ticket.companyId,
-
+                          companyId: ticket.companyId
                         });
 
-                        logger.info(`Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`);
+                        logger.info(
+                          `Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`
+                        );
                       } else {
-                        //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);            
+                        //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);
                       }
-
                     }
                   }
                 }
-
               }
             }
-          })
-        })
+          });
+        });
       }
     } catch (e) {
       Sentry.captureException(e);
-      logger.error("SearchForUsersRandom -> VerifyUsersRandom: error", e.message);
+      logger.error(
+        "SearchForUsersRandom -> VerifyUsersRandom: error",
+        e.message
+      );
       throw e;
     }
-
   });
 
   jobR.start();
 }
 
 async function handleProcessLanes() {
-  const job = new CronJob('*/1 * * * *', async () => {
+  const job = new CronJob("*/1 * * * *", async () => {
     const companies = await Company.findAll({
       include: [
         {
@@ -1477,88 +1664,112 @@ async function handleProcessLanes() {
           where: {
             useKanban: true
           }
-        },
+        }
       ]
     });
     companies.map(async c => {
-
       try {
         const companyId = c.id;
 
         const ticketTags = await TicketTag.findAll({
-          include: [{
-            model: Ticket,
-            as: "ticket",
-            where: {
-              status: "open",
-              fromMe: true,
-              companyId
+          include: [
+            {
+              model: Ticket,
+              as: "ticket",
+              where: {
+                status: "open",
+                fromMe: true,
+                companyId
+              },
+              attributes: ["id", "contactId", "updatedAt", "whatsappId"]
             },
-            attributes: ["id", "contactId", "updatedAt", "whatsappId"]
-          }, {
-            model: Tag,
-            as: "tag",
-            attributes: ["id", "timeLane", "nextLaneId", "greetingMessageLane"],
-            where: {
-              companyId
+            {
+              model: Tag,
+              as: "tag",
+              attributes: [
+                "id",
+                "timeLane",
+                "nextLaneId",
+                "greetingMessageLane"
+              ],
+              where: {
+                companyId
+              }
             }
-          }]
-        })
+          ]
+        });
 
         if (ticketTags.length > 0) {
           ticketTags.map(async t => {
-            if (!isNil(t?.tag.nextLaneId) && t?.tag.nextLaneId > 0 && t?.tag.timeLane > 0) {
+            if (
+              !isNil(t?.tag.nextLaneId) &&
+              t?.tag.nextLaneId > 0 &&
+              t?.tag.timeLane > 0
+            ) {
               const nextTag = await Tag.findByPk(t?.tag.nextLaneId);
 
               const dataLimite = new Date();
-              dataLimite.setHours(dataLimite.getHours() - Number(t.tag.timeLane));
-              const dataUltimaInteracaoChamado = new Date(t.ticket.updatedAt)
+              dataLimite.setHours(
+                dataLimite.getHours() - Number(t.tag.timeLane)
+              );
+              const dataUltimaInteracaoChamado = new Date(t.ticket.updatedAt);
 
               if (dataUltimaInteracaoChamado < dataLimite) {
-                await TicketTag.destroy({ where: { ticketId: t.ticketId, tagId: t.tagId } });
-                await TicketTag.create({ ticketId: t.ticketId, tagId: nextTag.id });
+                await TicketTag.destroy({
+                  where: { ticketId: t.ticketId, tagId: t.tagId }
+                });
+                await TicketTag.create({
+                  ticketId: t.ticketId,
+                  tagId: nextTag.id
+                });
 
                 const whatsapp = await Whatsapp.findByPk(t.ticket.whatsappId);
 
-                if (!isNil(nextTag.greetingMessageLane) && nextTag.greetingMessageLane !== "") {
+                if (
+                  !isNil(nextTag.greetingMessageLane) &&
+                  nextTag.greetingMessageLane !== ""
+                ) {
                   const bodyMessage = nextTag.greetingMessageLane;
 
                   const contact = await Contact.findByPk(t.ticket.contactId);
-                  const ticketUpdate = await ShowTicketService(t.ticketId, companyId);
+                  const ticketUpdate = await ShowTicketService(
+                    t.ticketId,
+                    companyId
+                  );
 
-                  await SendMessage(whatsapp, {
-                    number: contact.number,
-                    body: `${formatBody(bodyMessage, ticketUpdate)}`,
-                    mediaPath: null,
-                    companyId: companyId
-                  },
+                  await SendMessage(
+                    whatsapp,
+                    {
+                      number: contact.number,
+                      body: `${formatBody(bodyMessage, ticketUpdate)}`,
+                      mediaPath: null,
+                      companyId: companyId
+                    },
                     contact.isGroup
-                  )
+                  );
                 }
               }
             }
-          })
+          });
         }
       } catch (e: any) {
         Sentry.captureException(e);
         logger.error("Process Lanes -> Verify: error", e.message);
         throw e;
       }
-
     });
   });
-  job.start()
+  job.start();
 }
 
 async function handleCloseTicketsAutomatic() {
-  const job = new CronJob('*/1 * * * *', async () => {
+  const job = new CronJob("*/1 * * * *", async () => {
     const companies = await Company.findAll({
       where: {
         status: true
       }
     });
     companies.map(async c => {
-
       try {
         const companyId = c.id;
         await ClosedAllOpenTickets(companyId);
@@ -1567,117 +1778,194 @@ async function handleCloseTicketsAutomatic() {
         logger.error("ClosedAllOpenTickets -> Verify: error", e.message);
         throw e;
       }
-
     });
   });
-  job.start()
+  job.start();
 }
 
 async function handleWhatsapp() {
-  const jobW = new CronJob('* 15 3 * * *', async () => {
-    //*Whatsapp
-    GetWhatsapp();
-    jobW.stop();
-  }, null, false, 'America/Sao_Paulo')
+  const jobW = new CronJob(
+    "* 15 3 * * *",
+    async () => {
+      //*Whatsapp
+      GetWhatsapp();
+      jobW.stop();
+    },
+    null,
+    false,
+    "America/Sao_Paulo"
+  );
   jobW.start();
 }
 
 async function handleInvoiceCreate() {
   logger.info("GERANDO RECEITA...");
-  const job = new CronJob('*/30 * * * * *', async () => {
+  const job = new CronJob("*/30 * * * * *", async () => {
     const companies = await Company.findAll();
     companies.map(async c => {
-    
       const status = c.status;
-      const dueDate = c.dueDate; 
+      const dueDate = c.dueDate;
       const date = moment(dueDate).format();
       const timestamp = moment().format();
       const hoje = moment().format("DD/MM/yyyy");
       const vencimento = moment(dueDate).format("DD/MM/yyyy");
-      const diff = moment(vencimento, "DD/MM/yyyy").diff(moment(hoje, "DD/MM/yyyy"));
+      const diff = moment(vencimento, "DD/MM/yyyy").diff(
+        moment(hoje, "DD/MM/yyyy")
+      );
       const dias = moment.duration(diff).asDays();
-    
-      if(status === true){
-      	//logger.info(`EMPRESA: ${c.id} está ATIVA com vencimento em: ${vencimento} | ${dias}`);
-      
-      	//Verifico se a empresa está a mais de 10 dias sem pagamento
-        
-        if(dias <= -3){
-       
-          logger.info(`EMPRESA: ${c.id} está VENCIDA A MAIS DE 3 DIAS... INATIVANDO... ${dias}`);
+
+      if (status === true) {
+        //logger.info(`EMPRESA: ${c.id} está ATIVA com vencimento em: ${vencimento} | ${dias}`);
+
+        //Verifico se a empresa está a mais de 10 dias sem pagamento
+
+        if (dias <= -3) {
+          logger.info(
+            `EMPRESA: ${c.id} está VENCIDA A MAIS DE 3 DIAS... INATIVANDO... ${dias}`
+          );
           c.status = false;
           await c.save(); // Save the updated company record
           logger.info(`EMPRESA: ${c.id} foi INATIVADA.`);
-          logger.info(`EMPRESA: ${c.id} Desativando conexões com o WhatsApp...`);
-          
+          logger.info(
+            `EMPRESA: ${c.id} Desativando conexões com o WhatsApp...`
+          );
+
           try {
-    		const whatsapps = await Whatsapp.findAll({
-      		where: {
-        		companyId: c.id,
-      		},
-      			attributes: ['id','status','session'],
-    		});
-    		for (const whatsapp of whatsapps) {
-            	if (whatsapp.session) {
-    				await whatsapp.update({ status: "DISCONNECTED", session: "" });
-    				const wbot = getWbot(whatsapp.id);
-    				await wbot.logout();
-                	logger.info(`EMPRESA: ${c.id} teve o WhatsApp ${whatsapp.id} desconectado...`);
-  				}
-    		}
-          
-  		  } catch (error) {
-    		// Lidar com erros, se houver
-    		console.error('Erro ao buscar os IDs de WhatsApp:', error);
-    		throw error;
-  		  }
-        
-        }else{ // ELSE if(dias <= -3){
-        
+            const whatsapps = await Whatsapp.findAll({
+              where: {
+                companyId: c.id
+              },
+              attributes: ["id", "status", "session"]
+            });
+            for (const whatsapp of whatsapps) {
+              if (whatsapp.session) {
+                await whatsapp.update({ status: "DISCONNECTED", session: "" });
+                const wbot = getWbot(whatsapp.id);
+                await wbot.logout();
+                logger.info(
+                  `EMPRESA: ${c.id} teve o WhatsApp ${whatsapp.id} desconectado...`
+                );
+              }
+            }
+          } catch (error) {
+            // Lidar com erros, se houver
+            console.error("Erro ao buscar os IDs de WhatsApp:", error);
+            throw error;
+          }
+        } else {
+          // ELSE if(dias <= -3){
+
           const plan = await Plan.findByPk(c.planId);
-        
-          const sql = `SELECT * FROM "Invoices" WHERE "companyId" = ${c.id} AND "status" = 'open';`
-          const openInvoices = await sequelize.query(sql, { type: QueryTypes.SELECT }) as { id: number, dueDate: Date }[];
-          const existingInvoice = openInvoices.find(invoice => moment(invoice.dueDate).format("DD/MM/yyyy") === vencimento);
-        
+
+          const sql = `SELECT * FROM "Invoices" WHERE "companyId" = ${c.id} AND "status" = 'open';`;
+          const openInvoices = (await sequelize.query(sql, {
+            type: QueryTypes.SELECT
+          })) as { id: number; dueDate: Date }[];
+          const existingInvoice = openInvoices.find(
+            invoice =>
+              moment(invoice.dueDate).format("DD/MM/yyyy") === vencimento
+          );
+
           if (existingInvoice) {
             // Due date already exists, no action needed
             //logger.info(`Fatura Existente`);
-        
           } else if (openInvoices.length > 0) {
             const updateSql = `UPDATE "Invoices" SET "dueDate" = '${date}' WHERE "id" = ${openInvoices[0].id};`;
             await sequelize.query(updateSql, { type: QueryTypes.UPDATE });
-        
+
             logger.info(`Fatura Atualizada ID: ${openInvoices[0].id}`);
-        
           } else {
             const valuePlan = plan.amount.replace(",", ".");
             const sql = `INSERT INTO "Invoices" ("companyId", "dueDate", detail, status, value, users, connections, queues, "updatedAt", "createdAt")
-            VALUES (${c.id}, '${date}', '${plan.name}', 'open', ${valuePlan}, ${plan.users}, ${plan.connections}, ${plan.queues}, '${timestamp}', '${timestamp}');`
-            const invoiceInsert = await sequelize.query(sql, { type: QueryTypes.INSERT });
-        
+            VALUES (${c.id}, '${date}', '${plan.name}', 'open', ${valuePlan}, ${plan.users}, ${plan.connections}, ${plan.queues}, '${timestamp}', '${timestamp}');`;
+            const invoiceInsert = await sequelize.query(sql, {
+              type: QueryTypes.INSERT
+            });
+
             logger.info(`Fatura Gerada para o cliente: ${c.id}`);
             // Rest of the code for sending email
           }
-        
-          
-        
-        
         } // if(dias <= -6){
-        
-      }else{ // ELSE if(status === true){
-      
-      	//logger.info(`EMPRESA: ${c.id} está INATIVA`);
-      
+      } else {
+        // ELSE if(status === true){
+        //logger.info(`EMPRESA: ${c.id} está INATIVA`);
       }
-    
-    
     });
   });
   job.start();
 }
+
+async function handleDailyReport() {
+  const job = new CronJob(
+    "*/1 * * * *",
+    async () => {
+      const companies = await Company.findAll({ where: { status: true } });
+
+      for (const c of companies) {
+        const [numberSetting] = await Setting.findOrCreate({
+          where: { companyId: c.id, key: "dailyReportNumber" },
+          defaults: { value: "" }
+        });
+
+        const [timeSetting] = await Setting.findOrCreate({
+          where: { companyId: c.id, key: "dailyReportTime" },
+          defaults: { value: "19" }
+        });
+
+        const [lastSetting] = await Setting.findOrCreate({
+          where: { companyId: c.id, key: "dailyReportLastSent" },
+          defaults: { value: "" }
+        });
+
+        if (!numberSetting.value) continue;
+
+        const currentHour = moment().format("HH");
+        const today = moment().format("YYYY-MM-DD");
+
+        if (currentHour !== timeSetting.value || lastSetting.value === today) {
+          continue;
+        }
+
+        try {
+          const report = await DailyWhatsappReport(c.id, new Date());
+
+          let message = `\ud83d\udcc5 Relat\u00f3rio Di\u00e1rio - ${moment().format("DD/MM/YYYY")}\n\n`;
+          message += `\u2705 Total de Atendimentos: ${report.total}\n\n`;
+          for (const u of report.users) {
+            const hours = Math.floor(u.onlineminutes / 60);
+            const minutes = Math.floor(u.onlineminutes % 60);
+            const rate = u.rating ? u.rating.toFixed(1) : "N/A";
+            message += `\ud83d\udc64 Usu\u00e1rio: ${u.name}\n`;
+            message += `\ud83d\udd52 Tempo Online: ${hours}h ${minutes}m\n`;
+            message += `\ud83d\udcde Atendimentos Realizados: ${u.totaltickets}\n`;
+            message += `\u2b50 Nota M\u00e9dia: ${rate}\n\n`;
+          }
+          message +=
+            "\n---\n\ud83d\udd14 Relat\u00f3rio enviado automaticamente pelo sistema Loopchat.";
+
+          const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
+          await SendMessage(whatsapp, {
+            number: numberSetting.value,
+            body: message,
+            companyId: c.id
+          });
+          await lastSetting.update({ value: today });
+        } catch (err) {
+          Sentry.captureException(err);
+          logger.error("DailyReport -> error", err.message);
+        }
+      }
+    },
+    null,
+    false,
+    "America/Sao_Paulo"
+  );
+
+  job.start();
+}
 handleInvoiceCreate();
 handleWhatsapp();
+handleDailyReport();
 handleProcessLanes();
 handleCloseTicketsAutomatic();
 handleRandomUser();
