@@ -4,38 +4,24 @@ import ContactList from "../../models/ContactList";
 import Queue from "../../models/Queue";
 import User from "../../models/User";
 import Whatsapp from "../../models/Whatsapp";
+import { ICampaignData } from "../../@types/Campaign";
 
-interface Data {
-  id: number | string;
-  name: string;
-  status: string;
-  confirmation: boolean;
-  scheduledAt: string;
-  companyId: number;
-  contactListId: number;
-  message1?: string;
-  message2?: string;
-  message3?: string;
-  message4?: string;
-  message5?: string;
-  confirmationMessage1?: string;
-  confirmationMessage2?: string;
-  confirmationMessage3?: string;
-  confirmationMessage4?: string;
-  confirmationMessage5?: string;
-  userId: number | string;
-  queueId: number | string;
-  statusTicket: string;
-  openTicket: string;
-}
 
-const UpdateService = async (data: Data): Promise<Campaign> => {
+const UpdateService = async (data: ICampaignData): Promise<Campaign> => {
   const { id } = data;
 
   const record = await Campaign.findByPk(id);
 
   if (!record) {
     throw new AppError("ERR_NO_CAMPAIGN_FOUND", 404);
+  }
+
+  const contactList = await ContactList.findOne({
+    where: { id: data.contactListId, companyId: data.companyId }
+  });
+
+  if (!contactList) {
+    throw new AppError("ERR_NO_CONTACTLIST_FOUND", 404);
   }
 
   if (["INATIVA", "PROGRAMADA", "CANCELADA"].indexOf(data.status) === -1) {
@@ -45,13 +31,6 @@ const UpdateService = async (data: Data): Promise<Campaign> => {
     );
   }
 
-  if (
-    data.scheduledAt != null &&
-    data.scheduledAt != "" &&
-    data.status === "INATIVA"
-  ) {
-    data.status = "PROGRAMADA";
-  }
 
   await record.update(data);
 
