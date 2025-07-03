@@ -16,11 +16,15 @@ const PendingTickets: React.FC<PendingTicketsProps> = ({ tickets }) => {
           <ReportProblemIcon color="warning" />
         </Avatar>
         <Box>
-          <Typography variant="subtitle1">Pendentes</Typography>
+          <Typography variant="subtitle1">Aguardando</Typography>
           <Typography variant="caption">Atendimentos: {tickets.length}</Typography>
         </Box>
       </Box>
-      <AnimatePresence>{tickets.map((t) => <TicketCard key={t.id} ticket={t} />)}</AnimatePresence>
+      <AnimatePresence>
+        {tickets.map((t) => (
+          <TicketCard key={t.id} ticket={t} showWaitingTime />
+        ))}
+      </AnimatePresence>
     </Paper>
   );
 };
