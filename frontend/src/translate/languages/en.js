@@ -334,6 +334,7 @@ const messages = {
                                         uf: "State",
                                         nome: "Name",
                                         cpf: "CPF",
+                                        telefones: "Phones",
                                         nomeMae: "Mother's Name",
                                         renda: "Income",
                                         dataNascimento: "Birth Date",

@@ -1530,6 +1530,7 @@ const messages = {
           uf: "UF",
           nome: "Nome",
           cpf: "CPF",
+          telefones: "Telefones",
           nomeMae: "Nome da Mãe",
           renda: "Renda",
           dataNascimento: "Data de Nascimento",

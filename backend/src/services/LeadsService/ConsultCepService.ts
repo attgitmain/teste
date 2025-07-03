@@ -2,6 +2,7 @@ import axios from "axios";
 import LeadView from "../../models/LeadView";
 import ConsumeCreditsService from "../CreditService/ConsumeCreditsService";
 import AppError from "../../errors/AppError";
+import ConsultCpfService from "./ConsultCpfService";
 
 interface Request {
   cep: string;
@@ -50,6 +51,40 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
 
   if (slice.length > 0) {
     const balance = await ConsumeCreditsService(companyId, 1);
+
+    // Enrich each lead with phone numbers from CPF lookup
+    await Promise.all(
+      slice.map(async (lead: any) => {
+        try {
+          const { data } = await ConsultCpfService({
+            cpf: lead.dados_pessoais.cpf,
+            companyId,
+            free: true
+          });
+          const detail = data?.data || data;
+          let phones: any[] = [];
+          if (Array.isArray(detail.telefones)) {
+            phones = detail.telefones.map((tel: any) => ({
+              numero: tel.numero || tel.telefone || "",
+              tipo: tel.tipo || tel.operadora || "",
+              whatsapp: tel.whatsapp || false
+            }));
+          }
+          if (Array.isArray(detail.celulares)) {
+            phones = phones.concat(
+              detail.celulares.map((c: any) => ({ numero: c, tipo: "Celular" }))
+            );
+          }
+          if (!phones.length && detail.telefone) {
+            phones.push({ numero: detail.telefone, tipo: "Fixo" });
+          }
+          lead.telefones = phones;
+        } catch (err) {
+          lead.telefones = [];
+        }
+      })
+    );
+
     await LeadView.bulkCreate(
       slice.map((l: any) => ({
         companyId,
