@@ -10,14 +10,14 @@ interface PendingTicketsProps {
 
 const PendingTickets: React.FC<PendingTicketsProps> = ({ tickets }) => {
   return (
-    <Paper variant="outlined" sx={{ p: 1 }} component={motion.div} layout>
+    <Paper variant="outlined" sx={{ p: 2 }} component={motion.div} layout>
       <Box display="flex" alignItems="center" mb={1}>
-        <Avatar sx={{ mr: 1 }}>
+        <Avatar sx={{ mr: 1, width: 56, height: 56 }}>
           <ReportProblemIcon color="warning" />
         </Avatar>
         <Box>
-          <Typography variant="subtitle1">Aguardando</Typography>
-          <Typography variant="caption">Atendimentos: {tickets.length}</Typography>
+          <Typography variant="h6">Aguardando</Typography>
+          <Typography variant="subtitle1">Atendimentos: {tickets.length}</Typography>
         </Box>
       </Box>
       <AnimatePresence>

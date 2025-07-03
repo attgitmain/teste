@@ -54,8 +54,8 @@ const PainelTV: React.FC = () => {
   const pending = useMemo(() => tickets.filter((t: Ticket) => !t.user), [tickets]);
 
   return (
-    <Container maxWidth="xl" sx={{ py: 2 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container maxWidth="xl" sx={{ py: 3 }}>
+      <Typography variant="h3" gutterBottom>
         📺 Painel de Atendimentos em Tempo Real
       </Typography>
       <Grid container spacing={2} alignItems="flex-start">
