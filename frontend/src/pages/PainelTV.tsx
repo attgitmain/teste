@@ -3,9 +3,8 @@ import { Container, Grid, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "react-query";
 import { AuthContext } from "../context/Auth/AuthContext";
 import api from "../services/api";
-import GroupedTickets from "../components/PainelTV/GroupedTickets";
 import PendingTickets from "../components/PainelTV/PendingTickets";
-import { AnimatePresence } from "framer-motion";
+import ActiveTickets from "../components/PainelTV/ActiveTickets";
 
 interface Ticket {
   id: number;
@@ -60,18 +59,16 @@ const PainelTV: React.FC = () => {
         📺 Painel de Atendimentos em Tempo Real
       </Typography>
       <Grid container spacing={2} alignItems="flex-start">
-        <AnimatePresence>
-          {grouped.map((group) => (
-            <Grid item xs={12} sm={6} md={4} key={group.user.id}>
-              <GroupedTickets user={group.user} tickets={group.tickets} />
-            </Grid>
-          ))}
-          {pending.length > 0 && (
-            <Grid item xs={12} sm={6} md={4} key="pending">
-              <PendingTickets tickets={pending} />
-            </Grid>
-          )}
-        </AnimatePresence>
+        {pending.length > 0 && (
+          <Grid item xs={12} md={4} key="pending">
+            <PendingTickets tickets={pending} />
+          </Grid>
+        )}
+        {grouped.length > 0 && (
+          <Grid item xs={12} md={8} key="active">
+            <ActiveTickets groups={grouped} />
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

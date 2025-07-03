@@ -5,10 +5,36 @@ import { motion } from "framer-motion";
 
 interface TicketCardProps {
   ticket: any;
+  showWaitingTime?: boolean;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
+const TicketCard: React.FC<TicketCardProps> = ({ ticket, showWaitingTime }) => {
   const lastUpdate = parseISO(ticket.updatedAt);
+  const createdAt = parseISO(ticket.createdAt);
+  const [elapsed, setElapsed] = React.useState<number>(() =>
+    Math.floor((Date.now() - createdAt.getTime()) / 1000)
+  );
+
+  React.useEffect(() => {
+    if (!showWaitingTime) return;
+    const interval = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - createdAt.getTime()) / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [createdAt, showWaitingTime]);
+
+  const formatElapsed = () => {
+    const hours = Math.floor(elapsed / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((elapsed % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor(elapsed % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   return (
     <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
@@ -34,9 +60,18 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
             )}
           </Box>
         </Box>
-        <Typography variant="caption" color="text.secondary">
-          {isSameDay(lastUpdate, new Date()) ? format(lastUpdate, "HH:mm") : format(lastUpdate, "dd/MM")}
-        </Typography>
+        <Box textAlign="right">
+          <Typography variant="caption" color="text.secondary">
+            {isSameDay(lastUpdate, new Date())
+              ? format(lastUpdate, "HH:mm")
+              : format(lastUpdate, "dd/MM")}
+          </Typography>
+          {showWaitingTime && (
+            <Typography variant="caption" color="error.main">
+              {formatElapsed()}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </motion.div>
   );
