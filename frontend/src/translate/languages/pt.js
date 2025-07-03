@@ -871,6 +871,7 @@ const messages = {
           dashboard: "Dashboard",
           connections: "Conexões",
           chatsTempoReal: "Painel",
+          painelTV: "Painel TV",
           tickets: "Atendimentos",
           quickMessages: "Respostas rápidas",
           contacts: "Contatos",
