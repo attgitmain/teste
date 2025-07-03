@@ -314,16 +314,18 @@ const messages = {
 			settings: {
 				success: "Settings saved successfully.",
 				title: "Settings",
-				settings: {
-					userCreation: {
-						name: "User creation",
-						options: {
-							enabled: "Enabled",
-							disabled: "Disabled",
-						},
-					},
-				},
-			},
+                                settings: {
+                                        userCreation: {
+                                                name: "User creation",
+                                                options: {
+                                                        enabled: "Enabled",
+                                                        disabled: "Disabled",
+                                                },
+                                        },
+                                        dailyReportNumber: "Daily report number",
+                                        dailyReportTime: "Daily report time",
+                                },
+                        },
                         leads: {
                                 title: "Leads",
                                 table: {

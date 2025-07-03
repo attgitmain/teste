@@ -1621,7 +1621,9 @@ const messages = {
             requiredTag: "Tag obrigatoria para fechar ticket",
             closeTicketOnTransfer: "Fechar ticket ao transferir para outra fila",
             DirectTicketsToWallets: "Mover automaticamente cliente para carteira",
-            showNotificationPending: "Mostrar notificação para tickets pendentes"
+            showNotificationPending: "Mostrar notificação para tickets pendentes",
+            dailyReportNumber: "Número para relatórios diários",
+            dailyReportTime: "Horário do relatório diário"
           },
           customMessages: {
             sendQueuePositionMessage: "Mensagem de posição na fila",
