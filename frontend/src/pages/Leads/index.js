@@ -509,6 +509,7 @@ const Leads = () => {
                     <TableCell>{i18n.t("leads.table.uf")}</TableCell>
                     <TableCell>{i18n.t("leads.table.nome")}</TableCell>
                     <TableCell>{i18n.t("leads.table.cpf")}</TableCell>
+                    <TableCell>{i18n.t("leads.table.telefones")}</TableCell>
                     <TableCell>{i18n.t("leads.table.nomeMae")}</TableCell>
                     <TableCell>{i18n.t("leads.table.renda")}</TableCell>
                     <TableCell>{i18n.t("leads.table.dataNascimento")}</TableCell>
@@ -545,6 +546,11 @@ const Leads = () => {
                             </IconButton>
                           </TableCell>
                           <TableCell>{item.dados_pessoais.cpf}</TableCell>
+                          <TableCell>
+                            {(item.telefones || [])
+                              .map((t) => t.numero)
+                              .join(", ")}
+                          </TableCell>
                           <TableCell>{item.dados_pessoais.nome_mae}</TableCell>
                           <TableCell>{item.dados_pessoais.renda}</TableCell>
                           <TableCell>
