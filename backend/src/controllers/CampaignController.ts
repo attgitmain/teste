@@ -23,6 +23,8 @@ import ContactListItem from "../models/ContactListItem";
 import AppError from "../errors/AppError";
 import { CancelService } from "../services/CampaignService/CancelService";
 import { RestartService } from "../services/CampaignService/RestartService";
+import { ICampaignData } from "../@types/Campaign";
+import { applyStatusRules } from "../validators/CampaignValidator";
 
 type IndexQuery = {
   searchParam: string;
@@ -30,19 +32,7 @@ type IndexQuery = {
   companyId: string | number;
 };
 
-type StoreData = {
-  name: string;
-  status: string;
-  confirmation: boolean;
-  scheduledAt: string;
-  companyId: number;
-  contactListId: number;
-  tagListId: number | string;
-  userId: number | string;
-  queueId: number | string;
-  statusTicket: string;
-  openTicket: string;
-};
+
 
 type FindParams = {
   companyId: string;
@@ -63,7 +53,8 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
   const { companyId } = req.user;
-  const data = req.body as StoreData;
+  const data = req.body as ICampaignData;
+  applyStatusRules(data);
 
   const schema = Yup.object().shape({
     name: Yup.string().required()
@@ -159,8 +150,9 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
+  const { companyId } = req.user;
 
-  const record = await ShowService(id);
+  const record = await ShowService(id, companyId);
 
   return res.status(200).json(record);
 };
@@ -169,7 +161,8 @@ export const update = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const data = req.body as StoreData;
+  const data = req.body as ICampaignData;
+  applyStatusRules(data);
 
   const { companyId } = req.user;
 
@@ -187,7 +180,8 @@ export const update = async (
 
   const record = await UpdateService({
     ...data,
-    id
+    id,
+    companyId
   });
 
   const io = getIO();
@@ -205,8 +199,9 @@ export const cancel = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
+  const { companyId } = req.user;
 
-  await CancelService(+id);
+  await CancelService(+id, companyId);
 
   return res.status(204).json({ message: "Cancelamento realizado" });
 };
@@ -216,8 +211,9 @@ export const restart = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
+  const { companyId } = req.user;
 
-  await RestartService(+id);
+  await RestartService(+id, companyId);
 
   return res.status(204).json({ message: "Reinício dos disparos" });
 };
@@ -229,7 +225,7 @@ export const remove = async (
   const { id } = req.params;
   const { companyId } = req.user;
 
-  await DeleteService(id);
+  await DeleteService(id, companyId);
 
   const io = getIO();
   io.of(String(companyId))
