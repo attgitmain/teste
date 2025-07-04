@@ -43,8 +43,10 @@ cp .env.exemple .env
 
 As credenciais do aplicativo Meta (Facebook/Instagram) devem ser definidas nas
 variáveis `FACEBOOK_APP_ID` e `FACEBOOK_APP_SECRET` no backend. O frontend usa
-`REACT_APP_FACEBOOK_APP_ID` para inicializar o SDK. Esses valores precisam ser
-os mesmos em ambos os projetos para que o login via Facebook e Instagram
+`REACT_APP_FACEBOOK_APP_ID` para inicializar o SDK. Utilize também a variável
+`FACEBOOK_API_VERSION` (no backend) e `REACT_APP_FACEBOOK_API_VERSION` (no
+frontend) para definir a versão da Graph API utilizada. Esses valores precisam
+ser os mesmos em ambos os projetos para que o login via Facebook e Instagram
 funcione corretamente.
 
 Para habilitar as consultas de CEP e CPF pela Work API, defina também no backend

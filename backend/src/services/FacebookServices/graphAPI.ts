@@ -3,9 +3,11 @@ import FormData from "form-data";
 import { createReadStream } from "fs";
 import logger from "../../utils/logger";
 
+const { FACEBOOK_API_VERSION = "v20.0" } = process.env;
+
 const apiBase = (token: string) =>
   axios.create({
-    baseURL: "https://graph.facebook.com/v20.0/",
+    baseURL: `https://graph.facebook.com/${FACEBOOK_API_VERSION}/`,
     params: {
       access_token: token
     }
@@ -19,7 +21,7 @@ export const getAccessToken = async (): Promise<string> => {
   }
 
   const { data } = await axios.get(
-    "https://graph.facebook.com/v20.0/oauth/access_token",
+    `https://graph.facebook.com/${FACEBOOK_API_VERSION}/oauth/access_token`,
     {
       params: {
         client_id: FACEBOOK_APP_ID,
@@ -213,7 +215,7 @@ export const getAccessTokenFromPage = async (
     }
 
     const { data } = await axios.get(
-      "https://graph.facebook.com/v20.0/oauth/access_token",
+      `https://graph.facebook.com/${FACEBOOK_API_VERSION}/oauth/access_token`,
       {
         params: {
           client_id: FACEBOOK_APP_ID,
