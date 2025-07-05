@@ -75,6 +75,8 @@ Dentro de `frontend` os scripts principais são:
 - `npm run builddev` &mdash; gera o build mantendo sourcemaps.
 - `npm test` &mdash; executa os testes com **react-scripts**.
 - `node server.js` &mdash; serve o build de produção em uma instância Express.
+O diretório `public/` também inclui `politica.html`, uma página de privacidade leve pronta para ser servida em `/politica-de-privacidade`.
+Para orientações sobre remoção de contas, disponibilize também `exclusao.html` em `/exclusao-de-dados`.
 
 ## Procedimentos de build
 
