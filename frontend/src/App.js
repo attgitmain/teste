@@ -180,11 +180,11 @@ const App = () => {
       });
     getPublicSetting("appName")
       .then((name) => {
-        setAppName(name || "Chat-flow");
+        setAppName(name || "Loopchat");
       })
       .catch((error) => {
         console.error("Erro ao carregar temas:", error);
-        setAppName("chat-flow");
+        setAppName("Loopchat");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
