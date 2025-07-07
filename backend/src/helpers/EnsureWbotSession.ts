@@ -1,21 +1,15 @@
 import { getWbot } from "../libs/wbot";
 import Whatsapp from "../models/Whatsapp";
 import AppError from "../errors/AppError";
-import { WASocket } from "@whiskeysockets/baileys";
 
-type Session = WASocket & {
-  id?: number;
-};
-const EnsureWbotSession = (input: Whatsapp | Session): Session => {
-  const wbot = ("ws" in input ? (input as Session) : getWbot(input.id));
+const EnsureWbotSession = (whatsapp: Whatsapp) => {
+  const wbot = getWbot(whatsapp.id);
 
-  const readyState = (wbot?.ws as any)?.readyState;
-  const isOpen =
-    readyState === "open" ||
-    readyState === "OPEN" ||
-    readyState === 1;
+  // wbot.ws.readyState follows the WebSocket ready state numeric enum.
+  // 1 corresponds to an open connection.
+  const READY_STATE_OPEN = 1;
 
-  if (!wbot || !wbot.ws || !isOpen || !wbot.user) {
+  if (!wbot || !wbot.ws || wbot.ws.readyState !== READY_STATE_OPEN || !wbot.user) {
     throw new AppError("ERR_WAPP_SESSION_NOT_READY");
   }
 
