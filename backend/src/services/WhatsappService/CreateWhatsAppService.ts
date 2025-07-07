@@ -192,6 +192,15 @@ const CreateWhatsAppService = async ({
     }
   }
 
+  const parsedTimeSendQueue =
+    typeof timeSendQueue === "string"
+      ? Number.parseInt(timeSendQueue, 10)
+      : Number(timeSendQueue);
+  const parsedSendIdQueue =
+    typeof sendIdQueue === "string"
+      ? Number.parseInt(sendIdQueue, 10)
+      : Number(sendIdQueue);
+
   const whatsapp = await Whatsapp.create(
     {
       name,
@@ -213,8 +222,12 @@ const CreateWhatsAppService = async ({
       timeUseBotQueues,
       expiresTicket,
       allowGroup,
-      timeSendQueue,
-      sendIdQueue,
+      timeSendQueue: Number.isNaN(parsedTimeSendQueue)
+        ? 0
+        : parsedTimeSendQueue,
+      sendIdQueue: Number.isNaN(parsedSendIdQueue)
+        ? null
+        : parsedSendIdQueue,
       timeInactiveMessage,
       inactiveMessage,
       maxUseBotQueuesNPS,

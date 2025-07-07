@@ -120,6 +120,16 @@ const UpdateWhatsAppService = async ({
     throw new AppError("ERR_WAPP_GREETING_REQUIRED");
   }
 
+  const parsedTimeSendQueue =
+    typeof timeSendQueue === "string"
+      ? Number.parseInt(timeSendQueue, 10)
+      : Number(timeSendQueue);
+
+  const parsedSendIdQueue =
+    typeof sendIdQueue === "string"
+      ? Number.parseInt(sendIdQueue, 10)
+      : Number(sendIdQueue);
+
   let oldDefaultWhatsapp: Whatsapp | null = null;
 
   if (isDefault) {
@@ -152,8 +162,12 @@ const UpdateWhatsAppService = async ({
     timeUseBotQueues: timeUseBotQueues || 0,
     expiresTicket: expiresTicket || 0,
     allowGroup,
-    timeSendQueue,
-    sendIdQueue,
+    timeSendQueue: Number.isNaN(parsedTimeSendQueue)
+      ? 0
+      : parsedTimeSendQueue,
+    sendIdQueue: Number.isNaN(parsedSendIdQueue)
+      ? null
+      : parsedSendIdQueue,
     timeInactiveMessage,
     inactiveMessage,
     ratingMessage,
