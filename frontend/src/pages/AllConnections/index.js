@@ -465,47 +465,25 @@ const AllConnections = () => {
                           />
                           WhatsApp
                         </MenuItem>
-                        <FacebookLogin
-                          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                          autoLoad={false}
-                          fields="name,email,picture"
-                          version={process.env.REACT_APP_FACEBOOK_API_VERSION}
-                          scope="public_profile,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
-                          dialogParams={{ redirect_uri: process.env.REACT_APP_FACEBOOK_REDIRECT_URI }}
-                          onSuccess={responseFacebook}
-                          render={({ onClick }) => (
-                            <MenuItem onClick={onClick}>
-                              <Facebook
-                                fontSize="small"
-                                style={{
-                                  marginRight: "10px"
-                                }}
-                              />
-                              Facebook
-                            </MenuItem>
-                          )}
-                        />
+                          <MenuItem disabled>
+                            <Facebook
+                              fontSize="small"
+                              style={{
+                                marginRight: "10px"
+                              }}
+                            />
+                            Facebook (em manutenção)
+                          </MenuItem>
 
-                        <FacebookLogin
-                          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                          autoLoad={false}
-                          fields="name,email,picture"
-                          version={process.env.REACT_APP_FACEBOOK_API_VERSION}
-                          scope="public_profile,instagram_basic,instagram_manage_messages,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
-                          dialogParams={{ redirect_uri: process.env.REACT_APP_FACEBOOK_REDIRECT_URI }}
-                          onSuccess={responseInstagram}
-                          render={({ onClick }) => (
-                            <MenuItem onClick={onClick}>
-                              <Instagram
-                                fontSize="small"
-                                style={{
-                                  marginRight: "10px"
-                                }}
-                              />
-                              Instagram
-                            </MenuItem>
-                          )}
-                        />
+                          <MenuItem disabled>
+                            <Instagram
+                              fontSize="small"
+                              style={{
+                                marginRight: "10px"
+                              }}
+                            />
+                            Instagram (em manutenção)
+                          </MenuItem>
                       </Menu>
                     </React.Fragment>
                   )}
