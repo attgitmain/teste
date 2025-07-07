@@ -2,6 +2,7 @@ import { WAMessage, delay } from "@whiskeysockets/baileys";
 import * as Sentry from "@sentry/node";
 import AppError from "../../errors/AppError";
 import GetTicketWbot from "../../helpers/GetTicketWbot";
+import EnsureWbotSession from "../../helpers/EnsureWbotSession";
 import Message from "../../models/Message";
 import Ticket from "../../models/Ticket";
 import Contact from "../../models/Contact";
@@ -27,7 +28,7 @@ const SendWhatsAppMessage = async ({
   isForwarded = false
 }: Request): Promise<WAMessage> => {
   let options = {};
-  const wbot = await GetTicketWbot(ticket);
+  const wbot = EnsureWbotSession(await GetTicketWbot(ticket));
   const contactNumber = await Contact.findByPk(ticket.contactId)
 
   let number: string;

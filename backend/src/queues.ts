@@ -48,6 +48,7 @@ import { delay } from "@whiskeysockets/baileys";
 import Plan from "./models/Plan";
 import Setting from "./models/Setting";
 import DailyWhatsappReport from "./services/ReportService/DailyWhatsappReport";
+import * as ReportLogService from "./services/ReportService/ReportLogService";
 
 const connection = process.env.REDIS_URI || "";
 const limiterMax = process.env.REDIS_OPT_LIMITER_MAX || 1;
@@ -1944,12 +1945,29 @@ async function handleDailyReport() {
             "\n---\n\ud83d\udd14 Relat\u00f3rio enviado automaticamente pelo sistema Loopchat.";
 
           const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
-          await SendMessage(whatsapp, {
-            number: numberSetting.value,
-            body: message,
-            companyId: c.id
-          });
-          await lastSetting.update({ value: today });
+          try {
+            await SendMessage(whatsapp, {
+              number: numberSetting.value,
+              body: message,
+              companyId: c.id
+            });
+            await ReportLogService.createLog({
+              companyId: c.id,
+              toNumber: numberSetting.value,
+              body: message,
+              success: true
+            });
+            await lastSetting.update({ value: today });
+          } catch (sendErr: any) {
+            await ReportLogService.createLog({
+              companyId: c.id,
+              toNumber: numberSetting.value,
+              body: message,
+              success: false,
+              error: sendErr.message
+            });
+            throw sendErr;
+          }
         } catch (err) {
           Sentry.captureException(err);
           logger.error("DailyReport -> error", err.message);

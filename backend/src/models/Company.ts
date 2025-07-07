@@ -24,6 +24,7 @@ import UserRating from "./UserRating";
 import Whatsapp from "./Whatsapp";
 import CompaniesSettings from "./CompaniesSettings";
 import Invoices from "./Invoices";
+import ReportLog from "./ReportLog";
 
 @Table
 class Company extends Model<Company> {
@@ -165,6 +166,9 @@ class Company extends Model<Company> {
     hooks: true
   })
   invoices: Invoices[];
+
+  @HasMany(() => ReportLog)
+  reportLogs: ReportLog[];
 }
 
 export default Company;

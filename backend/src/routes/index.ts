@@ -49,6 +49,7 @@ import flowDefaultRoutes from "./flowDefaultRoutes";
 import webHook from "./webHookRoutes";
 import flowBuilder from "./flowBuilderRoutes";
 import flowCampaignRoutes from "./flowCampaignRoutes";
+import reportLogRoutes from "./reportLogRoutes";
 
 
 const routes = Router();
@@ -105,5 +106,6 @@ routes.use(promptRoutes);
 routes.use(statisticsRoutes);
 routes.use(companySettingsRoutes);
 routes.use(scheduleMessageRoutes);
+routes.use(reportLogRoutes);
 
 export default routes;

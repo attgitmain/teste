@@ -55,6 +55,7 @@ import { WebhookModel } from "../models/Webhook";
 import LeadView from "../models/LeadView";
 import ChipMaturation from "../models/ChipMaturation";
 import ChipMaturationLog from "../models/ChipMaturationLog";
+import ReportLog from "../models/ReportLog";
 import ChipConversationList from "../models/ChipConversationList";
 
 // eslint-disable-next-line
@@ -119,7 +120,8 @@ const models = [
   WebhookModel,
   ChipMaturation,
   ChipMaturationLog,
-  ChipConversationList
+  ChipConversationList,
+  ReportLog
 ];
 
 sequelize.addModels(models);

@@ -1,5 +1,6 @@
 import Whatsapp from "../models/Whatsapp";
 import GetWhatsappWbot from "./GetWhatsappWbot";
+import EnsureWbotSession from "./EnsureWbotSession";
 import fs from "fs";
 import formatBody from "./Mustache";
 
@@ -20,7 +21,7 @@ export const SendMessage = async (
 
 ): Promise<any> => {
   try {
-    const wbot = await GetWhatsappWbot(whatsapp);
+    const wbot = EnsureWbotSession(await GetWhatsappWbot(whatsapp));
     const chatId = `${messageData.number}@${!!isGroup ? 'g.us' : 's.whatsapp.net'}`;
     const companyId = messageData?.companyId ? messageData.companyId.toString(): null;
 
