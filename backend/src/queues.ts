@@ -1927,10 +1927,11 @@ async function handleDailyReport() {
           continue;
         }
 
+        let message = "";
         try {
           const report = await DailyWhatsappReport(c.id, new Date());
 
-          let message = `\ud83d\udcc5 Relat\u00f3rio Di\u00e1rio - ${moment().format("DD/MM/YYYY")}\n\n`;
+          message = `\ud83d\udcc5 Relat\u00f3rio Di\u00e1rio - ${moment().format("DD/MM/YYYY")}\n\n`;
           message += `\u2705 Total de Atendimentos: ${report.total}\n\n`;
           for (const u of report.users) {
             const hours = Math.floor(u.onlineminutes / 60);
@@ -1968,9 +1969,20 @@ async function handleDailyReport() {
             });
             throw sendErr;
           }
-        } catch (err) {
+        } catch (err: any) {
           Sentry.captureException(err);
           logger.error("DailyReport -> error", err.message);
+          try {
+            await ReportLogService.createLog({
+              companyId: c.id,
+              toNumber: numberSetting.value,
+              body: message,
+              success: false,
+              error: err.message
+            });
+          } catch (logErr) {
+            logger.error("DailyReport -> log error", (logErr as any).message);
+          }
         }
       }
     },
