@@ -129,28 +129,34 @@ const Leads = () => {
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem("leadsResults");
+    if (!user || !user.id) return;
+    const resultsKey = `leadsResults_${user.id}`;
+    const historyKey = `leadsHistory_${user.id}`;
+    const stored = localStorage.getItem(resultsKey);
     if (stored) {
       const parsed = JSON.parse(stored).map(normalizeLeadItem);
       setResults(parsed);
     }
-    const hist = JSON.parse(localStorage.getItem("leadsHistory") || "[]");
+    const hist = JSON.parse(localStorage.getItem(historyKey) || "[]");
     setHistory(hist);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem("leadsResults", JSON.stringify(results));
+    if (!user || !user.id) return;
+    const resultsKey = `leadsResults_${user.id}`;
+    const historyKey = `leadsHistory_${user.id}`;
+    localStorage.setItem(resultsKey, JSON.stringify(results));
     if (results && results.length > 0) {
-      const prev = JSON.parse(localStorage.getItem("leadsHistory") || "[]");
+      const prev = JSON.parse(localStorage.getItem(historyKey) || "[]");
       const exists = prev.find((h) => h.cep === cep);
       const entry = { cep, count: results.length };
       const newHist = [entry, ...prev.filter((h) => h.cep !== cep)].slice(0, 5);
-      localStorage.setItem("leadsHistory", JSON.stringify(newHist));
+      localStorage.setItem(historyKey, JSON.stringify(newHist));
       if (!exists || exists.count !== results.length) {
         setHistory(newHist);
       }
     }
-  }, [results]);
+  }, [results, user]);
 
   const handleSearch = async (searchCep = cep) => {
     const cleanCep = String(searchCep).replace(/\D/g, "");
@@ -209,6 +215,9 @@ const Leads = () => {
     setResults([]);
     setPageApi(1);
     setHasMore(false);
+    if (user && user.id) {
+      localStorage.removeItem(`leadsResults_${user.id}`);
+    }
   };
 
   const handleClearCpf = () => {
@@ -217,8 +226,10 @@ const Leads = () => {
   };
 
   const handleClearHistory = () => {
+    if (user && user.id) {
+      localStorage.removeItem(`leadsHistory_${user.id}`);
+    }
     setHistory([]);
-    localStorage.removeItem("leadsHistory");
     toast.success(i18n.t("leads.historyCleared"));
   };
 
