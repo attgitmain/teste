@@ -9,12 +9,13 @@ type Session = WASocket & {
 const EnsureWbotSession = (input: Whatsapp | Session): Session => {
   const wbot = ("ws" in input ? (input as Session) : getWbot(input.id));
 
-  if (
-    !wbot ||
-    !wbot.ws ||
-    ((wbot.ws as any).readyState !== "open" && (wbot.ws as any).readyState !== 1) ||
-    !wbot.user
-  ) {
+  const readyState = (wbot?.ws as any)?.readyState;
+  const isOpen =
+    readyState === "open" ||
+    readyState === "OPEN" ||
+    readyState === 1;
+
+  if (!wbot || !wbot.ws || !isOpen || !wbot.user) {
     throw new AppError("ERR_WAPP_SESSION_NOT_READY");
   }
 
