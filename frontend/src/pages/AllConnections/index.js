@@ -471,6 +471,7 @@ const AllConnections = () => {
                           fields="name,email,picture"
                           version={process.env.REACT_APP_FACEBOOK_API_VERSION}
                           scope="public_profile,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
+                          dialogParams={{ redirect_uri: process.env.REACT_APP_FACEBOOK_REDIRECT_URI }}
                           onSuccess={responseFacebook}
                           render={({ onClick }) => (
                             <MenuItem onClick={onClick}>
@@ -491,6 +492,7 @@ const AllConnections = () => {
                           fields="name,email,picture"
                           version={process.env.REACT_APP_FACEBOOK_API_VERSION}
                           scope="public_profile,instagram_basic,instagram_manage_messages,pages_messaging,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management"
+                          dialogParams={{ redirect_uri: process.env.REACT_APP_FACEBOOK_REDIRECT_URI }}
                           onSuccess={responseInstagram}
                           render={({ onClick }) => (
                             <MenuItem onClick={onClick}>
