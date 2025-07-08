@@ -1464,7 +1464,7 @@ const messages = {
       leads: {
         title: "Leads",
         creditsAvailable: "Créditos disponibles",
-        creditInfo: "Cada grupo de 15 leads consume 1 crédito",
+        creditInfo: "Cada grupo de 100 leads consume 1 crédito",
         cpfCreditInfo: "Cada consulta de CPF cuesta 3 créditos",
         addCredits: "Acreditar créditos",
         noCredits: "No tienes créditos suficientes",

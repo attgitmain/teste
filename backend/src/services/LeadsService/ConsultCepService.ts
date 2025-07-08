@@ -11,7 +11,7 @@ interface Request {
   page: number;
 }
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 100;
 
 const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   const token = process.env.API_TOKEN_CEP;
