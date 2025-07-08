@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import sequelize from "../../database";
 import { QueryTypes } from "sequelize";
 
@@ -18,8 +18,14 @@ export default async function DailyWhatsappReport(
   companyId: number,
   date: Date
 ): Promise<DailyReportData> {
-  const start = moment(date).startOf("day").format("YYYY-MM-DD HH:mm:ss");
-  const end = moment(date).endOf("day").format("YYYY-MM-DD HH:mm:ss");
+  const start = moment(date)
+    .tz("America/Sao_Paulo")
+    .startOf("day")
+    .format("YYYY-MM-DD HH:mm:ss");
+  const end = moment(date)
+    .tz("America/Sao_Paulo")
+    .endOf("day")
+    .format("YYYY-MM-DD HH:mm:ss");
 
   const totalQuery = `select count(*) as total from "Tickets" where "companyId" = :companyId and "createdAt" >= :start and "createdAt" <= :end`;
   const [{ total }] = (await sequelize.query(totalQuery, {
