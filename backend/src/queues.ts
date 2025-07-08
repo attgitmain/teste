@@ -1953,7 +1953,7 @@ async function handleDailyReport() {
           message +=
             "\n---\n\ud83d\udd14 Relat\u00f3rio enviado automaticamente pelo sistema Loopchat.";
 
-          const isGroup =
+const isGroup =
             numberSetting.value.includes("-") ||
             numberSetting.value.includes("@g.us");
 
@@ -1968,6 +1968,25 @@ async function handleDailyReport() {
             await ReportLogService.createLog({
               companyId: c.id,
               toNumber: numberSetting.value,
+              body: message,
+              success: false,
+              error: err.message
+            });
+            continue;
+          }
+
+          const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
+          try {
+            await SendMessage(
+              whatsapp,
+              {
+                number: sanitized,
+                body: message,
+                companyId: c.id
+              },
+              isGroup
+            );
+            
               body: message,
               success: false,
               error: err.message
