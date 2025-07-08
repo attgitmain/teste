@@ -1923,7 +1923,14 @@ async function handleDailyReport() {
         const currentHour = moment().tz("America/Sao_Paulo").format("HH");
         const today = moment().tz("America/Sao_Paulo").format("YYYY-MM-DD");
 
-        if (currentHour !== timeSetting.value || lastSetting.value === today) {
+        const currentHourInt = parseInt(currentHour, 10);
+        const timeSettingInt = parseInt(timeSetting.value, 10);
+
+        if (
+          isNaN(timeSettingInt) ||
+          currentHourInt !== timeSettingInt ||
+          lastSetting.value === today
+        ) {
           continue;
         }
 
