@@ -68,5 +68,28 @@ export default function normalizeLeadItem(item) {
     }
   }
 
+  // Normalize phones to always be an array of objects
+  if (Array.isArray(lead.telefones)) {
+    lead.telefones = lead.telefones.map(t => ({
+      numero: t.numero || t.telefone || t.celular || "",
+      tipo: t.tipo || t.operadora || "",
+      whatsapp: t.whatsapp || false
+    }));
+  } else if (lead.telefones && typeof lead.telefones === "object") {
+    lead.telefones = Object.values(lead.telefones).map(t => ({
+      numero: t.numero || t.telefone || t.celular || "",
+      tipo: t.tipo || t.operadora || "",
+      whatsapp: t.whatsapp || false
+    }));
+  } else if (Array.isArray(lead.celulares)) {
+    lead.telefones = lead.celulares.map(c => ({ numero: c, tipo: "Celular" }));
+  } else if (lead.telefone) {
+    lead.telefones = [{ numero: lead.telefone, tipo: "Fixo" }];
+  } else if (lead.celular) {
+    lead.telefones = [{ numero: lead.celular, tipo: "Celular" }];
+  } else {
+    lead.telefones = Array.isArray(lead.telefones) ? lead.telefones : [];
+  }
+
   return lead;
 }
