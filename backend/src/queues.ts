@@ -1954,39 +1954,58 @@ async function handleDailyReport() {
             "\n---\n\ud83d\udd14 Relat\u00f3rio enviado automaticamente pelo sistema Loopchat.";
 
 const isGroup =
-            numberSetting.value.includes("-") ||
-            numberSetting.value.includes("@g.us");
+  numberSetting.value.includes("-") ||
+  numberSetting.value.includes("@g.us");
 
-          let sanitized: string;
-          try {
-            sanitized = await CheckContactNumber(
-              numberSetting.value,
-              c.id,
-              isGroup
-            );
-          } catch (err: any) {
-            await ReportLogService.createLog({
-              companyId: c.id,
-              toNumber: numberSetting.value,
-              body: message,
-              success: false,
-              error: err.message
-            });
-            continue;
-          }
+let sanitized: string;
 
-          const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
-          try {
-            await SendMessage(
-              whatsapp,
-              {
-                number: sanitized,
-                body: message,
-                companyId: c.id
-              },
-              isGroup
-            );
-            
+try {
+  sanitized = await CheckContactNumber(
+    numberSetting.value,
+    c.id,
+    isGroup
+  );
+} catch (err: any) {
+  await ReportLogService.createLog({
+    companyId: c.id,
+    toNumber: numberSetting.value,
+    body: message,
+    success: false,
+    error: err.message
+  });
+  continue;
+}
+
+const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
+
+try {
+  await SendMessage(
+    whatsapp,
+    {
+      number: sanitized,
+      body: message,
+      companyId: c.id
+    },
+    isGroup
+  );
+  await ReportLogService.createLog({
+    companyId: c.id,
+    toNumber: numberSetting.value,
+    body: message,
+    success: true
+  });
+  await lastSetting.update({ value: today });
+} catch (sendErr: any) {
+  await ReportLogService.createLog({
+    companyId: c.id,
+    toNumber: numberSetting.value,
+    body: message,
+    success: false,
+    error: sendErr.message
+  });
+  throw sendErr;
+}
+
               body: message,
               success: false,
               error: err.message
