@@ -49,6 +49,7 @@ import Plan from "./models/Plan";
 import Setting from "./models/Setting";
 import DailyWhatsappReport from "./services/ReportService/DailyWhatsappReport";
 import * as ReportLogService from "./services/ReportService/ReportLogService";
+import CheckContactNumber from "./services/WbotServices/CheckNumber";
 
 const connection = process.env.REDIS_URI || "";
 const limiterMax = process.env.REDIS_OPT_LIMITER_MAX || 1;
@@ -1952,10 +1953,24 @@ async function handleDailyReport() {
           message +=
             "\n---\n\ud83d\udd14 Relat\u00f3rio enviado automaticamente pelo sistema Loopchat.";
 
+          let sanitized;
+          try {
+            sanitized = await CheckContactNumber(numberSetting.value, c.id);
+          } catch (err: any) {
+            await ReportLogService.createLog({
+              companyId: c.id,
+              toNumber: numberSetting.value,
+              body: message,
+              success: false,
+              error: err.message
+            });
+            continue;
+          }
+
           const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
           try {
             await SendMessage(whatsapp, {
-              number: numberSetting.value,
+              number: sanitized,
               body: message,
               companyId: c.id
             });
