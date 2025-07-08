@@ -57,8 +57,8 @@ as variáveis `API_TOKEN_CEP` e `API_TOKEN_CPF`. O frontend possui as variáveis
 mensagens de aviso ao usuário.
 
 Ao configurar relatórios diários, defina o `dailyReportNumber` com um número de
-WhatsApp válido. O sistema valida esse contato antes do envio e registra falhas
-caso o número esteja incorreto.
+WhatsApp válido (contato ou grupo). O sistema valida esse contato antes do
+envio e registra falhas caso o número esteja incorreto.
 
 ## Executando o backend
 
