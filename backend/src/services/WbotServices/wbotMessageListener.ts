@@ -4397,7 +4397,7 @@ const handleMessage = async (
         console.log("log... 3226");
         console.log("log... 3227", { ticketTraking});
         if (ticketTraking !== null && verifyRating(ticketTraking)) {
-          handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
+          await handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
           return;
         }
       }
