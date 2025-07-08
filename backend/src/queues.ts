@@ -1898,8 +1898,9 @@ async function handleInvoiceCreate() {
 }
 
 async function handleDailyReport() {
+  // execute once per hour and send the report when the configured hour matches
   const job = new CronJob(
-    "*/1 * * * *",
+    "0 0 * * * *",
     async () => {
       const companies = await Company.findAll({ where: { status: true } });
 
