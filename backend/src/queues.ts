@@ -3,7 +3,7 @@ import BullQueue from "bull";
 import { MessageData, SendMessage } from "./helpers/SendMessage";
 import Whatsapp from "./models/Whatsapp";
 import logger from "./utils/logger";
-import moment from "moment";
+import moment from "moment-timezone";
 import Schedule from "./models/Schedule";
 import { Op, QueryTypes, Sequelize } from "sequelize";
 import GetDefaultWhatsApp from "./helpers/GetDefaultWhatsApp";
@@ -1920,8 +1920,8 @@ async function handleDailyReport() {
 
         if (!numberSetting.value) continue;
 
-        const currentHour = moment().format("HH");
-        const today = moment().format("YYYY-MM-DD");
+        const currentHour = moment().tz("America/Sao_Paulo").format("HH");
+        const today = moment().tz("America/Sao_Paulo").format("YYYY-MM-DD");
 
         if (currentHour !== timeSetting.value || lastSetting.value === today) {
           continue;
