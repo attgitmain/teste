@@ -2006,41 +2006,6 @@ try {
   throw sendErr;
 }
 
-              body: message,
-              success: false,
-              error: err.message
-            });
-            continue;
-          }
-
-          const whatsapp = await GetDefaultWhatsApp(undefined, c.id);
-          try {
-            await SendMessage(
-              whatsapp,
-              {
-                number: sanitized,
-                body: message,
-                companyId: c.id
-              },
-              isGroup
-            );
-            await ReportLogService.createLog({
-              companyId: c.id,
-              toNumber: numberSetting.value,
-              body: message,
-              success: true
-            });
-            await lastSetting.update({ value: today });
-          } catch (sendErr: any) {
-            await ReportLogService.createLog({
-              companyId: c.id,
-              toNumber: numberSetting.value,
-              body: message,
-              success: false,
-              error: sendErr.message
-            });
-            throw sendErr;
-          }
         } catch (err: any) {
           Sentry.captureException(err);
           logger.error("DailyReport -> error", err.message);
