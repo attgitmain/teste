@@ -20,6 +20,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import ReactInputMask from "react-input-mask";
 import { CSVLink } from "react-csv";
 import html2pdf from "html2pdf.js";
+import * as XLSX from "xlsx";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
@@ -262,16 +263,22 @@ const Leads = () => {
   };
 
   const handleDownloadLoopchat = () => {
-    const content = results
-      .map((l) => `${l.dados_pessoais?.nome || ''};${l.dados_pessoais?.cpf || ''}`)
-      .join('\n');
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `leads-loopchat-${cep}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const rows = [];
+    results.forEach((lead) => {
+      const nome = lead.dados_pessoais?.nome || '';
+      const phones = Array.isArray(lead.telefones) ? lead.telefones : [];
+      if (phones.length === 0) {
+        rows.push({ Nome: nome, Numero: '' });
+      } else {
+        phones.forEach((tel) => {
+          rows.push({ Nome: nome, Numero: tel.numero });
+        });
+      }
+    });
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Leads');
+    XLSX.writeFile(wb, `leads-loopchat-${cep}.xlsx`);
     handleDownloadClose();
   };
 
