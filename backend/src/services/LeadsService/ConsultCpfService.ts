@@ -2,6 +2,11 @@ import axios from "axios";
 import AppError from "../../errors/AppError";
 import ConsumeCreditsService from "../CreditService/ConsumeCreditsService";
 
+const REQUEST_TIMEOUT = Math.max(
+  1000,
+  parseInt(process.env.REQUEST_TIMEOUT_MS || "30000", 10)
+);
+
 interface Request {
   cpf: string;
   companyId: number;
@@ -14,11 +19,6 @@ const ConsultCpfService = async ({ cpf, companyId, free = false }: Request) => {
     throw new AppError("Consulta por CPF em manutenção no momento", 503);
   }
   const url = `https://data.workbuscas.com/api/v1/${token}/cpf/${cpf}`;
-
-  const REQUEST_TIMEOUT = Math.max(
-    1000,
-    parseInt(process.env.REQUEST_TIMEOUT_MS || "30000", 10)
-  );
 
   const balance = await ConsumeCreditsService(companyId, free ? 0 : 3);
 
