@@ -45,11 +45,12 @@ app.set("queues", {
   sendScheduledMessages
 });
 
-// Permitir múltiplos domínios separados por vírgula em FRONTEND_URL
+// Permitir múltiplos domínios separados por vírgula em FRONTEND_URL.
+// Caso nenhuma origem seja definida, todas serão permitidas.
 const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(',').map(origin => origin.trim())
   : [];
-console.log('Allowed origins:', allowedOrigins);
+console.log('Allowed origins:', allowedOrigins.length ? allowedOrigins : 'all');
 
 // Configuração do BullBoard
 if (String(process.env.BULL_BOARD).toLocaleLowerCase() === 'true' && process.env.REDIS_URI_ACK !== '') {
@@ -82,7 +83,12 @@ app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 app.use(
   cors({
     credentials: true,
-    origin: allowedOrigins
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    }
   })
 );
 app.use(cookieParser());
