@@ -21,6 +21,10 @@ const CONCURRENCY = Math.max(
   parseInt(process.env.LEADS_CONCURRENCY || "5", 10)
 );
 const limit = pLimit(CONCURRENCY);
+const REQUEST_TIMEOUT = Math.max(
+  1000,
+  parseInt(process.env.REQUEST_TIMEOUT_MS || "30000", 10)
+);
 
 const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   const token = process.env.API_TOKEN_CEP;
@@ -31,10 +35,14 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
 
   let data: any;
   try {
-    ({ data } = await axios.get(url));
+    ({ data } = await axios.get(url, { timeout: REQUEST_TIMEOUT }));
   } catch (err: any) {
     const status = err.response?.status || 500;
-    const message = err.response?.data?.message || "Erro ao consultar CEP";
+    const defaultMessage =
+      err.code === "ECONNABORTED"
+        ? "Tempo limite excedido ao consultar CEP"
+        : "Erro ao consultar CEP";
+    const message = err.response?.data?.message || defaultMessage;
     throw new AppError(message, status);
   }
 
@@ -82,7 +90,10 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
             }
             if (Array.isArray(detail.celulares)) {
               phones = phones.concat(
-                detail.celulares.map((c: any) => ({ numero: c, tipo: "Celular" }))
+                detail.celulares.map((c: any) => ({
+                  numero: c,
+                  tipo: "Celular"
+                }))
               );
             }
             if (!phones.length && detail.telefone) {
