@@ -12,8 +12,14 @@ interface Request {
   page: number;
 }
 
-const PAGE_SIZE = 100;
-const CONCURRENCY = 5;
+const PAGE_SIZE = Math.max(
+  1,
+  parseInt(process.env.LEADS_PAGE_SIZE || "100", 10)
+);
+const CONCURRENCY = Math.max(
+  1,
+  parseInt(process.env.LEADS_CONCURRENCY || "5", 10)
+);
 const limit = pLimit(CONCURRENCY);
 
 const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
