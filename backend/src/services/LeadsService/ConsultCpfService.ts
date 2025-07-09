@@ -17,7 +17,8 @@ const ConsultCpfService = async ({ cpf, companyId, free = false }: Request) => {
 
   const REQUEST_TIMEOUT = Math.max(
     1000,
-    parseInt(process.env.REQUEST_TIMEOUT_MS || "30000", 10)
+    // Tempo limite para a consulta de CPF (padrão 90 segundos)
+    parseInt(process.env.REQUEST_TIMEOUT_MS || "90000", 10)
   );
 
   const balance = await ConsumeCreditsService(companyId, free ? 0 : 3);
