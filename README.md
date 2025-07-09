@@ -56,6 +56,15 @@ as variáveis `API_TOKEN_CEP` e `API_TOKEN_CPF`. O frontend possui as variáveis
 `REACT_APP_API_TOKEN_CEP` e `REACT_APP_API_TOKEN_CPF`, utilizadas apenas para
 mensagens de aviso ao usuário.
 
+Caso a extração de leads gere muitas requisições, é possível controlar a
+quantidade de dados processados definindo `LEADS_PAGE_SIZE` (número de leads por
+página) e `LEADS_CONCURRENCY` (quantas consultas de CPF ocorrem em paralelo) no
+`.env` do backend.
+
+Para evitar erros de CORS, configure `FRONTEND_URL` no backend com a URL
+do site que acessará a API, por exemplo `https://loopchat.com.br`. Se
+necessário, informe mais de um domínio separando-os por vírgula.
+
 Ao configurar relatórios diários, defina o `dailyReportNumber` com um número de
 WhatsApp válido (contato ou grupo). O sistema valida esse contato antes do
 envio e registra falhas caso o número esteja incorreto.
