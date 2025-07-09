@@ -343,7 +343,7 @@ const messages = {
                                         score: "Score",
                                 },
                                 creditsAvailable: "Available credits",
-                                creditInfo: "Each batch of 100 leads costs 1 credit",
+                                creditInfo: "Each batch of 25 leads costs 1 credit",
                                 cpfCreditInfo: "Each CPF lookup costs 3 credits",
                                 addCredits: "Add credits",
                                 historyCleared: "History cleared successfully",

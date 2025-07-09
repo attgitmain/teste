@@ -14,7 +14,7 @@ interface Request {
 
 const PAGE_SIZE = Math.max(
   1,
-  parseInt(process.env.LEADS_PAGE_SIZE || "100", 10)
+  parseInt(process.env.LEADS_PAGE_SIZE || "25", 10)
 );
 const CONCURRENCY = Math.max(
   1,
