@@ -45,7 +45,10 @@ app.set("queues", {
   sendScheduledMessages
 });
 
-const allowedOrigins = [process.env.FRONTEND_URL];
+// Permitir múltiplos domínios separados por vírgula em FRONTEND_URL
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map(origin => origin.trim())
+  : [];
 
 // Configuração do BullBoard
 if (String(process.env.BULL_BOARD).toLocaleLowerCase() === 'true' && process.env.REDIS_URI_ACK !== '') {
