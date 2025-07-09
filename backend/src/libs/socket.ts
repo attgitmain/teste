@@ -8,9 +8,12 @@ import User from "../models/User";
 let io: SocketIO;
 
 export const initIO = (httpServer: Server): SocketIO => {
+  const origins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
+    : [];
   io = new SocketIO(httpServer, {
     cors: {
-      origin: process.env.FRONTEND_URL
+      origin: origins
     }
   });
 

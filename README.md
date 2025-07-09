@@ -61,6 +61,10 @@ quantidade de dados processados definindo `LEADS_PAGE_SIZE` (número de leads po
 página) e `LEADS_CONCURRENCY` (quantas consultas de CPF ocorrem em paralelo) no
 `.env` do backend.
 
+Para evitar erros de CORS, configure `FRONTEND_URL` no backend com a URL
+do site que acessará a API, por exemplo `https://loopchat.com.br`. Se
+necessário, informe mais de um domínio separando-os por vírgula.
+
 Ao configurar relatórios diários, defina o `dailyReportNumber` com um número de
 WhatsApp válido (contato ou grupo). O sistema valida esse contato antes do
 envio e registra falhas caso o número esteja incorreto.
