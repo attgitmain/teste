@@ -11,9 +11,21 @@ export const initIO = (httpServer: Server): SocketIO => {
   const origins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
     : [];
+
+  console.log(
+    'Socket allowed origins:',
+    origins.length ? origins : 'all'
+  );
+
   io = new SocketIO(httpServer, {
     cors: {
-      origin: origins
+      credentials: true,
+      origin: (origin, callback) => {
+        if (!origin || origins.length === 0 || origins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+      }
     }
   });
 
