@@ -611,7 +611,7 @@ const Leads = () => {
                 onClick={handleLoadMore}
                 disabled={loadingMore}
               >
-                {loadingMore ? <CircularProgress size={20} /> : "+100"}
+                {loadingMore ? <CircularProgress size={20} /> : "+25"}
               </Button>
             )}
           </div>
@@ -627,5 +627,4 @@ const Leads = () => {
     </MainContainer>
   );
 };
-
 export default Leads;

@@ -58,8 +58,8 @@ mensagens de aviso ao usuário.
 
 Caso a extração de leads gere muitas requisições, é possível controlar a
 quantidade de dados processados definindo `LEADS_PAGE_SIZE` (número de leads por
-página) e `LEADS_CONCURRENCY` (quantas consultas de CPF ocorrem em paralelo) no
-`.env` do backend.
+página, padrão 25) e `LEADS_CONCURRENCY` (quantas consultas de CPF ocorrem em
+paralelo) no `.env` do backend.
 
 Para evitar erros de CORS, configure `FRONTEND_URL` no backend com a URL
 do site que acessará a API, por exemplo `https://loopchat.com.br`. Se
