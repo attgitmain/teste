@@ -38,6 +38,7 @@ import { Chip, Tooltip } from "@material-ui/core";
 import { AuthContext } from "../../context/Auth/AuthContext";
 import { MoreHoriz } from "@material-ui/icons";
 import ContactTagListModal from "../../components/ContactTagListModal";
+import ForbiddenPage from "../../components/ForbiddenPage";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -186,6 +187,8 @@ const Tags = () => {
   };
 
   return (
+    user.profile === "user" && user.allowTags === "disabled" ?
+      <ForbiddenPage /> :
     <MainContainer className={classes.mainContainer}>
       {contactModalOpen && (
         <ContactTagListModal
