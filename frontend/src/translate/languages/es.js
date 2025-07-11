@@ -385,6 +385,7 @@ const messages = {
           name: "Nombre",
           whatsapp: "WhatsApp",
           email: "Correo Electrónico",
+          matricula: "Matrícula",
           actions: "Acciones",
           lastMessage: "Ultimo Mensaje",
         },
@@ -452,6 +453,7 @@ const messages = {
           name: "Nombre",
           number: "Número de Whatsapp",
           email: "Correo Electrónico",
+          matricula: "Matrícula",
           extraName: "Nombre del Campo",
           extraValue: "Valor",
           chatBotContact: "Desactivar chatbot para este contacto",
@@ -1038,6 +1040,7 @@ const messages = {
           number: "Número",
           whatsapp: "Whatsapp",
           email: "Correo electrónico",
+          matricula: "Matrícula",
           actions: "Acciones",
         },
         confirmationModal: {
@@ -1603,6 +1606,7 @@ const messages = {
         vars: {
           contactFirstName: "Primer Nombre",
           contactName: "Nombre",
+          matricula: "Matrícula",
           user: "Agente",
           greeting: "Saludos",
           protocolNumber: "Protocolo",

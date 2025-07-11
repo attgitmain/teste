@@ -35,6 +35,9 @@ class ContactListItem extends Model<ContactListItem> {
   email: string;
 
   @Column
+  matricula: string;
+
+  @Column
   isWhatsappValid: boolean;
 
   @CreatedAt

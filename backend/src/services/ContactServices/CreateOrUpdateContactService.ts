@@ -21,6 +21,7 @@ interface Request {
   number: string;
   isGroup: boolean;
   email?: string;
+  matricula?: string;
   profilePicUrl?: string;
   companyId: number;
   channel?: string;
@@ -155,6 +156,7 @@ const CreateOrUpdateContactService = async ({
         name,
         number,
         email,
+        matricula,
         isGroup,
         companyId,
         channel,
@@ -171,6 +173,7 @@ const CreateOrUpdateContactService = async ({
         name,
         number,
         email,
+        matricula,
         isGroup,
         companyId,
         channel,

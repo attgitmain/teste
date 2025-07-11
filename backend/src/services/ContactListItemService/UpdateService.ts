@@ -8,10 +8,11 @@ interface Data {
   name: string;
   number: string;
   email?: string;
+  matricula?: string;
 }
 
 const UpdateService = async (data: Data): Promise<ContactListItem> => {
-  const { id, name, number, email } = data;
+  const { id, name, number, email, matricula } = data;
 
   const record = await ContactListItem.findByPk(id);
 
@@ -22,7 +23,8 @@ const UpdateService = async (data: Data): Promise<ContactListItem> => {
   await record.update({
     name,
     number,
-    email
+    email,
+    matricula
   });
 
   try {
