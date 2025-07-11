@@ -10,6 +10,7 @@ interface Request {
   companyId: number;
   userId: number;
   page: number;
+  fetchPhones?: boolean;
 }
 
 const PAGE_SIZE = Math.max(
@@ -23,11 +24,17 @@ const CONCURRENCY = Math.max(
 const limit = pLimit(CONCURRENCY);
 const REQUEST_TIMEOUT = Math.max(
   1000,
-  // Tempo limite para as requisições à Work API (padrão 90 segundos)
-  parseInt(process.env.REQUEST_TIMEOUT_MS || "90000", 10)
+  // Tempo limite para as requisições à Work API (padrão 60 segundos)
+  parseInt(process.env.REQUEST_TIMEOUT_MS || "60000", 10)
 );
 
-const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
+const ConsultCepService = async ({
+  cep,
+  companyId,
+  userId,
+  page,
+  fetchPhones
+}: Request) => {
   const token = process.env.API_TOKEN_CEP;
   if (!token) {
     console.log("🚫 Token da API não encontrado.");
@@ -83,50 +90,64 @@ const ConsultCepService = async ({ cep, companyId, userId, page }: Request) => {
   const start = (page - 1) * PAGE_SIZE;
   const slice = freshLeads.slice(start, start + PAGE_SIZE);
   console.log(`📦 Página ${page}: ${slice.length} leads para retornar.`);
+  const shouldFetchPhones =
+    typeof fetchPhones === "boolean" ? fetchPhones : page <= 2;
+  console.log(`📞 Buscar telefones nesta página: ${shouldFetchPhones}`);
 
   if (slice.length > 0) {
     console.log(`💳 Consumindo crédito para a empresa ${companyId}`);
     const balance = await ConsumeCreditsService(companyId, 1);
 
-    // Enrich each lead with phone numbers from CPF lookup
-    await Promise.all(
-      slice.map(lead =>
-        limit(async () => {
-          try {
-            console.log(`🔍 Buscando telefones do CPF: ${lead.dados_pessoais.cpf}`);
-            const { data } = await ConsultCpfService({
-              cpf: lead.dados_pessoais.cpf,
-              companyId,
-              free: true
-            });
-            const detail = data?.data || data;
-            let phones: any[] = [];
-            if (Array.isArray(detail.telefones)) {
-              phones = detail.telefones.map((tel: any) => ({
-                numero: tel.numero || tel.telefone || "",
-                tipo: tel.tipo || tel.operadora || "",
-                whatsapp: tel.whatsapp || false
-              }));
-            }
-            if (Array.isArray(detail.celulares)) {
-              phones = phones.concat(
-                detail.celulares.map((c: any) => ({
-                  numero: c,
-                  tipo: "Celular"
-                }))
+    if (shouldFetchPhones) {
+      // Enrich each lead with phone numbers from CPF lookup
+      await Promise.all(
+        slice.map(lead =>
+          limit(async () => {
+            const cpf = lead.dados_pessoais.cpf;
+            const startTime = Date.now();
+            try {
+              console.log(`🔍 Buscando telefones do CPF: ${cpf}`);
+              const { data } = await ConsultCpfService({
+                cpf,
+                companyId,
+                free: true
+              });
+              const detail = data?.data || data;
+              let phones: any[] = [];
+              if (Array.isArray(detail.telefones)) {
+                phones = detail.telefones.map((tel: any) => ({
+                  numero: tel.numero || tel.telefone || "",
+                  tipo: tel.tipo || tel.operadora || "",
+                  whatsapp: tel.whatsapp || false
+                }));
+              }
+              if (Array.isArray(detail.celulares)) {
+                phones = phones.concat(
+                  detail.celulares.map((c: any) => ({
+                    numero: c,
+                    tipo: "Celular"
+                  }))
+                );
+              }
+              if (!phones.length && detail.telefone) {
+                phones.push({ numero: detail.telefone, tipo: "Fixo" });
+              }
+              lead.telefones = phones;
+              console.log(
+                `✅ Telefones do CPF ${cpf} obtidos em ${Date.now() - startTime}ms`
               );
+            } catch (err) {
+              console.warn(`⚠️ Falha ao buscar telefones para CPF: ${cpf}`);
+              lead.telefones = [];
             }
-            if (!phones.length && detail.telefone) {
-              phones.push({ numero: detail.telefone, tipo: "Fixo" });
-            }
-            lead.telefones = phones;
-          } catch (err) {
-            console.warn(`⚠️ Falha ao buscar telefones para CPF: ${lead.dados_pessoais.cpf}`);
-            lead.telefones = [];
-          }
-        })
-      )
-    );
+          })
+        )
+      );
+    } else {
+      slice.forEach(lead => {
+        lead.telefones = [];
+      });
+    }
 
     await LeadView.bulkCreate(
       slice.map((l: any) => ({
