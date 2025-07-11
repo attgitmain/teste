@@ -311,7 +311,9 @@ const Leads = () => {
     const next = pageApi + 1;
     setLoadingMore(true);
     try {
-      const { data } = await api.get(`/consult/cep/${cep}?page=${next}`);
+      const { data } = await api.get(
+        `/consult/cep/${cep}?page=${next}&phones=true`
+      );
       const leads = (data.leads || []).map(normalizeLeadItem);
       setResults((prev) => [...prev, ...leads]);
       setHasMore(data.hasMore);

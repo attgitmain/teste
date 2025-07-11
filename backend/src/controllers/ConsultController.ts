@@ -7,12 +7,14 @@ export const consultCep = async (req: Request, res: Response): Promise<Response>
   const { cep } = req.params;
   const { companyId, id } = req.user;
   const page = parseInt(req.query.page as string) || 1;
+  const fetchPhones = req.query.phones === "true";
 
   const result = await ConsultCepService({
     cep,
     companyId,
     userId: parseInt(id),
-    page
+    page,
+    fetchPhones
   });
 
   return res.status(200).json(result);
