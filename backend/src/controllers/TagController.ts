@@ -104,7 +104,11 @@ export const remove = async (
   res: Response
 ): Promise<Response> => {
   const { tagId } = req.params;
-  const { companyId } = req.user;
+  const { companyId, profile } = req.user;
+
+  if (profile !== "admin") {
+    throw new AppError("ERR_NO_PERMISSION", 403);
+  }
 
   await DeleteService(tagId);
 
