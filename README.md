@@ -62,10 +62,8 @@ página, padrão 25) e `LEADS_CONCURRENCY` (quantas consultas de CPF ocorrem em
 paralelo) no `.env` do backend. Se as consultas demorarem muito, ajuste também
 `REQUEST_TIMEOUT_MS`, definido em milissegundos (padrão 60000).
 
-Ao chamar `GET /consult/cep/:cep` é possível controlar se os telefones devem ser
-buscados enviando o parâmetro de consulta `phones=true`. Para as páginas 1 e 2
-os telefones são retornados por padrão; nas demais páginas utilize esse
-parâmetro quando realmente quiser carregá-los.
+Ao chamar `GET /consult/cep/:cep` os telefones são buscados por padrão em todos
+os resultados. Caso não queira carregá-los, envie `phones=false` na consulta.
 
 Para evitar erros de CORS, configure `FRONTEND_URL` no backend com a URL
 do site que acessará a API, por exemplo `https://loopchat.com.br`. Se
