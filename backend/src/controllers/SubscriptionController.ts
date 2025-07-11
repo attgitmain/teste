@@ -37,12 +37,11 @@ export const createSubscription = async (
   let asaasURL;
   // let key_STRIPE_PRIVATE = process.env.STRIPE_PRIVATE;
   // let key_MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
-  // let key_GERENCIANET_PIX_KEY = process.env.GERENCIANET_PIX_KEY;
   // let key_ASAAS_TOKEN = process.env.ASAAS_TOKEN;
 
   let key_STRIPE_PRIVATE = null;
   let key_MP_ACCESS_TOKEN = null;
-  let key_GERENCIANET_PIX_KEY = null;
+  let key_GERENCIANET_PIX_KEY = process.env.GERENCIANET_PIX_KEY || null;
   let key_ASAAS_TOKEN = null;
 
   try {
@@ -64,13 +63,6 @@ export const createSubscription = async (
     });
     key_STRIPE_PRIVATE = getstripetoken?.value;
   
-    const getpixchave = await Setting.findOne({
-      where: { companyId: buscacompanyId, key: "efichavepix" },
-    });
-    key_GERENCIANET_PIX_KEY = getpixchave?.value;
-
-
-
   } catch (error) {
     console.error("Error retrieving settings:", error);
   }

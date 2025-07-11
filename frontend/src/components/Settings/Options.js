@@ -105,15 +105,6 @@ export default function Options(props) {
   const [loadingAcceptAudioMessageContact, setLoadingAcceptAudioMessageContact] = useState(false);
 
   //PAYMENT METHODS
-  const [eficlientidType, setEfiClientidType] = useState('');
-  const [loadingEfiClientidType, setLoadingEfiClientidType] = useState(false);
-
-  const [eficlientsecretType, setEfiClientsecretType] = useState('');
-  const [loadingEfiClientsecretType, setLoadingEfiClientsecretType] =
-    useState(false);
-
-  const [efichavepixType, setEfiChavepixType] = useState('');
-  const [loadingEfiChavepixType, setLoadingEfiChavepixType] = useState(false);
 
   const [mpaccesstokenType, setmpaccesstokenType] = useState('');
   const [loadingmpaccesstokenType, setLoadingmpaccesstokenType] =
@@ -186,9 +177,6 @@ export default function Options(props) {
 
   const { update: updatedownloadLimit } = useSettings();
 
-  const { update: updateeficlientid } = useSettings();
-  const { update: updateeficlientsecret } = useSettings();
-  const { update: updateefichavepix } = useSettings();
   const { update: updatempaccesstoken } = useSettings();
   const { update: updatestripeprivatekey } = useSettings();
   const { update: updateasaastoken } = useSettings();
@@ -217,22 +205,6 @@ export default function Options(props) {
        setdownloadLimit(downloadLimit.value);
       }
 
-      const eficlientidType = oldSettings.find((s) => s.key === 'eficlientid');
-      if (eficlientidType) {
-        setEfiClientidType(eficlientidType.value);
-      }
-
-      const eficlientsecretType = oldSettings.find(
-        (s) => s.key === 'eficlientsecret'
-      );
-      if (eficlientsecretType) {
-        setEfiClientsecretType(eficlientsecretType.value);
-      }
-
-      const efichavepixType = oldSettings.find((s) => s.key === 'efichavepix');
-      if (efichavepixType) {
-        setEfiChavepixType(efichavepixType.value);
-      }
 
       const mpaccesstokenType = oldSettings.find((s) => s.key === 'mpaccesstoken');
       if (mpaccesstokenType) {
@@ -309,38 +281,6 @@ export default function Options(props) {
     setLoadingdownloadLimit(false);
   }
 
-  async function handleChangeEfiClientid(value) {
-    setEfiClientidType(value);
-    setLoadingEfiClientidType(true);
-    await updateeficlientid({
-      key: 'eficlientid',
-      value,
-    });
-    toast.success('Operação atualizada com sucesso.');
-    setLoadingEfiClientidType(false);
-  }
-
-  async function handleChangeEfiClientsecret(value) {
-    setEfiClientsecretType(value);
-    setLoadingEfiClientsecretType(true);
-    await updateeficlientsecret({
-      key: 'eficlientsecret',
-      value,
-    });
-    toast.success('Operação atualizada com sucesso.');
-    setLoadingEfiClientsecretType(false);
-  }
-
-  async function handleChangeEfiChavepix(value) {
-    setEfiChavepixType(value);
-    setLoadingEfiChavepixType(true);
-    await updateefichavepix({
-      key: 'efichavepix',
-      value,
-    });
-    toast.success('Operação atualizada com sucesso.');
-    setLoadingEfiChavepixType(false);
-  }
 
   async function handleChangempaccesstoken(value) {
     setmpaccesstokenType(value);
@@ -1240,84 +1180,6 @@ export default function Options(props) {
       
       <Grid spacing={3} container>
       {isSuper() ?
-              <Tabs
-                indicatorColor='primary'
-                textColor='primary'
-                scrollButtons='on'
-                variant='scrollable'
-                className={classes.tab}
-                style={{
-                  marginBottom: 20,
-                  marginTop: 20,
-                }}
-              >
-                <Tab label='Configuração Pix Efí (GerenciaNet)' />
-              </Tabs>
-              : null}
-            </Grid>
-            
-            <Grid spacing={3} container style={{ marginBottom: 10 }}>
-              <Grid xs={12} sm={6} md={6} item>
-              {isSuper() ?
-                <FormControl className={classes.selectContainer}>
-                  <TextField
-                    id='eficlientid'
-                    name='eficlientid'
-                    margin='dense'
-                    label='Client ID'
-                    variant='outlined'
-                    value={eficlientidType}
-                    onChange={async (e) => {
-                      handleChangeEfiClientid(e.target.value);
-                    }}
-                  ></TextField>
-                  <FormHelperText>
-                    {loadingEfiClientidType && 'Atualizando...'}
-                  </FormHelperText>
-                </FormControl>
-                : null}
-              </Grid>
-              <Grid xs={12} sm={6} md={6} item>
-              {isSuper() ?
-                <FormControl className={classes.selectContainer}>
-                  <TextField
-                    id='eficlientsecret'
-                    name='eficlientsecret'
-                    margin='dense'
-                    label='Client Secret'
-                    variant='outlined'
-                    value={eficlientsecretType}
-                    onChange={async (e) => {
-                      handleChangeEfiClientsecret(e.target.value);
-                    }}
-                  ></TextField>
-                  <FormHelperText>
-                    {loadingEfiClientsecretType && 'Atualizando...'}
-                  </FormHelperText>
-                </FormControl>
-                : null}
-              </Grid>
-              <Grid xs={12} sm={12} md={12} item>
-              {isSuper() ?
-                <FormControl className={classes.selectContainer}>
-                  <TextField
-                    id='efichavepix'
-                    name='efichavepix'
-                    margin='dense'
-                    label='Chave PIX'
-                    variant='outlined'
-                    value={efichavepixType}
-                    onChange={async (e) => {
-                      handleChangeEfiChavepix(e.target.value);
-                    }}
-                  ></TextField>
-                  <FormHelperText>
-                    {loadingEfiChavepixType && 'Atualizando...'}
-                  </FormHelperText>
-                </FormControl>
-                : null}
-              </Grid>
-            </Grid>
 
             <Grid spacing={3} container>
             {isSuper() ?

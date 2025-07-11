@@ -16,27 +16,6 @@ module.exports = {
                             updatedAt: new Date()
                         },
                     	{
-                            key: "efichavepix",
-                            value: "",
-                            companyId: 1,
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        },
-                        {
-                            key: "eficlientid",
-                            value: "",
-                            companyId: 1,
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        },
-                        {
-                            key: "eficlientsecret",
-                            value: "",
-                            companyId: 1,
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        },
-                    	{
                             key: "mpaccesstoken",
                             value: "",
                             companyId: 1,
