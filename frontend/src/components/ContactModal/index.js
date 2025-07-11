@@ -62,7 +62,7 @@ const ContactSchema = Yup.object().shape({
                 .required("Required"),
         number: Yup.string().min(8, "Too Short!").max(50, "Too Long!"),
         email: Yup.string().email("Invalid email"),
-        matricula: Yup.string(),
+        matricula: Yup.string().nullable(),
 });
 
 const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
