@@ -13,9 +13,8 @@ import SimpleListService from "../services/UserServices/SimpleListService";
 import CreateCompanyService from "../services/CompanyService/CreateCompanyService";
 import { SendMail } from "../helpers/SendMail";
 import { useDate } from "../utils/useDate";
-import ShowCompanyService from "../services/CompanyService/ShowCompanyService";
 import { getWbot } from "../libs/wbot";
-import FindCompaniesWhatsappService from "../services/CompanyService/FindCompaniesWhatsappService";
+import GetDefaultWhatsApp from "../helpers/GetDefaultWhatsApp";
 import User from "../models/User";
 
 import { head } from "lodash";
@@ -142,12 +141,10 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     }
 
     try {
-      const company = await ShowCompanyService(1);
-      const whatsappCompany = await FindCompaniesWhatsappService(company.id)
+      const whatsapp = await GetDefaultWhatsApp(undefined, 1);
 
-      if (whatsappCompany.whatsapps[0].status === "CONNECTED") {
-        const whatsappId = whatsappCompany.whatsapps[0].id;
-        const wbot = getWbot(whatsappId);
+      if (whatsapp.status === "CONNECTED") {
+        const wbot = getWbot(whatsapp.id);
 
         const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`;
 
