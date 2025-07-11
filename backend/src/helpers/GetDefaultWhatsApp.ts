@@ -7,44 +7,34 @@ const GetDefaultWhatsApp = async (
   companyId: number | null = null,
   userId?: number
 ): Promise<Whatsapp> => {
-  let connection: Whatsapp;
-  let defaultWhatsapp = null;
+  let connection: Whatsapp | null = null;
 
-  console.log({ whatsappId, companyId, userId })
-  
+  console.log({ whatsappId, companyId, userId });
+
   if (whatsappId) {
-    defaultWhatsapp = await Whatsapp.findOne({
-      where: { id: whatsappId, companyId }
-    });
-  } else {
-    defaultWhatsapp = await Whatsapp.findOne({
-      where: { status: "CONNECTED", companyId, isDefault: true }
+    connection = await Whatsapp.findOne({
+      where: { id: whatsappId, companyId, status: "CONNECTED" }
     });
   }
 
+  if (!connection) {
+    connection = await Whatsapp.findOne({
+      where: { isDefault: true, status: "CONNECTED", companyId }
+    });
+  }
 
-  if (defaultWhatsapp?.status === 'CONNECTED') {
-    connection = defaultWhatsapp;
-  } else {
-    const whatsapp = await Whatsapp.findOne({
+  if (!connection) {
+    connection = await Whatsapp.findOne({
       where: { status: "CONNECTED", companyId }
     });
-    connection = whatsapp;
   }
 
-  
   if (userId) {
     const whatsappByUser = await GetDefaultWhatsAppByUser(userId);
-    if (whatsappByUser?.status === 'CONNECTED') {
+    if (whatsappByUser?.status === "CONNECTED") {
       connection = whatsappByUser;
-    } else {
-      const whatsapp = await Whatsapp.findOne({
-        where: { status: "CONNECTED", companyId }
-      });
-      connection = whatsapp;
     }
   }
-
 
   if (!connection) {
     throw new AppError(`ERR_NO_DEF_WAPP_FOUND in COMPANY ${companyId}`);

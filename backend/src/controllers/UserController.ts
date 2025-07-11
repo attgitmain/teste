@@ -142,6 +142,13 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
     try {
       const whatsapp = await GetDefaultWhatsApp(undefined, 1);
+      console.log(
+        "Default WAPP:",
+        whatsapp.id,
+        whatsapp.number,
+        "status:",
+        whatsapp.status
+      );
 
       if (whatsapp.status === "CONNECTED") {
         const wbot = getWbot(whatsapp.id);
@@ -149,16 +156,26 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
         const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`;
 
         if (phone !== undefined && !isNil(phone) && !isEmpty(phone)) {
-          await wbot.sendMessage(`55${phone}@s.whatsapp.net`, { text: body });
+          const onlyDigits = phone.replace(/\D/g, "");
+          const jid = `${onlyDigits}@s.whatsapp.net`;
+          console.log("Enviando mensagem para JID =", jid);
+          await wbot
+            .sendMessage(jid, { text: body })
+            .catch(() => wbot.sendMessage(`${onlyDigits}@c.us`, { text: body }));
         }
 
         const adminPhone = process.env.ADMIN_PHONE;
         if (adminPhone && !isEmpty(adminPhone)) {
-          await wbot.sendMessage(`55${adminPhone}@s.whatsapp.net`, { text: body });
+          const onlyDigitsAdmin = adminPhone.replace(/\D/g, "");
+          await wbot
+            .sendMessage(`${onlyDigitsAdmin}@s.whatsapp.net`, { text: body })
+            .catch(() =>
+              wbot.sendMessage(`${onlyDigitsAdmin}@c.us`, { text: body })
+            );
         }
       }
     } catch (error) {
-      console.log('Não consegui enviar a mensagem')
+      console.log('Não consegui enviar a mensagem');
     }
 
     return res.status(200).json(user);
