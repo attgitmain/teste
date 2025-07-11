@@ -9,7 +9,7 @@ import { isNil } from "lodash";
 import Whatsapp from "../../models/Whatsapp";
 import * as Sentry from "@sentry/node";
 
-const axios = require('axios');
+const axios = require("axios");
 
 interface ExtraInfo extends ContactCustomField {
   name: string;
@@ -34,12 +34,19 @@ interface Request {
 const downloadProfileImage = async ({
   profilePicUrl,
   companyId,
-  contact
-}) => {
-  const publicFolder = path.resolve(__dirname, "..", "..", "..", "public");
-  let filename;
-
-
+  contact,
+}: {
+  profilePicUrl: string;
+  companyId: number;
+  contact: Contact;
+}): Promise<string> => {
+  const publicFolder = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "public"
+  );
   const folder = path.resolve(publicFolder, `company${companyId}`, "contacts");
 
   if (!fs.existsSync(folder)) {
@@ -48,20 +55,18 @@ const downloadProfileImage = async ({
   }
 
   try {
-
     const response = await axios.get(profilePicUrl, {
-      responseType: 'arraybuffer'
+      responseType: "arraybuffer",
     });
 
-    filename = `${new Date().getTime()}.jpeg`;
+    const filename = `${Date.now()}.jpeg`;
     fs.writeFileSync(join(folder, filename), response.data);
-
+    return filename;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return "";
   }
-
-  return filename
-}
+};
 
 const CreateOrUpdateContactService = async ({
   name,
@@ -69,57 +74,73 @@ const CreateOrUpdateContactService = async ({
   profilePicUrl,
   isGroup,
   email = "",
+  matricula = "",
   channel = "whatsapp",
   companyId,
   extraInfo = [],
   remoteJid = "",
   whatsappId,
-  wbot
+  wbot,
 }: Request): Promise<Contact> => {
   try {
     let createContact = false;
-    const publicFolder = path.resolve(__dirname, "..", "..", "..", "public");
-    const number = isGroup ? rawNumber : rawNumber.replace(/[^0-9]/g, "");
+    const publicFolder = path.resolve(
+      __dirname,
+      "..",
+      "..",
+      "..",
+      "public"
+    );
+    const number = isGroup
+      ? rawNumber
+      : rawNumber.replace(/[^0-9]/g, "");
     const io = getIO();
     let contact: Contact | null;
 
     contact = await Contact.findOne({
-      where: { number, companyId }
+      where: { number, companyId },
     });
 
-    let updateImage = (!contact || contact?.profilePicUrl !== profilePicUrl && profilePicUrl !== "") && wbot || false;
-
-    console.log(93, "CreateUpdateContactService", { updateImage })
+    let updateImage =
+      ((!contact ||
+        (contact.profilePicUrl !== profilePicUrl &&
+          profilePicUrl !== "")) &&
+        !!wbot) ||
+      false;
 
     if (contact) {
+      // --- update existing ---
       contact.remoteJid = remoteJid;
       contact.profilePicUrl = profilePicUrl || null;
       contact.isGroup = isGroup;
+
       if (isNil(contact.whatsappId)) {
         const whatsapp = await Whatsapp.findOne({
-          where: { id: whatsappId, companyId }
+          where: { id: whatsappId, companyId },
         });
-
-        console.log(104, "CreateUpdateContactService")
-
         if (whatsapp) {
           contact.whatsappId = whatsappId;
         }
       }
-      const folder = path.resolve(publicFolder, `company${companyId}`, "contacts");
 
-      let fileName, oldPath = "";
+      // download new picture if needed
+      const folder = path.resolve(
+        publicFolder,
+        `company${companyId}`,
+        "contacts"
+      );
+      let fileName = "";
       if (contact.urlPicture) {
-        console.log(114, "CreateUpdateContactService")
-
-        oldPath = path.resolve(contact.urlPicture.replace(/\\/g, '/'));
-        fileName = path.join(folder, oldPath.split('\\').pop());
+        const oldPath = contact.urlPicture.replace(/\\/g, "/");
+        fileName = path.join(folder, oldPath.split("/").pop() || "");
       }
       if (!fs.existsSync(fileName) || contact.profilePicUrl === "") {
-        if (wbot && ['whatsapp'].includes(channel)) {
+        if (wbot && channel === "whatsapp") {
           try {
-            console.log(120, "CreateUpdateContactService")
-            profilePicUrl = await wbot.profilePictureUrl(remoteJid, "image");
+            profilePicUrl = await wbot.profilePictureUrl(
+              remoteJid,
+              "image"
+            );
           } catch (e) {
             Sentry.captureException(e);
             profilePicUrl = `${process.env.FRONTEND_URL}/nopicture.png`;
@@ -133,20 +154,26 @@ const CreateOrUpdateContactService = async ({
         contact.name = name;
       }
 
-      await contact.save(); // Ensure save() is called to trigger updatedAt
+      await contact.save();
       await contact.reload();
-
-    } else if (wbot && ['whatsapp'].includes(channel)) {
-      const settings = await CompaniesSettings.findOne({ where: { companyId } });
-      const { acceptAudioMessageContact } = settings;
-      let newRemoteJid = remoteJid;
-
-      if (!remoteJid && remoteJid !== "") {
-        newRemoteJid = isGroup ? `${rawNumber}@g.us` : `${rawNumber}@s.whatsapp.net`;
-      }
+    } else if (wbot && channel === "whatsapp") {
+      // --- create new whatsapp contact ---
+      const settings = await CompaniesSettings.findOne({
+        where: { companyId },
+      });
+      const { acceptAudioMessageContact } = settings || {};
+      let newRemoteJid =
+        remoteJid && remoteJid !== ""
+          ? remoteJid
+          : isGroup
+          ? `${rawNumber}@g.us`
+          : `${rawNumber}@s.whatsapp.net`;
 
       try {
-        profilePicUrl = await wbot.profilePictureUrl(remoteJid, "image");
+        profilePicUrl = await wbot.profilePictureUrl(
+          newRemoteJid,
+          "image"
+        );
       } catch (e) {
         Sentry.captureException(e);
         profilePicUrl = `${process.env.FRONTEND_URL}/nopicture.png`;
@@ -160,15 +187,19 @@ const CreateOrUpdateContactService = async ({
         isGroup,
         companyId,
         channel,
-        acceptAudioMessage: acceptAudioMessageContact === 'enabled' ? true : false,
+        acceptAudioMessage:
+          acceptAudioMessageContact === "enabled",
         remoteJid: newRemoteJid,
         profilePicUrl,
         urlPicture: "",
-        whatsappId
+        whatsappId,
       });
 
       createContact = true;
-    } else if (['facebook', 'instagram'].includes(channel)) {
+    } else if (
+      ["facebook", "instagram"].includes(channel || "")
+    ) {
+      // --- create new social contact ---
       contact = await Contact.create({
         name,
         number,
@@ -179,65 +210,33 @@ const CreateOrUpdateContactService = async ({
         channel,
         profilePicUrl,
         urlPicture: "",
-        whatsappId
+        whatsappId,
       });
+      createContact = true;
     }
 
-
-
+    // download and attach remote image if flagged
     if (updateImage) {
-
-
-      let filename;
-
-      filename = await downloadProfileImage({
-        profilePicUrl,
+      const filename = await downloadProfileImage({
+        profilePicUrl: contact.profilePicUrl!,
         companyId,
-        contact
-      })
-
-
+        contact,
+      });
       await contact.update({
         urlPicture: filename,
-        pictureUpdated: true
+        pictureUpdated: true,
       });
-
       await contact.reload();
-    } else {
-      if (['facebook', 'instagram'].includes(channel)) {
-        let filename;
+    }
 
-        filename = await downloadProfileImage({
-          profilePicUrl,
-          companyId,
-          contact
-        })
-
-
-        await contact.update({
-          urlPicture: filename,
-          pictureUpdated: true
-        });
-
-        await contact.reload();
+    // emit socket event
+    io.of(String(companyId)).emit(
+      `company-${companyId}-contact`,
+      {
+        action: createContact ? "create" : "update",
+        contact,
       }
-    }
-
-    if (createContact) {
-      io.of(String(companyId))
-        .emit(`company-${companyId}-contact`, {
-          action: "create",
-          contact
-        });
-    } else {
-      
-      io.of(String(companyId))
-        .emit(`company-${companyId}-contact`, {
-          action: "update",
-          contact
-        });
-        
-    }
+    );
 
     return contact;
   } catch (err) {
