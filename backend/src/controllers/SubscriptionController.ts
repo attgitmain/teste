@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import Gerencianet from "gn-api-sdk-typescript";
 import AppError from "../errors/AppError";
 
-import options from "../config/Gn";
+import getGnConfig from "../config/Gn";
 import Company from "../models/Company";
 import Invoices from "../models/Invoices";
 import { getIO } from "../libs/socket";
@@ -19,6 +19,7 @@ import * as Sentry from "@sentry/node";
 // const app = express();
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
+  const options = await getGnConfig();
   const gerencianet = new Gerencianet(options);
 
   return res.json(gerencianet.getSubscriptions());
@@ -77,6 +78,7 @@ export const createSubscription = async (
   console.log(key_ASAAS_TOKEN);
   console.log(key_MP_ACCESS_TOKEN);
 
+  const options = await getGnConfig();
   const gerencianet = new Gerencianet(options);
   const { companyId } = req.user;
 
@@ -313,6 +315,7 @@ export const createWebhook = async (
   };
 
   try {
+    const options = await getGnConfig();
     const gerencianet = new Gerencianet(options);
     const create = await gerencianet.pixConfigWebhook(params, body);
     return res.json(create);
@@ -335,6 +338,7 @@ export const webhook = async (
     return res.json({ ok: true });
   }
   if (req.body.pix) {
+    const options = await getGnConfig();
     const gerencianet = new Gerencianet(options);
     req.body.pix.forEach(async (pix: any) => {
       const detahe = await gerencianet.pixDetailCharge({
