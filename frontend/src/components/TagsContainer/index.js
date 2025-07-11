@@ -1,11 +1,15 @@
 import { Chip, Paper, TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { isArray, isString } from "lodash";
 import toastError from "../../errors/toastError";
 import api from "../../services/api";
+import { AuthContext } from "../../context/Auth/AuthContext";
+import ContactTag from "../ContactTag";
 
 export function TagsContainer({ contact }) {
+
+    const { user } = useContext(AuthContext);
 
     const [tags, setTags] = useState([]);
     const [selecteds, setSelecteds] = useState([]);
@@ -59,6 +63,9 @@ export function TagsContainer({ contact }) {
     }
 
     const onChange = async (value, reason) => {
+        if (user.profile !== "admin" && (reason === 'remove-option' || reason === 'clear')) {
+            return;
+        }
         let optionsChanged = []
         if (reason === 'create-option') {
             if (isArray(value)) {
@@ -106,26 +113,32 @@ export function TagsContainer({ contact }) {
                 onChange={(e, v, r) => onChange(v, r)}
                 getOptionLabel={(option) => option.name}
                 renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                        <Chip
-                            variant="outlined"
-                            style={{
-                                backgroundColor: option.color || '#eee',
-                                color: "#FFF",
-                                marginRight: 1,
-                                padding: 1,
-                                fontWeight: 'bold',
-                                paddingLeft: 5,
-                                paddingRight: 5,
-                                borderRadius: 3,
-                                fontSize: "0.8em",
-                                whiteSpace: "nowrap"
-                            }}
-                            label={option.name}
-                            {...getTagProps({ index })}
-                            size="small"
-                        />
-                    ))
+                    value.map((option, index) => {
+                        const tagProps = getTagProps({ index });
+                        if (user.profile !== "admin") {
+                            delete tagProps.onDelete;
+                        }
+                        return (
+                            <Chip
+                                variant="outlined"
+                                style={{
+                                    backgroundColor: option.color || '#eee',
+                                    color: "#FFF",
+                                    marginRight: 1,
+                                    padding: 1,
+                                    fontWeight: 'bold',
+                                    paddingLeft: 5,
+                                    paddingRight: 5,
+                                    borderRadius: 3,
+                                    fontSize: "0.8em",
+                                    whiteSpace: "nowrap"
+                                }}
+                                label={option.name}
+                                size="small"
+                                {...tagProps}
+                            />
+                        )
+                    })
                 }
                 renderInput={(params) => (
                     <TextField {...params} variant="outlined" placeholder="Tags" />
