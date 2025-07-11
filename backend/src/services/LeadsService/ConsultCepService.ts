@@ -91,7 +91,7 @@ const ConsultCepService = async ({
   const slice = freshLeads.slice(start, start + PAGE_SIZE);
   console.log(`📦 Página ${page}: ${slice.length} leads para retornar.`);
   const shouldFetchPhones =
-    typeof fetchPhones === "boolean" ? fetchPhones : page <= 2;
+    typeof fetchPhones === "boolean" ? fetchPhones : true;
   console.log(`📞 Buscar telefones nesta página: ${shouldFetchPhones}`);
 
   if (slice.length > 0) {

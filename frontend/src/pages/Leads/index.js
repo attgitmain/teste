@@ -168,7 +168,7 @@ const Leads = () => {
     setLoading(true);
     setTokenError(false);
     try {
-      const { data } = await api.get(`/consult/cep/${cleanCep}?page=1`);
+      const { data } = await api.get(`/consult/cep/${cleanCep}?page=1&phones=true`);
       const leads = (data.leads || []).map(normalizeLeadItem);
       setResults(leads);
       if (leads.length > 0) {
