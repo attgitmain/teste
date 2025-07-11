@@ -135,10 +135,11 @@ const UserModal = ({ open, onClose, userId }) => {
 		allHistoric: "disabled",
 		allUserChat: "disabled",
 		userClosePendingTicket: "enabled",
-		showDashboard: "disabled",
-		allowRealTime: "disabled",
-		allowConnections: "disabled",
-	};
+                showDashboard: "disabled",
+                allowRealTime: "disabled",
+                allowConnections: "disabled",
+                allowTags: "disabled",
+        };
 
 	const { user: loggedInUser } = useContext(AuthContext);
 
@@ -760,24 +761,46 @@ const UserModal = ({ open, onClose, userId }) => {
 																		{i18n.t("userModal.form.allowRealTime")}
 																	</InputLabel>
 
-																	<Field
-																		as={Select}
-																		label={i18n.t("userModal.form.allowRealTime")}
-																		name="allowRealTime"
-																		type="allowRealTime"
-																		required
-																	>
-																		<MenuItem value="disabled">{i18n.t("userModal.form.allHistoricDisabled")}</MenuItem>
-																		<MenuItem value="enabled">{i18n.t("userModal.form.allHistoricEnabled")}</MenuItem>
-																	</Field>
-																</>
-															</FormControl>
-														</Grid>
-													</Grid>
-												</>
-											}
-										/>
-									</TabPanel>
+            <Field
+              as={Select}
+              label={i18n.t("userModal.form.allowRealTime")}
+              name="allowRealTime"
+              type="allowRealTime"
+              required
+            >
+              <MenuItem value="disabled">{i18n.t("userModal.form.allHistoricDisabled")}</MenuItem>
+              <MenuItem value="enabled">{i18n.t("userModal.form.allHistoricEnabled")}</MenuItem>
+            </Field>
+            </>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6} xl={6}>
+            <FormControl
+              variant="outlined"
+              className={classes.maxWidth}
+              margin="dense"
+              fullWidth
+            >
+              <InputLabel >
+                {i18n.t("userModal.form.allowTags")}
+              </InputLabel>
+              <Field
+                as={Select}
+                label={i18n.t("userModal.form.allowTags")}
+                name="allowTags"
+                type="allowTags"
+                required
+              >
+                <MenuItem value="disabled">{i18n.t("userModal.form.allHistoricDisabled")}</MenuItem>
+                <MenuItem value="enabled">{i18n.t("userModal.form.allHistoricEnabled")}</MenuItem>
+              </Field>
+            </FormControl>
+          </Grid>
+        </Grid>
+        </>
+        }
+        />
+      </TabPanel>
 								</DialogContent>
 							</Paper>
 							<DialogActions>
