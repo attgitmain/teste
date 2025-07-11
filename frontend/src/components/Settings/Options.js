@@ -181,11 +181,6 @@ export default function Options(props) {
   const [showNotificationPending, setShowNotificationPending] = useState(false);
   const [loadingShowNotificationPending, setLoadingShowNotificationPending] = useState(false);
 
-  const [dailyReportNumber, setDailyReportNumber] = useState("");
-  const [loadingDailyReportNumber, setLoadingDailyReportNumber] = useState(false);
-
-  const [dailyReportTime, setDailyReportTime] = useState("19");
-  const [loadingDailyReportTime, setLoadingDailyReportTime] = useState(false);
 
   const { update: updateUserCreation, getAll } = useSettings();
 
@@ -258,15 +253,6 @@ export default function Options(props) {
         setopenaitokenType(openaitokenType.value);
       }
 
-      const dailyNumber = oldSettings.find((s) => s.key === 'dailyReportNumber');
-      if (dailyNumber) {
-        setDailyReportNumber(dailyNumber.value);
-      }
-
-      const dailyTime = oldSettings.find((s) => s.key === 'dailyReportTime');
-      if (dailyTime) {
-        setDailyReportTime(dailyTime.value);
-      }
     }
   }, [oldSettings])
 
@@ -299,8 +285,6 @@ export default function Options(props) {
       if (key === "AcceptCallWhatsappMessage") setAcceptCallWhatsappMessage(value);
       if (key === "sendQueuePositionMessage") setSendQueuePositionMessage(value);
       if (key === "showNotificationPending") setShowNotificationPending(value);
-      if (key === "dailyReportNumber") setDailyReportNumber(value);
-      if (key === "dailyReportTime") setDailyReportTime(value);
 
     }
   }, [settings]);
@@ -496,25 +480,6 @@ export default function Options(props) {
     setLoadingShowNotificationPending(false);
   }
 
-  async function handleDailyReportNumber(value) {
-    setDailyReportNumber(value);
-    setLoadingDailyReportNumber(true);
-    await updateUserCreation({
-      key: "dailyReportNumber",
-      value,
-    });
-    setLoadingDailyReportNumber(false);
-  }
-
-  async function handleDailyReportTime(value) {
-    setDailyReportTime(value);
-    setLoadingDailyReportTime(true);
-    await updateUserCreation({
-      key: "dailyReportTime",
-      value,
-    });
-    setLoadingDailyReportTime(false);
-  }
 
   async function handleLGPDLink(value) {
     setLGPDLink(value);
@@ -1518,46 +1483,7 @@ export default function Options(props) {
           </Grid>
         </Grid>
 
-        <Grid spacing={3} container style={{ marginBottom: 10 }}>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormControl className={classes.selectContainer}>
-              <TextField
-                id="dailyReportNumber"
-                name="dailyReportNumber"
-                margin="dense"
-                label={i18n.t("settings.settings.options.dailyReportNumber")}
-                variant="outlined"
-                value={dailyReportNumber}
-                onChange={async (e) => {
-                  handleDailyReportNumber(e.target.value);
-                }}
-              ></TextField>
-              <FormHelperText>
-                {loadingDailyReportNumber && i18n.t("settings.settings.options.updating")}
-              </FormHelperText>
-            </FormControl>
-          </Grid>
-          {isSuper() ?
-          <Grid xs={12} sm={6} md={6} item>
-            <FormControl className={classes.selectContainer}>
-              <TextField
-                id="dailyReportTime"
-                name="dailyReportTime"
-                margin="dense"
-                label={i18n.t("settings.settings.options.dailyReportTime")}
-                variant="outlined"
-                value={dailyReportTime}
-                onChange={async (e) => {
-                  handleDailyReportTime(e.target.value);
-                }}
-              ></TextField>
-              <FormHelperText>
-                {loadingDailyReportTime && i18n.t("settings.settings.options.updating")}
-              </FormHelperText>
-            </FormControl>
-          </Grid>
-          : null}
-        </Grid>
+
 
       <Grid spacing={1} container>
         <Grid xs={12} sm={6} md={6} item>
