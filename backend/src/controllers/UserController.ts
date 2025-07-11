@@ -155,37 +155,42 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
         const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`;
 
-if (phone !== undefined && !isNil(phone) && !isEmpty(phone)) {
-  // remove tudo que não for dígito
-  const onlyDigits = phone.replace(/\D/g, "");
-  // garante prefixo +55 se necessário
-  const phoneWithCountry = onlyDigits.startsWith("55")
-    ? onlyDigits
-    : `55${onlyDigits}`;
-  const jid = `${phoneWithCountry}@s.whatsapp.net`;
-  console.log("Enviando mensagem para JID =", jid);
-  // tenta @s.whatsapp.net, se falhar usa @c.us
-  await wbot
-    .sendMessage(jid, { text: body })
-    .catch(() =>
-      wbot.sendMessage(`${phoneWithCountry}@c.us`, { text: body })
-    );
-}
+        if (phone !== undefined && !isNil(phone) && !isEmpty(phone)) {
+          // remove tudo que não for dígito
+          const onlyDigits = phone.replace(/\D/g, "");
+          const phoneWithCountry = onlyDigits.startsWith("55")
+            ? onlyDigits
+            : `55${onlyDigits}`;
+          const jid = `${phoneWithCountry}@s.whatsapp.net`;
+          console.log("Enviando mensagem para JID =", jid);
+          await wbot
+            .sendMessage(jid, { text: body })
+            .catch(() =>
+              wbot.sendMessage(`${phoneWithCountry}@c.us`, { text: body })
+            );
+        }
 
-const adminPhone = process.env.ADMIN_PHONE;
-if (adminPhone && !isEmpty(adminPhone)) {
-  // mesma normalização para o número do admin
-  const onlyDigitsAdmin = adminPhone.replace(/\D/g, "");
-  const adminWithCountry = onlyDigitsAdmin.startsWith("55")
-    ? onlyDigitsAdmin
-    : `55${onlyDigitsAdmin}`;
-  console.log("Enviando mensagem para admin JID =", `${adminWithCountry}@s.whatsapp.net`);
-  await wbot
-    .sendMessage(`${adminWithCountry}@s.whatsapp.net`, { text: body })
-    .catch(() =>
-      wbot.sendMessage(`${adminWithCountry}@c.us`, { text: body })
-    );
-}
+        const adminPhone = process.env.ADMIN_PHONE;
+        if (adminPhone && !isEmpty(adminPhone)) {
+          const onlyDigitsAdmin = adminPhone.replace(/\D/g, "");
+          const adminWithCountry = onlyDigitsAdmin.startsWith("55")
+            ? onlyDigitsAdmin
+            : `55${onlyDigitsAdmin}`;
+          console.log(
+            "Enviando mensagem para admin JID =",
+            `${adminWithCountry}@s.whatsapp.net`
+          );
+          await wbot
+            .sendMessage(`${adminWithCountry}@s.whatsapp.net`, { text: body })
+            .catch(() =>
+              wbot.sendMessage(`${adminWithCountry}@c.us`, { text: body })
+            );
+        }
+      }
+    } catch (error) {
+      console.log("Não consegui enviar a mensagem via WhatsApp");
+    }
+  }
 
   if (companyUser) {
     const user = await CreateUserService({
