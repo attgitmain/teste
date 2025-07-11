@@ -11,6 +11,7 @@ interface Request {
   number: string;
   isGroup: boolean;
   email?: string;
+  matricula?: string;
   commandBot?: string;
   profilePicUrl?: string;
   extraInfo?: ExtraInfo[];
@@ -23,6 +24,7 @@ const CreateOrUpdateContactServiceForImport = async ({
   profilePicUrl,
   isGroup,
   email = "",
+  matricula = "",
   commandBot = "",
   extraInfo = [], companyId
 }: Request): Promise<Contact> => {
@@ -35,9 +37,9 @@ const CreateOrUpdateContactServiceForImport = async ({
 
   if (contact) {
     if (contact.companyId === null)
-      await contact.update({ name ,profilePicUrl, companyId })
+      await contact.update({ name ,profilePicUrl, companyId, matricula })
     else
-      await contact.update({ name , profilePicUrl });
+      await contact.update({ name , profilePicUrl, matricula });
 
       io.of(String(companyId))
   .emit(`company-${companyId}-contact`, {
@@ -51,6 +53,7 @@ const CreateOrUpdateContactServiceForImport = async ({
       number,
       profilePicUrl,
       email,
+      matricula,
       commandBot,
       isGroup,
       extraInfo

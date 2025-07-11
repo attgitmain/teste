@@ -532,12 +532,14 @@ const MainListItems = ({ collapsed, drawerClose }) => {
         </>
       )}
     {planExpired && (
-      <ListItemLink
-        to="/tags"
-        primary={i18n.t("mainDrawer.listItems.tags")}
-        icon={<LocalOfferIcon />}
-        tooltip={collapsed}
-      />
+      user.profile === "user" && user.allowTags === "disabled" ? null : (
+        <ListItemLink
+          to="/tags"
+          primary={i18n.t("mainDrawer.listItems.tags")}
+          icon={<LocalOfferIcon />}
+          tooltip={collapsed}
+        />
+      )
     )}
 
       {showInternalChat && planExpired && (

@@ -59,6 +59,7 @@ const ContactSchema = Yup.object().shape({
     .required("Required"),
   number: Yup.string().min(8, "Too Short!").max(50, "Too Long!"),
   email: Yup.string().email("Invalid email"),
+  matricula: Yup.string().nullable(),
 });
 
 const ContactListItemModal = ({
@@ -80,6 +81,7 @@ const ContactListItemModal = ({
     name: "",
     number: "",
     email: "",
+    matricula: "",
   };
 
   const [contact, setContact] = useState(initialState);
@@ -198,6 +200,19 @@ const ContactListItemModal = ({
                     error={touched.email && Boolean(errors.email)}
                     helperText={touched.email && errors.email}
                     placeholder="Email address"
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                  />
+                </div>
+                <div>
+                  <Field
+                    as={TextField}
+                    label="Matrícula"
+                    name="matricula"
+                    error={touched.matricula && Boolean(errors.matricula)}
+                    helperText={touched.matricula && errors.matricula}
+                    placeholder="Matrícula"
                     fullWidth
                     margin="dense"
                     variant="outlined"

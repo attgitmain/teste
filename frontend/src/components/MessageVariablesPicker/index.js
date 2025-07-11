@@ -29,6 +29,10 @@ const MessageVariablesPicker = ({ onClick, disabled }) => {
             value: "{{name}} "
         },
         {
+            name: "Matrícula",
+            value: "{{matricula}} "
+        },
+        {
             name: i18n.t("messageVariablesPicker.vars.user"),
             value: "{{userName}} "
         },

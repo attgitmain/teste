@@ -19,6 +19,7 @@ export async function ImportContactsService(
     let name = "";
     let number = "";
     let email = "";
+    let matricula = "";
 
     if (has(row, "nome") || has(row, "Nome")) {
       name = row["nome"] || row["Nome"];
@@ -43,7 +44,11 @@ export async function ImportContactsService(
       email = row["email"] || row["e-mail"] || row["Email"] || row["E-mail"];
     }
 
-    return { name, number, email, companyId };
+    if (has(row, "matricula") || has(row, "Matricula")) {
+      matricula = row["matricula"] || row["Matricula"];
+    }
+
+    return { name, number, email, matricula, companyId };
   });
 
 

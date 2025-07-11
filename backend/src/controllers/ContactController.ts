@@ -54,6 +54,7 @@ interface ContactData {
   name: string;
   number: string;
   email?: string;
+  matricula?: string;
   extraInfo?: ExtraInfo[];
   disableBot?: boolean;
   remoteJid?: string;
@@ -85,6 +86,7 @@ export const importXls = async (req: Request, res: Response): Promise<Response> 
     profilePicUrl: "",
     isGroup: false,
     email,
+    matricula: req.body.matricula,
     companyId,
     // whatsappId: defaultWhatsapp.id
   };

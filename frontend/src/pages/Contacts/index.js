@@ -587,6 +587,7 @@ const Contacts = () => {
                             <TableCell align="center">
                                 {i18n.t("contacts.table.email")}
                             </TableCell>
+                            <TableCell align="center">Matrícula</TableCell>
                             {/* <TableCell align="center">
                                 {i18n.t("contacts.table.lastMessage")}
                             </TableCell> */}
@@ -619,6 +620,7 @@ const Contacts = () => {
                                     <TableCell align="center">
                                         {contact.email}
                                     </TableCell>
+                                    <TableCell align="center">{contact.matricula}</TableCell>
                                     {/* <TableCell align="center">
                                         {getDateLastMessage(contact)}
                                     </TableCell> */}
@@ -703,7 +705,7 @@ const Contacts = () => {
                                     </TableCell>
                                 </TableRow>
                             ))}
-                            {loading && <TableRowSkeleton avatar columns={6} />}
+                            {loading && <TableRowSkeleton avatar columns={7} />}
                         </>
                     </TableBody>
                 </Table>

@@ -27,6 +27,7 @@ interface UserData {
   defaultTicketsManagerWidth?: number;
   allowRealTime?: string;
   allowConnections?: string;
+  allowTags?: string;
   profileImage?: string;
 }
 
@@ -89,7 +90,8 @@ const UpdateUserService = async ({
     allowConnections,
     defaultTicketsManagerWidth = 550,
     allowRealTime,
-    profileImage
+    profileImage,
+    allowTags
   } = userData;
 
   try {
@@ -118,7 +120,8 @@ const UpdateUserService = async ({
     defaultTicketsManagerWidth,
     allowRealTime,
     profileImage,
-    allowConnections
+    allowConnections,
+    allowTags
   });
 
   await user.$set("queues", queueIds);
@@ -155,6 +158,7 @@ const UpdateUserService = async ({
     defaultTicketsManagerWidth: user.defaultTicketsManagerWidth,
     allowRealTime: user.allowRealTime,
     allowConnections: user.allowConnections,
+    allowTags: user.allowTags,
     profileImage: user.profileImage
   };
 

@@ -56,25 +56,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ContactSchema = Yup.object().shape({
-	name: Yup.string()
-		.min(2, "Too Short!")
-		.max(250, "Too Long!")
-		.required("Required"),
-	number: Yup.string().min(8, "Too Short!").max(50, "Too Long!"),
-	email: Yup.string().email("Invalid email"),
+        name: Yup.string()
+                .min(2, "Too Short!")
+                .max(250, "Too Long!")
+                .required("Required"),
+        number: Yup.string().min(8, "Too Short!").max(50, "Too Long!"),
+        email: Yup.string().email("Invalid email"),
+        matricula: Yup.string().nullable(),
 });
 
 const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
 	const classes = useStyles();
 	const isMounted = useRef(true);
 
-	const initialState = {
-		name: "",
-		number: "",
-		email: "",
-		disableBot: false,
-		lgpdAcceptedAt: ""
-	};
+        const initialState = {
+                name: "",
+                number: "",
+                email: "",
+                matricula: "",
+                disableBot: false,
+                lgpdAcceptedAt: ""
+        };
 
 	const [contact, setContact] = useState(initialState);
 	const [disableBot, setDisableBot] = useState(false);
@@ -177,22 +179,35 @@ const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
 									variant="outlined"
 									margin="dense"
 								/>
-								<div>
-									<Field
-										as={TextField}
-										label={i18n.t("contactModal.form.email")}
-										name="email"
-										error={touched.email && Boolean(errors.email)}
-										helperText={touched.email && errors.email}
-										placeholder="Email address"
-										fullWidth
-										margin="dense"
-										variant="outlined"
-									/>
-								</div>
-								<div>
-									<TagsContainer contact={contact} className={classes.textField} />
-								</div>
+                                                               <div>
+                                                                       <Field
+                                                                               as={TextField}
+                                                                               label={i18n.t("contactModal.form.email")}
+                                                                               name="email"
+                                                                               error={touched.email && Boolean(errors.email)}
+                                                                               helperText={touched.email && errors.email}
+                                                                               placeholder="Email address"
+                                                                               fullWidth
+                                                                               margin="dense"
+                                                                               variant="outlined"
+                                                                       />
+                                                               </div>
+                                                               <div>
+                                                                       <Field
+                                                                               as={TextField}
+                                                                               label="Matrícula"
+                                                                               name="matricula"
+                                                                               error={touched.matricula && Boolean(errors.matricula)}
+                                                                               helperText={touched.matricula && errors.matricula}
+                                                                               placeholder="Matrícula"
+                                                                               fullWidth
+                                                                               margin="dense"
+                                                                               variant="outlined"
+                                                                       />
+                                                               </div>
+                                                               <div>
+                                                                       <TagsContainer contact={contact} className={classes.textField} />
+                                                               </div>
 								<Typography
 									style={{ marginBottom: 8, marginTop: 12 }}
 									variant="subtitle1"
