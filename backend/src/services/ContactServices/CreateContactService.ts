@@ -19,6 +19,7 @@ interface Request {
   name: string;
   number: string;
   email?: string;
+  matricula?: string;
   profilePicUrl?: string;
   acceptAudioMessage?: boolean;
   active?: boolean;
@@ -32,6 +33,7 @@ const CreateContactService = async ({
   name,
   number,
   email = "",
+  matricula,
   acceptAudioMessage,
   active,
   companyId,
@@ -61,6 +63,7 @@ const CreateContactService = async ({
       name,
       number,
       email,
+      matricula,
       acceptAudioMessage: acceptAudioMessageContact === 'enabled' ? true : false,
       active,
       extraInfo,

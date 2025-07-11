@@ -371,6 +371,7 @@ const ContactListItems = () => {
                     <TableCell align="center">
                       {i18n.t("contactListItems.table.email")}
                     </TableCell>
+                    <TableCell align="center">Matrícula</TableCell>
                     <TableCell align="center">
                       {i18n.t("contactListItems.table.actions")}
                     </TableCell>
@@ -398,6 +399,7 @@ const ContactListItems = () => {
                         <TableCell>{contact.name}</TableCell>
                         <TableCell align="center">{contact.number}</TableCell>
                         <TableCell align="center">{contact.email}</TableCell>
+                        <TableCell align="center">{contact.matricula}</TableCell>
                         <TableCell align="center">
                           <IconButton
                             size="small"
@@ -423,7 +425,7 @@ const ContactListItems = () => {
                         </TableCell>
                       </TableRow>
                     ))}
-                    {loading && <TableRowSkeleton columns={4} />}
+                    {loading && <TableRowSkeleton columns={5} />}
                   </>
                 </TableBody>
               </Table>

@@ -83,6 +83,7 @@ export default (body: string, ticket?: Ticket): string => {
     data_hora: new Array(date(), hour()).join(" às "),
     protocol: new Array(control(), ticket ? ticket.id.toString() : "").join(""),
     name_company: ticket ? ticket?.company?.name : "",
+    matricula: ticket ? (ticket.contact as any)?.matricula || "" : "",
   };
 
   return Mustache.render(body, view);

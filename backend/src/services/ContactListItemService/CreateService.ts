@@ -10,6 +10,7 @@ interface Data {
   contactListId: number;
   companyId: number;
   email?: string;
+  matricula?: string;
 }
 
 const CreateService = async (data: Data): Promise<ContactListItem> => {

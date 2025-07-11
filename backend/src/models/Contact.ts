@@ -44,6 +44,9 @@ class Contact extends Model<Contact> {
   @Column
   email: string;
 
+  @Column
+  matricula: string;
+
   @Default("")
   @Column
   profilePicUrl: string;
