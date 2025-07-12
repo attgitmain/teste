@@ -593,7 +593,7 @@ export default function Options(props) {
   }
 
   return (
-    <>
+    <div>
       <Grid spacing={3} container>
 
         {/* CRIAÇÃO DE COMPANY/USERS */}
@@ -1347,6 +1347,8 @@ export default function Options(props) {
         </>
       ) : null}
 
+      </Grid>
+
       <Grid spacing={1} container>
         <Grid xs={12} sm={6} md={6} item>
           <FormControl className={classes.selectContainer}>
@@ -1443,6 +1445,6 @@ export default function Options(props) {
         
               
       </Grid>
-    </>
+    </div>
   );
 }
