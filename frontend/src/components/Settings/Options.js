@@ -1179,8 +1179,8 @@ export default function Options(props) {
 
       
       <Grid spacing={3} container>
-      {isSuper() ?
-
+      {isSuper() ? (
+        <>
             <Grid spacing={3} container>
             {isSuper() ?
               <Tabs
@@ -1344,8 +1344,8 @@ export default function Options(props) {
             : null}
           </Grid>
         </Grid>
-
-
+        </>
+      ) : null}
 
       <Grid spacing={1} container>
         <Grid xs={12} sm={6} md={6} item>
