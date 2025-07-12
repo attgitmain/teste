@@ -233,7 +233,7 @@ if(key_GERENCIANET_PIX_KEY){
       expiracao: 3600
     },
     valor: {
-      original: price.toLocaleString("pt-br", { minimumFractionDigits: 2 }).replace(",", ".")
+      original: Number(price).toFixed(2)
     },
     chave: key_GERENCIANET_PIX_KEY,
     solicitacaoPagador: `#Fatura:${invoiceId}`
