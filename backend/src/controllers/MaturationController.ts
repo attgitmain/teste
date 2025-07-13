@@ -3,9 +3,8 @@ import * as MaturationService from "../services/MaturationService";
 import { MaturationJob } from "../services/MaturationService/MaturationManager";
 
 const formatJob = (job: MaturationJob) => {
-  const { timeout, ...rest } = job;
   return {
-    ...rest,
+    ...job,
     progress:
       (Date.now() - job.startAt.getTime()) /
       (job.endAt.getTime() - job.startAt.getTime()),
