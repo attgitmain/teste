@@ -12,7 +12,7 @@ const isWhatsappConnected = async (whatsapp: Whatsapp): Promise<boolean> => {
     logger.warn(`[isWhatsappConnected] ensure failed for ${whatsapp.id}:`, err);
     try {
       // restarts the session using WhatsApp ID and company ID
-      await StartWhatsAppSession(whatsapp.id, whatsapp.companyId);
+      await StartWhatsAppSession(whatsapp, whatsapp.companyId);
       EnsureWbotSession(await GetWhatsappWbot(whatsapp));
       return true;
     } catch (restartErr) {
