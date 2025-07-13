@@ -4,6 +4,7 @@ import ChipMaturation from "../../models/ChipMaturation";
 import ChipMaturationLog from "../../models/ChipMaturationLog";
 import { SendMessage } from "../../helpers/SendMessage";
 import { getIO } from "../../libs/socket";
+import logger from "../../utils/logger";
 
 export type MaturationStatus = "running" | "completed" | "canceled";
 
@@ -175,7 +176,11 @@ class MaturationManager {
 
     this.jobs.set(id, job);
 
-    await this.executeJob(id);
+    try {
+      await this.executeJob(id);
+    } catch (err) {
+      logger.error(`Failed to start maturation job ${id}: ${err}`);
+    }
 
     return job;
   }
