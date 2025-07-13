@@ -19,9 +19,8 @@ class JobRunner {
   }
 
   public serialize() {
-    const { timeout, ...rest } = this.job;
     return {
-      ...rest,
+      ...this.job,
       progress:
         (Date.now() - this.job.startAt.getTime()) /
         (this.job.endAt.getTime() - this.job.startAt.getTime())
@@ -29,7 +28,7 @@ class JobRunner {
   }
 
   private scheduleNext(delayMinutes?: number) {
-    const interval = delayMinutes ?? this.job.intervalMinutes || this.job.intervalHours * 60;
+    const interval = delayMinutes ?? (this.job.intervalMinutes || this.job.intervalHours * 60);
     const delay = interval * 60 * 1000;
     this.timeout = setTimeout(() => this.execute(), delay);
   }
