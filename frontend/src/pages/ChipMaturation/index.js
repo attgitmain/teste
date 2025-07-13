@@ -69,23 +69,6 @@ const ChipMaturation = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeStep === 0 && origin) {
-      setActiveStep(1);
-    }
-  }, [origin]);
-
-  useEffect(() => {
-    if (activeStep === 1 && targets.length > 0) {
-      setActiveStep(2);
-    }
-  }, [targets]);
-
-  useEffect(() => {
-    if (activeStep === 2 && days && intervalMinutes) {
-      setActiveStep(3);
-    }
-  }, [days, intervalMinutes]);
 
   useEffect(() => {
     fetchJobs();
@@ -188,14 +171,26 @@ const ChipMaturation = () => {
                       </MenuItem>
                     ))}
                   </Select>
+                  <div style={{ marginTop: 16 }}>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={() => setActiveStep(activeStep - 1)}
+                    >
+                      {i18n.t("chipMaturation.backButton")}
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => setActiveStep(activeStep + 1)}
+                      disabled={!origin}
+                    >
+                      {i18n.t("chipMaturation.nextButton")}
+                    </Button>
+                  </div>
                 </StepContent>
               </Step>
               <Step>
                 <StepLabel>{i18n.t("chipMaturation.step_targets")}</StepLabel>
                 <StepContent>
-                  <Typography variant="body2" gutterBottom>
-                    {i18n.t("chipMaturation.selectListsLabel")}
-                  </Typography>
                   <Select
                     multiple
                     fullWidth
@@ -210,6 +205,18 @@ const ChipMaturation = () => {
                       </MenuItem>
                     ))}
                   </Select>
+                  <div style={{ marginTop: 16 }}>
+                    <Button onClick={() => setActiveStep(activeStep - 1)}>
+                      {i18n.t("chipMaturation.backButton")}
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => setActiveStep(activeStep + 1)}
+                      disabled={targets.length === 0}
+                    >
+                      {i18n.t("chipMaturation.nextButton")}
+                    </Button>
+                  </div>
                 </StepContent>
               </Step>
               <Step>
@@ -230,6 +237,18 @@ const ChipMaturation = () => {
                     value={intervalMinutes}
                     onChange={(e) => setIntervalMinutes(e.target.value)}
                   />
+                  <div style={{ marginTop: 16 }}>
+                    <Button onClick={() => setActiveStep(activeStep - 1)}>
+                      {i18n.t("chipMaturation.backButton")}
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => setActiveStep(activeStep + 1)}
+                      disabled={!days || !intervalMinutes}
+                    >
+                      {i18n.t("chipMaturation.nextButton")}
+                    </Button>
+                  </div>
                 </StepContent>
               </Step>
               <Step>
@@ -264,31 +283,22 @@ const ChipMaturation = () => {
                     value={conversations}
                     onChange={(e) => setConversations(e.target.value)}
                   />
+                  <div style={{ marginTop: 16 }}>
+                    <Button onClick={() => setActiveStep(activeStep - 1)}>
+                      {i18n.t("chipMaturation.backButton")}
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={handleStart}
+                      disabled={!origin || targets.length === 0 || (conversations.trim() === "" && selectedLists.length === 0)}
+                    >
+                      {i18n.t("chipMaturation.startButton")}
+                    </Button>
+                  </div>
                 </StepContent>
               </Step>
             </Stepper>
-            <div style={{ marginTop: 16 }}>
-              {activeStep > 0 && (
-                <Button onClick={() => setActiveStep(activeStep - 1)}>
-                  {i18n.t("chipMaturation.backButton")}
-                </Button>
-              )}
-              {activeStep < 3 && (
-                <Button color="primary" onClick={() => setActiveStep(activeStep + 1)}>
-                  {i18n.t("chipMaturation.nextButton")}
-                </Button>
-              )}
-              {activeStep === 3 && (
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleStart}
-                  disabled={!origin || targets.length === 0 || (conversations.trim() === "" && selectedLists.length === 0)}
-                >
-                  {i18n.t("chipMaturation.startButton")}
-                </Button>
-              )}
-            </div>
           </Paper>
         </Grid>
         <Grid item xs={12} md={8}>
