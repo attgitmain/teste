@@ -368,10 +368,22 @@ export const initWASocket = async (whatsapp: Whatsapp): Promise<Session> => {
             if (connection === "close") {
               console.log("DESCONECTOU", JSON.stringify(lastDisconnect, null, 2))
               logger.info(
-                `Socket  ${name} Connection Update ${connection || ""} ${lastDisconnect ? lastDisconnect.error.message : ""
-                }`
+                `Socket  ${name} Connection Update ${connection || ""} ${lastDisconnect ? lastDisconnect.error.message : ""}`
               );
-              if ((lastDisconnect?.error as Boom)?.output?.statusCode === 403) {
+
+              const code = (lastDisconnect?.error as Boom)?.output?.statusCode;
+
+              if (code === 515) {
+                logger.warn(`Socket ${name} Stream restart required (515)`);
+                removeWbot(id, false);
+                setTimeout(
+                  () => StartWhatsAppSession(whatsapp, whatsapp.companyId),
+                  2000
+                );
+                return;
+              }
+
+              if (code === 403 || code === DisconnectReason.loggedOut) {
                 await whatsapp.update({ status: "PENDING", session: "" });
                 await DeleteBaileysService(whatsapp.id);
                 await cacheLayer.delFromPattern(`sessions:${whatsapp.id}:*`);
@@ -380,26 +392,12 @@ export const initWASocket = async (whatsapp: Whatsapp): Promise<Session> => {
                     action: "update",
                     session: whatsapp
                   });
-                removeWbot(id, false);
-              }
-              if (
-                (lastDisconnect?.error as Boom)?.output?.statusCode !==
-                DisconnectReason.loggedOut
-              ) {
                 removeWbot(id, false);
                 setTimeout(
                   () => StartWhatsAppSession(whatsapp, whatsapp.companyId),
                   2000
                 );
               } else {
-                await whatsapp.update({ status: "PENDING", session: "" });
-                await DeleteBaileysService(whatsapp.id);
-                await cacheLayer.delFromPattern(`sessions:${whatsapp.id}:*`);
-                io.of(String(companyId))
-                  .emit(`company-${whatsapp.companyId}-whatsappSession`, {
-                    action: "update",
-                    session: whatsapp
-                  });
                 removeWbot(id, false);
                 setTimeout(
                   () => StartWhatsAppSession(whatsapp, whatsapp.companyId),
