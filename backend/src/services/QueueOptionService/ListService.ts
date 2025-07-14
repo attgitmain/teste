@@ -19,12 +19,13 @@ const ListService = async ({ queueId, queueOptionId, parentId }: QueueOptionFilt
     whereOptions.id = queueOptionId;
   }
 
-  if (parentId == -1) {
-    whereOptions.parentId = null;
-  }
+  const parentIdNumber =
+    typeof parentId === "number" ? parentId : Number(parentId);
 
-  if (parentId > 0) {
-    whereOptions.parentId = parentId;
+  if (parentIdNumber === -1) {
+    whereOptions.parentId = null;
+  } else if (!isNaN(parentIdNumber) && parentIdNumber > 0) {
+    whereOptions.parentId = parentIdNumber;
   }
 
   const queueOptions = await QueueOption.findAll({
