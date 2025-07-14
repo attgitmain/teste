@@ -3333,13 +3333,19 @@ export const handleRating = async (
     companyId
   );
 
-  let finalRate = rate;
+  let finalRate = parseInt(String(rate), 10);
 
-  if (rate < 0) {
-    finalRate = 0;
+  if (isNaN(finalRate)) {
+    finalRate = null;
   }
-  if (rate > 10) {
-    finalRate = 10;
+
+  if (finalRate !== null) {
+    if (finalRate < 0) {
+      finalRate = 0;
+    }
+    if (finalRate > 10) {
+      finalRate = 10;
+    }
   }
 
   await UserRating.create({
@@ -4351,9 +4357,9 @@ const handleMessage = async (
           }
         }
       }
-    } catch (e) {
-      Sentry.captureException(e);
-      console.log(e);
+    } catch (err) {
+      Sentry.captureException(err);
+      logger.error(`[handleRating] falha ao gravar rating:`, err);
     }
 
     const isMsgForwarded =
@@ -4406,9 +4412,9 @@ const handleMessage = async (
           return;
         }
       }
-    } catch (e) {
-      Sentry.captureException(e);
-      console.log(e);
+    } catch (err) {
+      Sentry.captureException(err);
+      logger.error(`[handleRating] falha ao gravar rating:`, err);
     }
     
     // Atualiza o ticket se a ultima mensagem foi enviada por mim, para que possa ser finalizado.
