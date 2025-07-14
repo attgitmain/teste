@@ -4314,6 +4314,25 @@ const handleMessage = async (
       userId: ticket.userId
     });
 
+    const normalizedBody = bodyMessage?.trim().toLowerCase();
+
+    if (!msg.key.fromMe && normalizedBody === "#") {
+      await sayChatbot(ticket.queueId, wbot, ticket, contact, msg, ticketTraking);
+      return;
+    }
+
+    if (!msg.key.fromMe && normalizedBody === "sair") {
+      const ticketData = {
+        status: "closed",
+        sendFarewellMessage: true,
+        amountUsedBotQueues: 0,
+        isBot: false
+      };
+
+      await UpdateTicketService({ ticketData, ticketId: ticket.id, companyId });
+      return;
+    }
+
     let useLGPD = false;
 
     try {
