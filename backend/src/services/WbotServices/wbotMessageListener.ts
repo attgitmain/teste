@@ -4310,6 +4310,10 @@ const handleMessage = async (
       whatsappId: whatsapp?.id
     });
 
+    await ticketTraking.update({
+      userId: ticket.userId
+    });
+
     let useLGPD = false;
 
     try {
