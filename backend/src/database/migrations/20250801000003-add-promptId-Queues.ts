@@ -1,8 +1,16 @@
 import { QueryInterface, DataTypes } from "sequelize";
 
 module.exports = {
-  up: (queryInterface: QueryInterface) => {
-    return queryInterface.addColumn("Queues", "promptId", {
+  up: async (queryInterface: QueryInterface) => {
+    const table = "Queues";
+    const column = "promptId";
+
+    const tableInfo = await queryInterface.describeTable(table);
+    if (tableInfo[column]) {
+      return Promise.resolve();
+    }
+
+    return queryInterface.addColumn(table, column, {
       type: DataTypes.INTEGER,
       references: { model: "Prompts", key: "id" },
       onUpdate: "CASCADE",
