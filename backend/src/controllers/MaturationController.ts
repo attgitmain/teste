@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as MaturationService from "../services/MaturationService";
 import { MaturationJob } from "../services/MaturationService/MaturationManager";
+import User from "../models/User";
 
 const formatJob = (job: MaturationJob) => {
   return {
@@ -11,8 +12,12 @@ const formatJob = (job: MaturationJob) => {
   };
 };
 
-export const index = (req: Request, res: Response): Response => {
-  const jobs = MaturationService.listMaturations().map(formatJob);
+export const index = async (req: Request, res: Response): Promise<Response> => {
+  const user = await User.findByPk(req.user.id);
+  const isSuper = !!user?.super;
+  const jobs = MaturationService.listMaturations()
+    .filter(job => isSuper || job.companyId === req.user.companyId)
+    .map(formatJob);
   return res.json(jobs);
 };
 
@@ -33,23 +38,46 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   return res.status(201).json(formatJob(job));
 };
 
-export const show = (req: Request, res: Response): Response => {
+export const show = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
   const job = MaturationService.getMaturation(id);
   if (!job) {
     return res.status(404).json({ error: "Not found" });
+  }
+  const user = await User.findByPk(req.user.id);
+  const isSuper = !!user?.super;
+  if (!isSuper && job.companyId !== req.user.companyId) {
+    return res.status(403).json({ error: "Not authorized" });
   }
   return res.json(formatJob(job));
 };
 
 export const remove = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
+  const job = MaturationService.getMaturation(id);
+  if (!job) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  const user = await User.findByPk(req.user.id);
+  const isSuper = !!user?.super;
+  if (!isSuper && job.companyId !== req.user.companyId) {
+    return res.status(403).json({ error: "Not authorized" });
+  }
   await MaturationService.cancelMaturation(id);
   return res.status(200).json({});
 };
 
 export const logs = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
+  const job = MaturationService.getMaturation(id);
+  if (!job) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  const user = await User.findByPk(req.user.id);
+  const isSuper = !!user?.super;
+  if (!isSuper && job.companyId !== req.user.companyId) {
+    return res.status(403).json({ error: "Not authorized" });
+  }
   const data = await MaturationService.listLogs(id);
   return res.json(data);
 };
