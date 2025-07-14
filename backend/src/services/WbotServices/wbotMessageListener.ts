@@ -4693,7 +4693,7 @@ const handleMessage = async (
         apiKey: qPrompt.apiKey,
         queueId: qPrompt.queueId,
         maxMessages: qPrompt.maxMessages
-      } as IOpenAi;
+      };
 
       await handleOpenAi(
         openAiSettings,
