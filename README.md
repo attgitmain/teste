@@ -126,6 +126,21 @@ Para gerar uma versão pronta para produção:
 4. Certifique-se de que os arquivos `.env` contêm as configurações corretas no servidor.
 5. Inicie ambos os serviços usando `node` ou o gerenciador de processos de sua preferência.
 
+### Executando com PM2
+
+Se optar por utilizar o **pm2** para gerenciar o backend, certifique-se de que as
+variáveis de ambiente do arquivo `.env` sejam carregadas. Uma forma simples é
+adicionar `env_file: '.env'` no arquivo `backend/ecosystem.config.js` e executar
+
+```bash
+cd backend
+pm2 start ecosystem.config.js
+```
+
+Isso garante que o processo será iniciado no diretório correto e que as
+credenciais de serviços como Redis serão preservadas entre os reinícios,
+mantendo as sessões do WhatsApp ativas após um build.
+
 ## Executando os testes
 
 Os testes estão configurados no backend e no frontend. Basta rodar:
