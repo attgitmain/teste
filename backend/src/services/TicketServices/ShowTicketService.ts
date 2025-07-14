@@ -9,6 +9,7 @@ import Whatsapp from "../../models/Whatsapp";
 import Company from "../../models/Company";
 import QueueIntegrations from "../../models/QueueIntegrations";
 import TicketTag from "../../models/TicketTag";
+import Prompt from "../../models/Prompt";
 
 const ShowTicketService = async (
   id: string | number,
@@ -70,7 +71,10 @@ const ShowTicketService = async (
         model: Queue,
         as: "queue",
         attributes: ["id", "name", "color"],
-        include: ["chatbots"]
+        include: [
+          "chatbots",
+          { model: Prompt, as: "promptSelected" }
+        ]
       },
       {
         model: User,
