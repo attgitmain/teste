@@ -32,6 +32,7 @@ import { ActionsWebhookService } from "../WebhookService/ActionsWebhookService";
 import { FlowBuilderModel } from "../../models/FlowBuilder";
 import { FlowDefaultModel } from "../../models/FlowDefault";
 import { IConnections, INodes } from "../WebhookService/DispatchWebHookService";
+import logger from "../../utils/logger";
 
 import { differenceInMilliseconds } from "date-fns";
 import { ActionsWebhookFacebookService } from "./WebhookFacebookServices/ActionsWebhookFacebookService";
@@ -630,7 +631,7 @@ export const handleMessage = async (
 
             if (!isNaN(parseFloat(bodyMessage))) {
 
-              handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
+              await handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
 
               await ticketTraking.update({
                 ratingAt: moment().toDate(),
@@ -802,9 +803,8 @@ export const handleMessage = async (
               return
           }
         }
-      } catch (e) {
-        throw new Error(e);
-        console.log(e);
+      } catch (err) {
+        logger.error(`[handleRating] falha ao gravar rating:`, err);
       }
 
       if (message.attachments) {
