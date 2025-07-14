@@ -95,6 +95,8 @@ import ShowTicketService from "../TicketServices/ShowTicketService";
 import { handleOpenAi } from "../IntegrationsServices/OpenAiService";
 import { IOpenAi } from "../../@types/openai";
 
+const MATURATION_PREFIX = "\u2063";
+
 const os = require("os");
 
 const request = require("request");
@@ -5145,6 +5147,9 @@ const verifyCampaignMessageAndCloseTicket = async (
 
   const io = getIO();
   const body = await getBodyMessage(message);
+  if (body && body.includes(MATURATION_PREFIX)) {
+    return;
+  }
   const isCampaign = /\u200c/.test(body);
 
   if (message.key.fromMe && isCampaign) {
@@ -5235,6 +5240,9 @@ const wbotMessageListener = (wbot: Session, companyId: number): void => {
         let isCampaign = false;
         let body = await getBodyMessage(message);
         const fromMe = message?.key?.fromMe;
+        if (body && body.includes(MATURATION_PREFIX)) {
+          return;
+        }
         if (fromMe) {
           isCampaign = /\u200c/.test(body);
         } else {

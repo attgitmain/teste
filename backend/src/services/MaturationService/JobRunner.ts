@@ -7,6 +7,8 @@ import { MaturationJob } from "./MaturationManager";
 import isWhatsappConnected from "../../helpers/isWhatsappConnected";
 import logger from "../../utils/logger";
 
+const MATURATION_PREFIX = "\u2063";
+
 class JobRunner {
   private timeout?: NodeJS.Timeout;
 
@@ -54,6 +56,7 @@ class JobRunner {
         to = chips[Math.floor(Math.random() * chips.length)];
       }
       const msg = this.job.conversations[this.job.currentIndex % this.job.conversations.length];
+      const sendBody = `${MATURATION_PREFIX}${msg}`;
       this.job.currentIndex += 1;
       this.job.lastFrom = from;
 
@@ -66,7 +69,7 @@ class JobRunner {
           error = "sender disconnected";
         } else {
           try {
-            await SendMessage(whatsapp, { number: to, body: msg, companyId: this.job.companyId });
+            await SendMessage(whatsapp, { number: to, body: sendBody, companyId: this.job.companyId });
             success = true;
           } catch (err: any) {
             error = err.message;
