@@ -489,6 +489,7 @@ const messages = {
           outOfHoursMessage: "Mensaje fuera de horario de atención",
           token: "Token",
           integrationId: "Integración",
+          prompt: "Prompt",
           fileListId: "Listado de archivos",
           closeTicket: "Cerrar ticket",
           queueType: "Tipo de menu",

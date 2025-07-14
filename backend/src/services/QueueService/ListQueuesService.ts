@@ -1,4 +1,5 @@
 import Queue from "../../models/Queue";
+import Prompt from "../../models/Prompt";
 
 interface Request {
   companyId: number;
@@ -9,6 +10,12 @@ const ListQueuesService = async ({ companyId }: Request): Promise<Queue[]> => {
     where: {
       companyId
     },
+    include: [
+      {
+        model: Prompt,
+        as: "promptSelected"
+      }
+    ],
     order: [["orderQueue", "ASC"]],
   });
 

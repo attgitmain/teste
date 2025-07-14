@@ -20,6 +20,7 @@ interface QueueData {
   integrationId?: number;
   fileListId?: number;
   closeTicket?: boolean;
+  promptId?: number | null;
 }
 
 const CreateQueueService = async (queueData: QueueData): Promise<Queue> => {
