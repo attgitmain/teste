@@ -4654,6 +4654,39 @@ const handleMessage = async (
 
 
 
+    //openai na fila
+    if (
+      ticket.queue &&
+      ticket.queue.promptSelected &&
+      !isGroup &&
+      !msg.key.fromMe &&
+      !ticket.userId
+    ) {
+      const qPrompt = ticket.queue.promptSelected;
+      const openAiSettings = {
+        name: qPrompt.name,
+        prompt: qPrompt.prompt,
+        voice: qPrompt.voice,
+        voiceKey: qPrompt.voiceKey,
+        voiceRegion: qPrompt.voiceRegion,
+        maxTokens: qPrompt.maxTokens,
+        temperature: qPrompt.temperature,
+        apiKey: qPrompt.apiKey,
+        queueId: qPrompt.queueId,
+        maxMessages: qPrompt.maxMessages
+      };
+
+      await handleOpenAi(
+        openAiSettings,
+        msg,
+        wbot,
+        ticket,
+        contact,
+        mediaSent,
+        ticketTraking
+      );
+    }
+
     //openai na conexao
     if (
       !ticket.queue &&
