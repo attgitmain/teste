@@ -3308,6 +3308,7 @@ export const verifyRating = (ticketTraking: TicketTraking) => {
     ticketTraking &&
     ticketTraking.finishedAt === null &&
     ticketTraking.closedAt !== null &&
+    ticketTraking.userId !== null &&
     ticketTraking.ratingAt === null
   ) {
     return true;
@@ -4307,6 +4308,10 @@ const handleMessage = async (
       companyId,
       userId,
       whatsappId: whatsapp?.id
+    });
+
+    await ticketTraking.update({
+      userId: ticket.userId
     });
 
     let useLGPD = false;
