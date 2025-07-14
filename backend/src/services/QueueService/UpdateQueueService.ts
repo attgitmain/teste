@@ -5,22 +5,7 @@ import Chatbot from "../../models/Chatbot";
 import Queue from "../../models/Queue";
 import ShowQueueService from "./ShowQueueService";
 import User from "../../models/User";
-
-interface QueueData {
-  name?: string;
-  color?: string;
-  greetingMessage?: string;
-  outOfHoursMessage?: string;
-  schedules?: any[];
-  chatbots?: Chatbot[];
-  orderQueue?: number;
-  ativarRoteador?: boolean;
-  tempoRoteador: number;
-  integrationId?: number | null;
-  fileListId?: number | null;
-  closeTicket?: boolean;
-  promptId?: number | null;
-}
+import { QueueData } from "../../interfaces/QueueData";
 
 const UpdateQueueService = async (
   queueId: number | string,

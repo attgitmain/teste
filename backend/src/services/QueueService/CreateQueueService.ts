@@ -5,23 +5,7 @@ import Company from "../../models/Company";
 import Plan from "../../models/Plan";
 import Chatbot from "../../models/Chatbot";
 import User from "../../models/User";
-
-interface QueueData {
-  name: string;
-  color: string;
-  companyId: number;
-  greetingMessage?: string;
-  outOfHoursMessage?: string;
-  schedules?: any[];
-  chatbots?: Chatbot[];
-  orderQueue?: number;
-  ativarRoteador?: boolean;
-  tempoRoteador: number;
-  integrationId?: number;
-  fileListId?: number;
-  closeTicket?: boolean;
-  promptId?: number | null;
-}
+import { QueueData } from "../../interfaces/QueueData";
 
 const CreateQueueService = async (queueData: QueueData): Promise<Queue> => {
   const { color, name, companyId } = queueData;
