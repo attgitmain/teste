@@ -2,6 +2,7 @@ import AppError from "../../errors/AppError";
 import Chatbot from "../../models/Chatbot";
 import Queue from "../../models/Queue";
 import User from "../../models/User";
+import Prompt from "../../models/Prompt";
 
 const ShowQueueService = async (
   queueId: number | string,
@@ -12,17 +13,22 @@ const ShowQueueService = async (
       id: queueId,
       companyId
     },
-    include: [{
-      model: Chatbot,
-      as: "chatbots",
-      include: [
-        {
-          model: User,
-          as: "user"
-        },
-      ]
-    }
-  ],
+    include: [
+      {
+        model: Chatbot,
+        as: "chatbots",
+        include: [
+          {
+            model: User,
+            as: "user"
+          },
+        ]
+      },
+      {
+        model: Prompt,
+        as: "promptSelected"
+      }
+    ],
     order: [
       [{ model: Chatbot, as: "chatbots" }, "id", "asc"],
       ["id", "ASC"]

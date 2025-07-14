@@ -129,6 +129,7 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
     tempoRoteador: 0,
     ativarRoteador: false,
     integrationId: "",
+    promptId: "",
     fileListId: "",
     closeTicket: false
   };
@@ -151,6 +152,8 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
   const { user, socket } = useContext(AuthContext);
   const [searchParam, setSearchParam] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedPrompt, setSelectedPrompt] = useState(null);
+  const [prompts, setPrompts] = useState([]);
 
   const [selectedQueueOption, setSelectedQueueOption] = useState("");
   const { findAll: findAllQueues } = useQueues();
@@ -225,6 +228,8 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
           return { ...prevState, ...data };
         });
 
+        if (data.promptSelected) setSelectedPrompt(data.promptSelected.id);
+
         if (isArray(data.schedules) && data.schedules.length > 0)
           setSchedules(data.schedules);
       } catch (err) {
@@ -246,6 +251,7 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
         fileListId: "",
         closeTicket: false
       });
+      setSelectedPrompt(null);
     };
   }, [queueId, open]);
 
@@ -299,6 +305,17 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get("/prompt");
+        setPrompts(data.prompts);
+      } catch (err) {
+        toastError(err);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
 
     if (activeStep) {
       setSelectedQueueOption(queue.chatbots[activeStep]?.optQueueId)
@@ -339,6 +356,7 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
       const { data } = await api.get(`/queue/${queueId}`);
       setQueue(initialState);
       setQueue(data);
+      setSelectedPrompt(data.promptSelected ? data.promptSelected.id : null);
 
       setIsNamedEdit(null);
       setGreetingMessageEdit(null);
@@ -351,9 +369,9 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
   const handleSaveQueue = async (values) => {
     try {
       if (queueId) {
-        await api.put(`/queue/${queueId}`, { ...values, schedules });
+        await api.put(`/queue/${queueId}`, { ...values, schedules, promptId: selectedPrompt });
       } else {
-        await api.post("/queue", { ...values, schedules });
+        await api.post("/queue", { ...values, schedules, promptId: selectedPrompt });
       }
 
       toast.success(`${i18n.t("queues.toasts.success")}`);
@@ -367,13 +385,13 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
     console.log(values)
     try {
       if (queueId) {
-        const { data } = await api.put(`/queue/${queueId}`, values);
+        const { data } = await api.put(`/queue/${queueId}`, { ...values, promptId: selectedPrompt });
         if (data.chatbots && data.chatbots.length) {
           onEdit(data);
           setQueue(data);
         }
       } else {
-        const { data } = await api.post("/queue", values);
+        const { data } = await api.post("/queue", { ...values, promptId: selectedPrompt });
         if (data.chatbots && data.chatbots.length) {
           setQueue(data);
           onEdit(data);
@@ -579,39 +597,64 @@ const QueueModal = ({ open, onClose, queueId, onEdit }) => {
                   </div>
                   <div>
                     {showIntegrations && (
-                      <FormControl
-                        variant="outlined"
-                        margin="dense"
-                        className={classes.FormControl}
-                        fullWidth
-                      >
-                        <InputLabel id="integrationId-selection-label">
-                          {i18n.t("queueModal.form.integrationId")}
-                        </InputLabel>
-                        <Field
-                          as={Select}
-                          label={i18n.t("queueModal.form.integrationId")}
-                          name="integrationId"
-                          id="integrationId"
-                          placeholder={i18n.t("queueModal.form.integrationId")}
-                          labelId="integrationId-selection-label"
-                          value={values.integrationId || ""}
-                        >
-                          <MenuItem value={""} >{"Nenhum"}</MenuItem>
-                          {integrations.map((integration) => (
-                            <MenuItem key={integration.id} value={integration.id}>
-                              {integration.name}
-                            </MenuItem>
-                          ))}
-                        </Field>
-
-                      </FormControl>
-                    )}
                     <FormControl
                       variant="outlined"
                       margin="dense"
                       className={classes.FormControl}
                       fullWidth
+                    >
+                      <InputLabel id="integrationId-selection-label">
+                        {i18n.t("queueModal.form.integrationId")}
+                      </InputLabel>
+                      <Field
+                        as={Select}
+                        label={i18n.t("queueModal.form.integrationId")}
+                        name="integrationId"
+                        id="integrationId"
+                        placeholder={i18n.t("queueModal.form.integrationId")}
+                        labelId="integrationId-selection-label"
+                        value={values.integrationId || ""}
+                      >
+                        <MenuItem value={""} >{"Nenhum"}</MenuItem>
+                        {integrations.map((integration) => (
+                          <MenuItem key={integration.id} value={integration.id}>
+                            {integration.name}
+                          </MenuItem>
+                        ))}
+                      </Field>
+
+                    </FormControl>
+                  )}
+                  {showOpenAi && (
+                    <FormControl
+                      variant="outlined"
+                      margin="dense"
+                      className={classes.FormControl}
+                      fullWidth
+                    >
+                      <InputLabel id="promptId-selection-label">{i18n.t("queueModal.form.prompt")}</InputLabel>
+                      <Select
+                        labelId="promptId-selection-label"
+                        id="promptId"
+                        name="promptId"
+                        value={selectedPrompt || ""}
+                        onChange={(e) => setSelectedPrompt(e.target.value)}
+                        label={i18n.t("queueModal.form.prompt")}
+                      >
+                        <MenuItem value="">{"Nenhum"}</MenuItem>
+                        {prompts.map((prompt) => (
+                          <MenuItem key={prompt.id} value={prompt.id}>
+                            {prompt.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                  <FormControl
+                    variant="outlined"
+                    margin="dense"
+                    className={classes.FormControl}
+                    fullWidth
                     >
                       <InputLabel id="fileListId-selection-label">{i18n.t("queueModal.form.fileListId")}</InputLabel>
                       <Field

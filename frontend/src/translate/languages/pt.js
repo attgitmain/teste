@@ -500,6 +500,7 @@ const messages = {
           outOfHoursMessage: "Mensagem de fora de expediente",
           token: "Token",
           integrationId: "Integração",
+          prompt: "Prompt",
           fileListId: "Lista de arquivos",
           closeTicket: "Fechar ticket",
           queueType: "Tipo de menu",

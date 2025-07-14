@@ -38,7 +38,8 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     ativarRoteador,
     integrationId,
     fileListId,
-    closeTicket
+    closeTicket,
+    promptId
   } = req.body;
   const { companyId } = req.user;
 
@@ -55,7 +56,8 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     orderQueue: orderQueue === "" ? null : orderQueue,
     integrationId: integrationId === "" ? null : integrationId,
     fileListId: fileListId === "" ? null : fileListId,
-    closeTicket
+    closeTicket,
+    promptId: promptId === "" ? null : promptId
   });
 
   const io = getIO();
@@ -96,7 +98,8 @@ export const update = async (
     ativarRoteador,
     integrationId,
     fileListId,
-    closeTicket
+    closeTicket,
+    promptId
   } = req.body;
 
   const queue = await UpdateQueueService(queueId, 
@@ -111,7 +114,8 @@ export const update = async (
     orderQueue: orderQueue === "" ? null : orderQueue,
     integrationId: integrationId === "" ? null : integrationId,
     fileListId: fileListId === "" ? null : fileListId,
-    closeTicket},
+    closeTicket,
+    promptId: promptId === "" ? null : promptId},
     companyId);
 
   const io = getIO();

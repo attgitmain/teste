@@ -107,6 +107,13 @@ class Queue extends Model<Queue> {
 
   @BelongsTo(() => Files)
   files: Files;
+
+  @ForeignKey(() => Prompt)
+  @Column
+  promptId: number;
+
+  @BelongsTo(() => Prompt)
+  promptSelected: Prompt;
   
   @Default(false)
   @Column
