@@ -64,7 +64,8 @@ const PromptSchema = Yup.object().shape({
     temperature: Yup.number().required("Informe a temperatura"),
     apikey: Yup.string().required("Informe a API Key"),
     queueId: Yup.number().required("Informe a fila"),
-    max_messages: Yup.number().required("Informe o número máximo de mensagens")
+    max_messages: Yup.number().required("Informe o número máximo de mensagens"),
+    finishTicket: Yup.number()
 });
 
 const PromptModal = ({ open, onClose, promptId }) => {
@@ -86,7 +87,8 @@ const PromptModal = ({ open, onClose, promptId }) => {
         temperature: 1,
         apiKey: "",
         queueId: null,
-        maxMessages: 10
+        maxMessages: 10,
+        finishTicket: 0
     };
 
     const [prompt, setPrompt] = useState(initialState);
@@ -329,6 +331,20 @@ const PromptModal = ({ open, onClose, promptId }) => {
                                         margin="dense"
                                         fullWidth
                                     />
+                                    <FormControl fullWidth margin="dense" variant="outlined">
+                                        <InputLabel id="finishTicket-label">{i18n.t("promptModal.form.finishTicket")}</InputLabel>
+                                        <Field
+                                            as={Select}
+                                            labelId="finishTicket-label"
+                                            name="finishTicket"
+                                            label={i18n.t("promptModal.form.finishTicket")}
+                                        >
+                                            <MenuItem value={0}>0</MenuItem>
+                                            {[5,10,15,20,25,30,35,40,45,50,55,60].map(m => (
+                                                <MenuItem key={m} value={m}>{m}</MenuItem>
+                                            ))}
+                                        </Field>
+                                    </FormControl>
                                 </div>
                             </DialogContent>
                             <DialogActions>

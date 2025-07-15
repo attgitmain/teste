@@ -42,6 +42,9 @@ class Prompt extends Model<Prompt> {
   temperature: number;
 
   @Column({ defaultValue: 0 })
+  finishTicket: number;
+
+  @Column({ defaultValue: 0 })
   promptTokens: number;
 
   @Column({ defaultValue: 0 })
