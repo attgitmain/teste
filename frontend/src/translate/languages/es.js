@@ -414,6 +414,7 @@ const messages = {
           max_messages: "Máximo de mensajes del Historico",
           voiceKey: "Llave de la API de la Voz",
           voiceRegion: "Región de la Voz",
+          finishTicket: "Finalizar servicio después (min)"
         },
         success: "Prompt guardado",
         title: {

@@ -4657,7 +4657,8 @@ const handleMessage = async (
         temperature: parseInt(temperature),
         apiKey,
         queueId: parseInt(queueId),
-        maxMessages: parseInt(maxMessages)
+        maxMessages: parseInt(maxMessages),
+        finishTicket: nodeSelected.data.typebotIntegration.finishTicket ? parseInt(nodeSelected.data.typebotIntegration.finishTicket) : 0
       };
 
       await handleOpenAi(
@@ -4694,7 +4695,8 @@ const handleMessage = async (
         temperature: qPrompt.temperature,
         apiKey: qPrompt.apiKey,
         queueId: qPrompt.queueId,
-        maxMessages: qPrompt.maxMessages
+        maxMessages: qPrompt.maxMessages,
+        finishTicket: qPrompt.finishTicket || 0
       };
 
       await handleOpenAi(
@@ -5008,7 +5010,8 @@ const handleMessage = async (
 
       //atualiza mensagem para indicar que houve atividade e aí contar o tempo novamente para enviar mensagem de inatividade
       await ticket.update({
-        sendInactiveMessage: false
+        sendInactiveMessage: false,
+        botFinishAt: null
       });
     }
 

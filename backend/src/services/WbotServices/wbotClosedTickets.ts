@@ -19,7 +19,8 @@ const closeTicket = async (ticket: any, body: string) => {
     status: "closed",
     lastMessage: body,
     unreadMessages: 0,
-    amountUsedBotQueues: 0
+    amountUsedBotQueues: 0,
+    botFinishAt: null
   });
   await CreateLogTicketService({
     userId: ticket.userId || null,
@@ -27,6 +28,49 @@ const closeTicket = async (ticket: any, body: string) => {
     ticketId: ticket.id,
     type: "autoClose"
   });
+};
+
+const handleBotAutoCloseTickets = async (companyId: number, whatsapp: Whatsapp) => {
+  const ticketsToClose = await Ticket.findAll({
+    where: {
+      status: "open",
+      companyId,
+      whatsappId: whatsapp.id,
+      botFinishAt: { [Op.lt]: new Date() }
+    }
+  });
+
+  if (ticketsToClose && ticketsToClose.length > 0) {
+    logger.info(`Encontrou ${ticketsToClose.length} atendimentos para encerrar por inatividade do bot na empresa ${companyId} - na conexão ${whatsapp.name}!`);
+    for (const ticket of ticketsToClose) {
+      await ticket.reload();
+      const ticketTraking = await TicketTraking.findOne({
+        where: { ticketId: ticket.id, finishedAt: null }
+      });
+
+      let bodyMessageInactive = "";
+      if (!isNil(whatsapp.inactiveMessage) && whatsapp.inactiveMessage !== "") {
+        bodyMessageInactive = formatBody(`\u200e ${whatsapp.inactiveMessage}`, ticket);
+        const sentMessage = await SendWhatsAppMessage({ body: bodyMessageInactive, ticket });
+        await verifyMessage(sentMessage, ticket, ticket.contact);
+      }
+
+      await closeTicket(ticket, bodyMessageInactive);
+
+      await ticketTraking.update({
+        finishedAt: new Date(),
+        closedAt: new Date(),
+        whatsappId: ticket.whatsappId,
+        userId: ticket.userId,
+      });
+
+      const io = getIO();
+      io.of(companyId.toString()).emit(`company-${companyId}-ticket`, {
+        action: "delete",
+        ticketId: ticket.id
+      });
+    }
+  }
 };
 
 const handleOpenTickets = async (companyId: number, whatsapp: Whatsapp) => {
@@ -209,11 +253,7 @@ export const ClosedAllOpenTickets = async (companyId: number): Promise<void> => 
         "expiresInactiveMessage", "inactiveMessage", "expiresTicket", "expiresTicketNPS", "whenExpiresTicket",
         "completionMessage"],
       where: {
-        [Op.or]: [
-          { expiresTicket: { [Op.gt]: '0' } },
-          { expiresTicketNPS: { [Op.gt]: '0' } }
-        ],
-        companyId: companyId, // Filtrar pelo companyId fornecido como parâmetro
+        companyId: companyId,
         status: "CONNECTED"
       }
     });
@@ -221,6 +261,7 @@ export const ClosedAllOpenTickets = async (companyId: number): Promise<void> => 
     // Agora você pode iterar sobre as instâncias de Whatsapp diretamente
     if (whatsapps.length > 0) {
       for (const whatsapp of whatsapps) {
+        await handleBotAutoCloseTickets(companyId, whatsapp);
         if (whatsapp.expiresTicket) {
           await handleOpenTickets(companyId, whatsapp);
         }

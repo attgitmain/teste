@@ -12,6 +12,7 @@ import { isNil, isNull } from "lodash";
 
 import fs from "fs";
 import path, { join } from "path";
+import moment from "moment";
 
 import OpenAI from "openai";
 import Ticket from "../../models/Ticket";
@@ -51,6 +52,7 @@ interface IOpenAi {
   apiKey: string;
   queueId: number;
   maxMessages: number;
+  finishTicket: number;
 }
 
 const deleteFileSync = (path: string): void => {
@@ -179,6 +181,9 @@ export const handleOpenAi = async (
         text: `\u200e ${response!}`
       });
       await verifyMessage(sentMessage!, ticket, contact);
+      if (openAiSettings.finishTicket > 0) {
+        await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+      }
     } else {
       console.log(179, "OpenAiService");
       const fileNameWithOutExtension = `${ticket.id}_${Date.now()}`;
@@ -206,6 +211,9 @@ export const handleOpenAi = async (
             false,
             wbot
           );
+          if (openAiSettings.finishTicket > 0) {
+            await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+          }
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);
         } catch (error) {
@@ -289,6 +297,9 @@ export const handleOpenAi = async (
             false,
             wbot
           );
+          if (openAiSettings.finishTicket > 0) {
+            await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+          }
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);
         } catch (error) {

@@ -18,10 +18,11 @@ interface PromptData {
     voice?: string;
     voiceKey?: string;
     voiceRegion?: string;
+    finishTicket?: number;
 }
 
 const CreatePromptService = async (promptData: PromptData): Promise<Prompt> => {
-    const { name, apiKey, prompt, queueId,maxMessages,companyId } = promptData;
+    const { name, apiKey, prompt, queueId,maxMessages,companyId, finishTicket } = promptData;
 
     const promptSchema = Yup.object().shape({
         name: Yup.string().required("ERR_PROMPT_NAME_INVALID"),

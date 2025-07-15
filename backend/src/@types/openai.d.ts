@@ -9,4 +9,5 @@ export interface IOpenAi {
     apiKey: string;
     queueId: string;
     maxMessages: string;
+    finishTicket: string;
 };

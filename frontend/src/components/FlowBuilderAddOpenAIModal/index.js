@@ -77,6 +77,7 @@ const FlowBuilderOpenAIModal = ({ open, onSave, data, onUpdate, close }) => {
     apiKey: "",
     queueId: null,
     maxMessages: 10,
+    finishTicket: 0,
   };
 
   const [showApiKey, setShowApiKey] = useState(false);
@@ -373,6 +374,20 @@ const FlowBuilderOpenAIModal = ({ open, onSave, data, onUpdate, close }) => {
                     margin="dense"
                     fullWidth
                   />
+                  <FormControl fullWidth margin="dense" variant="outlined">
+                    <InputLabel id="flow-finishTicket">{i18n.t("promptModal.form.finishTicket")}</InputLabel>
+                    <Field
+                      as={Select}
+                      labelId="flow-finishTicket"
+                      name="finishTicket"
+                      label={i18n.t("promptModal.form.finishTicket")}
+                    >
+                      <MenuItem value={0}>0</MenuItem>
+                      {[5,10,15,20,25,30,35,40,45,50,55,60].map(m => (
+                        <MenuItem key={m} value={m}>{m}</MenuItem>
+                      ))}
+                    </Field>
+                  </FormControl>
                 </div>
               </DialogContent>
               <DialogActions>
