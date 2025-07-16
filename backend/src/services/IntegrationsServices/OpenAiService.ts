@@ -13,6 +13,7 @@ import { isNil, isNull } from "lodash";
 import fs from "fs";
 import path, { join } from "path";
 import moment from "moment";
+import { Sequelize } from "sequelize";
 
 import OpenAI from "openai";
 import Ticket from "../../models/Ticket";
@@ -182,7 +183,9 @@ export const handleOpenAi = async (
       });
       await verifyMessage(sentMessage!, ticket, contact);
       if (openAiSettings.finishTicket > 0) {
-        await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+        await ticket.update({
+          botFinishAt: Sequelize.literal(`NOW() + INTERVAL '${openAiSettings.finishTicket} minutes'`)
+        });
       }
     } else {
       console.log(179, "OpenAiService");
@@ -212,7 +215,9 @@ export const handleOpenAi = async (
             wbot
           );
           if (openAiSettings.finishTicket > 0) {
-            await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+            await ticket.update({
+              botFinishAt: Sequelize.literal(`NOW() + INTERVAL '${openAiSettings.finishTicket} minutes'`)
+            });
           }
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);
@@ -298,7 +303,9 @@ export const handleOpenAi = async (
             wbot
           );
           if (openAiSettings.finishTicket > 0) {
-            await ticket.update({ botFinishAt: moment().add(openAiSettings.finishTicket, "minutes").toDate() });
+            await ticket.update({
+              botFinishAt: Sequelize.literal(`NOW() + INTERVAL '${openAiSettings.finishTicket} minutes'`)
+            });
           }
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);

@@ -5,6 +5,7 @@ import { getIO } from "../../libs/socket"
 import formatBody from "../../helpers/Mustache";
 import SendWhatsAppMessage from "./SendWhatsAppMessage";
 import moment from "moment";
+import { Sequelize } from "sequelize";
 import ShowTicketService from "../TicketServices/ShowTicketService";
 import { verifyMessage } from "./wbotMessageListener";
 import TicketTraking from "../../models/TicketTraking";
@@ -36,7 +37,7 @@ const handleBotAutoCloseTickets = async (companyId: number, whatsapp: Whatsapp) 
       status: "open",
       companyId,
       whatsappId: whatsapp.id,
-      botFinishAt: { [Op.lt]: new Date() }
+      botFinishAt: { [Op.lt]: Sequelize.literal('NOW()') }
     }
   });
 
