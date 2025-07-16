@@ -279,7 +279,10 @@ export const ActionsWebhookService = async (
           temperature: parseInt(temperature),
           apiKey,
           queueId: parseInt(queueId),
-          maxMessages: parseInt(maxMessages)
+          maxMessages: parseInt(maxMessages),
+          finishTicket: nodeSelected.data.typebotIntegration.finishTicket
+            ? parseInt(nodeSelected.data.typebotIntegration.finishTicket)
+            : 0
         };
 
         const contact = await Contact.findOne({
