@@ -37,7 +37,10 @@ const handleBotAutoCloseTickets = async (companyId: number, whatsapp: Whatsapp) 
       status: "open",
       companyId,
       whatsappId: whatsapp.id,
-      botFinishAt: { [Op.lt]: Sequelize.literal('NOW()') }
+      botFinishAt: {
+        [Op.ne]: null,
+        [Op.lte]: Sequelize.literal("NOW()")
+      }
     }
   });
 
