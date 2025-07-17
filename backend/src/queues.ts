@@ -1766,21 +1766,18 @@ async function handleProcessLanes() {
 
 async function handleCloseTicketsAutomatic() {
   const job = new CronJob("*/1 * * * *", async () => {
-    const companies = await Company.findAll({
-      where: {
-        status: true
-      }
-    });
-    companies.map(async c => {
-      try {
-        const companyId = c.id;
-        await ClosedAllOpenTickets(companyId);
-      } catch (e: any) {
-        Sentry.captureException(e);
-        logger.error("ClosedAllOpenTickets -> Verify: error", e.message);
-        throw e;
-      }
-    });
+    try {
+      const companies = await Company.findAll({
+        where: { status: true }
+      });
+
+      await Promise.allSettled(
+        companies.map(c => ClosedAllOpenTickets(c.id))
+      );
+    } catch (e: any) {
+      Sentry.captureException(e);
+      logger.error("ClosedAllOpenTickets -> Verify: error", e.message);
+    }
   });
   job.start();
 }
@@ -2031,15 +2028,17 @@ try {
 
   job.start();
 }
-handleInvoiceCreate();
-handleWhatsapp();
-handleDailyReport();
-handleProcessLanes();
-handleCloseTicketsAutomatic();
-handleRandomUser();
 
 export async function startQueueProcess() {
   logger.info("Iniciando processamento de filas");
+
+  // Inicia rotinas agendadas
+  handleInvoiceCreate();
+  handleWhatsapp();
+  handleDailyReport();
+  handleProcessLanes();
+  handleCloseTicketsAutomatic();
+  handleRandomUser();
 
   messageQueue.process("SendMessage", handleSendMessage);
 
