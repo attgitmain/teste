@@ -8,6 +8,7 @@ import logger from "../../utils/logger";
 import { isNil } from "lodash";
 import Whatsapp from "../../models/Whatsapp";
 import * as Sentry from "@sentry/node";
+import GetNoPictureUrl from "../../helpers/GetNoPictureUrl";
 
 const axios = require("axios");
 
@@ -143,7 +144,7 @@ const CreateOrUpdateContactService = async ({
             );
           } catch (e) {
             Sentry.captureException(e);
-            profilePicUrl = `${process.env.FRONTEND_URL}/nopicture.png`;
+            profilePicUrl = await GetNoPictureUrl();
           }
           contact.profilePicUrl = profilePicUrl;
           updateImage = true;
@@ -176,7 +177,7 @@ const CreateOrUpdateContactService = async ({
         );
       } catch (e) {
         Sentry.captureException(e);
-        profilePicUrl = `${process.env.FRONTEND_URL}/nopicture.png`;
+        profilePicUrl = await GetNoPictureUrl();
       }
 
       contact = await Contact.create({
