@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/node";
 import { isNil, isNull } from "lodash";
 import { REDIS_URI_MSG_CONN } from "../../config/redis";
 import axios from "axios";
+import GetNoPictureUrl from "../../helpers/GetNoPictureUrl";
 
 import {
   downloadMediaMessage,
@@ -5397,7 +5398,7 @@ const wbotMessageListener = (wbot: Session, companyId: number): void => {
          profilePicUrl = await wbot.profilePictureUrl(group.id, "image");
        } catch (e) {
          Sentry.captureException(e);
-         profilePicUrl = `${process.env.FRONTEND_URL}/nopicture.png`;
+         profilePicUrl = await GetNoPictureUrl();
        }
       const contactData = {
         name: nameGroup,
