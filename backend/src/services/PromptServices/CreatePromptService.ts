@@ -7,6 +7,11 @@ interface PromptData {
     name: string;
     apiKey: string;
     prompt: string;
+    prompt1?: string;
+    prompt2?: string;
+    prompt3?: string;
+    activePrompt?: number;
+    rotatePrompts?: boolean;
     maxTokens?: number;
     temperature?: number;
     promptTokens?: number;
@@ -22,7 +27,7 @@ interface PromptData {
 }
 
 const CreatePromptService = async (promptData: PromptData): Promise<Prompt> => {
-    const { name, apiKey, prompt, queueId,maxMessages,companyId, finishTicket } = promptData;
+    const { name, apiKey, prompt, prompt1, prompt2, prompt3, activePrompt, rotatePrompts, queueId, maxMessages, companyId, finishTicket } = promptData;
 
     const promptSchema = Yup.object().shape({
         name: Yup.string().required("ERR_PROMPT_NAME_INVALID"),

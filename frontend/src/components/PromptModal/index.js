@@ -14,7 +14,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { i18n } from "../../translate/i18n";
-import { MenuItem, FormControl, InputLabel, Select } from "@material-ui/core";
+import { MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { InputAdornment, IconButton } from "@material-ui/core";
 import QueueSelectSingle from "../QueueSelectSingle";
@@ -59,6 +59,11 @@ const useStyles = makeStyles(theme => ({
 const PromptSchema = Yup.object().shape({
     name: Yup.string().min(5, "Muito curto!").max(100, "Muito longo!").required("Obrigatório"),
     prompt: Yup.string().min(50, "Muito curto!").required("Descreva o treinamento para Inteligência Artificial"),
+    prompt1: Yup.string(),
+    prompt2: Yup.string(),
+    prompt3: Yup.string(),
+    activePrompt: Yup.number(),
+    rotatePrompts: Yup.boolean(),
     voice: Yup.string().required("Informe o modo para Voz"),
     max_tokens: Yup.number().required("Informe o número máximo de tokens"),
     temperature: Yup.number().required("Informe a temperatura"),
@@ -80,6 +85,11 @@ const PromptModal = ({ open, onClose, promptId }) => {
     const initialState = {
         name: "",
         prompt: "",
+        prompt1: "",
+        prompt2: "",
+        prompt3: "",
+        activePrompt: 0,
+        rotatePrompts: false,
         voice: "texto",
         voiceKey: "",
         voiceRegion: "",
@@ -124,7 +134,12 @@ const PromptModal = ({ open, onClose, promptId }) => {
     };
 
     const handleSavePrompt = async values => {
-        const promptData = { ...values, voice: selectedVoice };
+        const promptsArr = [values.prompt, values.prompt1, values.prompt2, values.prompt3];
+        const promptData = {
+            ...values,
+            prompt: promptsArr[values.activePrompt] || values.prompt,
+            voice: selectedVoice
+        };
         if (!values.queueId) {
             toastError("Informe o setor");
             return;
@@ -213,8 +228,56 @@ const PromptModal = ({ open, onClose, promptId }) => {
                                     margin="dense"
                                     fullWidth
                                     required
-                                    rows={10}
+                                    rows={4}
                                     multiline={true}
+                                />
+                                <Field
+                                    as={TextField}
+                                    label={i18n.t("promptModal.form.prompt1")}
+                                    name="prompt1"
+                                    variant="outlined"
+                                    margin="dense"
+                                    fullWidth
+                                    rows={4}
+                                    multiline={true}
+                                />
+                                <Field
+                                    as={TextField}
+                                    label={i18n.t("promptModal.form.prompt2")}
+                                    name="prompt2"
+                                    variant="outlined"
+                                    margin="dense"
+                                    fullWidth
+                                    rows={4}
+                                    multiline={true}
+                                />
+                                <Field
+                                    as={TextField}
+                                    label={i18n.t("promptModal.form.prompt3")}
+                                    name="prompt3"
+                                    variant="outlined"
+                                    margin="dense"
+                                    fullWidth
+                                    rows={4}
+                                    multiline={true}
+                                />
+                                <FormControl fullWidth margin="dense" variant="outlined">
+                                    <InputLabel id="activePrompt-label">{i18n.t("promptModal.form.activePrompt")}</InputLabel>
+                                    <Field
+                                        as={Select}
+                                        labelId="activePrompt-label"
+                                        name="activePrompt"
+                                        label={i18n.t("promptModal.form.activePrompt")}
+                                    >
+                                        <MenuItem value={0}>{i18n.t("promptModal.form.prompt")}</MenuItem>
+                                        <MenuItem value={1}>{i18n.t("promptModal.form.prompt1")}</MenuItem>
+                                        <MenuItem value={2}>{i18n.t("promptModal.form.prompt2")}</MenuItem>
+                                        <MenuItem value={3}>{i18n.t("promptModal.form.prompt3")}</MenuItem>
+                                    </Field>
+                                </FormControl>
+                                <FormControlLabel
+                                    control={<Field as={Switch} name="rotatePrompts" color="primary" />}
+                                    label={i18n.t("promptModal.form.rotatePrompts")}
                                 />
                                 <QueueSelectSingle />
                                 <div className={classes.multFieldLine}>

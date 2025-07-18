@@ -8,6 +8,11 @@ interface PromptData {
     name: string;
     apiKey: string;
     prompt: string;
+    prompt1?: string;
+    prompt2?: string;
+    prompt3?: string;
+    activePrompt?: number;
+    rotatePrompts?: boolean;
     maxTokens?: number;
     temperature?: number;
     promptTokens?: number;
@@ -43,7 +48,7 @@ const UpdatePromptService = async ({
         maxMessages: Yup.number().required("ERR_PROMPT_MAX_MESSAGES_INVALID")
     });
 
-    const { name, apiKey, prompt, maxTokens, temperature, promptTokens, completionTokens, totalTokens, queueId, maxMessages, voice, voiceKey, voiceRegion, finishTicket } = promptData;
+    const { name, apiKey, prompt, prompt1, prompt2, prompt3, activePrompt, rotatePrompts, maxTokens, temperature, promptTokens, completionTokens, totalTokens, queueId, maxMessages, voice, voiceKey, voiceRegion, finishTicket } = promptData;
 
     try {
         await promptSchema.validate({ name, apiKey, prompt, maxTokens, temperature, promptTokens, completionTokens, totalTokens, queueId, maxMessages });
@@ -51,7 +56,7 @@ const UpdatePromptService = async ({
         throw new AppError(`${JSON.stringify(err, undefined, 2)}`);
     }
 
-    await promptTable.update({ name, apiKey, prompt, maxTokens, temperature, promptTokens, completionTokens, totalTokens, queueId, maxMessages, voice, voiceKey, voiceRegion, finishTicket });
+    await promptTable.update({ name, apiKey, prompt, prompt1, prompt2, prompt3, activePrompt, rotatePrompts, maxTokens, temperature, promptTokens, completionTokens, totalTokens, queueId, maxMessages, voice, voiceKey, voiceRegion, finishTicket });
     await promptTable.reload();
     return promptTable;
 };

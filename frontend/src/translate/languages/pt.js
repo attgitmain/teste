@@ -416,6 +416,11 @@ const messages = {
         form: {
           name: "Nome",
           prompt: "Prompt",
+          prompt1: "Prompt 1",
+          prompt2: "Prompt 2",
+          prompt3: "Prompt 3",
+          activePrompt: "Escolher Prompt",
+          rotatePrompts: "Ativar rotatividade de prompts",
           voice: "Voz",
           max_tokens: "Máximo de Tokens na resposta",
           temperature: "Temperatura",
