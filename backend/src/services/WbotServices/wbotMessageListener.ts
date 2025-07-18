@@ -4686,9 +4686,20 @@ const handleMessage = async (
       !ticket.userId
     ) {
       const qPrompt = ticket.queue.promptSelected;
+      let promptText = qPrompt.prompt;
+      if (qPrompt.rotatePrompts) {
+        const promptsArr = [qPrompt.prompt, qPrompt.prompt1, qPrompt.prompt2, qPrompt.prompt3];
+        let variant = ticket.promptVariant;
+        if (variant === null || variant === undefined) {
+          variant = qPrompt.activePrompt || 0;
+          await ticket.update({ promptVariant: variant });
+          await qPrompt.update({ activePrompt: (variant + 1) % 4 });
+        }
+        promptText = promptsArr[variant] || qPrompt.prompt;
+      }
       const openAiSettings = {
         name: qPrompt.name,
-        prompt: qPrompt.prompt,
+        prompt: promptText,
         voice: qPrompt.voice,
         voiceKey: qPrompt.voiceKey,
         voiceRegion: qPrompt.voiceRegion,
@@ -4719,9 +4730,33 @@ const handleMessage = async (
       !ticket.userId &&
       !isNil(whatsapp.promptId)
     ) {
-      const { prompt } = whatsapp;
+      const promptConfig = whatsapp.prompt;
+      let promptText = promptConfig.prompt;
+      if (promptConfig.rotatePrompts) {
+        const promptsArr = [promptConfig.prompt, promptConfig.prompt1, promptConfig.prompt2, promptConfig.prompt3];
+        let variant = ticket.promptVariant;
+        if (variant === null || variant === undefined) {
+          variant = promptConfig.activePrompt || 0;
+          await ticket.update({ promptVariant: variant });
+          await promptConfig.update({ activePrompt: (variant + 1) % 4 });
+        }
+        promptText = promptsArr[variant] || promptConfig.prompt;
+      }
+      const openAiSettings = {
+        name: promptConfig.name,
+        prompt: promptText,
+        voice: promptConfig.voice,
+        voiceKey: promptConfig.voiceKey,
+        voiceRegion: promptConfig.voiceRegion,
+        maxTokens: promptConfig.maxTokens,
+        temperature: promptConfig.temperature,
+        apiKey: promptConfig.apiKey,
+        queueId: promptConfig.queueId,
+        maxMessages: promptConfig.maxMessages,
+        finishTicket: promptConfig.finishTicket || 0
+      };
       await handleOpenAi(
-        prompt,
+        openAiSettings,
         msg,
         wbot,
         ticket,

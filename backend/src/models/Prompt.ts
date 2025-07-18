@@ -28,6 +28,24 @@ class Prompt extends Model<Prompt> {
   @Column
   prompt: string;
 
+  @AllowNull(true)
+  @Column
+  prompt1: string;
+
+  @AllowNull(true)
+  @Column
+  prompt2: string;
+
+  @AllowNull(true)
+  @Column
+  prompt3: string;
+
+  @Column({ defaultValue: 0 })
+  activePrompt: number;
+
+  @Column({ defaultValue: false })
+  rotatePrompts: boolean;
+
   @AllowNull(false)
   @Column
   apiKey: string;

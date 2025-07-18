@@ -188,6 +188,12 @@ class Ticket extends Model<Ticket> {
 
   @Column
   botFinishAt: Date;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true
+  })
+  promptVariant: number;
 }
 
 export default Ticket;
