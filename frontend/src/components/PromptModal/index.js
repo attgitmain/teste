@@ -278,7 +278,15 @@ const PromptModal = ({ open, onClose, promptId }) => {
                                     </Field>
                                 </FormControl>
                                 <FormControlLabel
-                                    control={<Field as={Switch} name="rotatePrompts" color="primary" />}
+                                    control={
+                                        <Field
+                                            as={Switch}
+                                            name="rotatePrompts"
+                                            color="primary"
+                                            checked={values.rotatePrompts}
+                                            type="checkbox"
+                                        />
+                                    }
                                     label={i18n.t("promptModal.form.rotatePrompts")}
                                 />
                                 <QueueSelectSingle />
