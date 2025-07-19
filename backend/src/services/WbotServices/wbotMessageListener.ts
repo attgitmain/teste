@@ -46,6 +46,7 @@ import SendWhatsAppMessage from "./SendWhatsAppMessage";
 import sendFaceMessage from "../FacebookServices/sendFacebookMessage";
 import moment from "moment";
 import Queue from "../../models/Queue";
+import Prompt from "../../models/Prompt";
 import FindOrCreateATicketTrakingService from "../TicketServices/FindOrCreateATicketTrakingService";
 import VerifyCurrentSchedule from "../CompanyService/VerifyCurrentSchedule";
 import Campaign from "../../models/Campaign";
