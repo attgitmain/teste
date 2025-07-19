@@ -72,6 +72,7 @@ import ShowFileService from "../FileServices/ShowService";
 
 import OpenAI from "openai";
 import ffmpeg from "fluent-ffmpeg";
+import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 import {
   SpeechConfig,
   SpeechSynthesizer,
@@ -96,6 +97,8 @@ import { FlowCampaignModel } from "../../models/FlowCampaign";
 import ShowTicketService from "../TicketServices/ShowTicketService";
 import { handleOpenAi } from "../IntegrationsServices/OpenAiService";
 import { IOpenAi } from "../../@types/openai";
+
+ffmpeg.setFfmpegPath(ffmpegPath.path);
 
 const MATURATION_PREFIX = "\u2063";
 
