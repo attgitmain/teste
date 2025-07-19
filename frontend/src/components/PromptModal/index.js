@@ -134,10 +134,8 @@ const PromptModal = ({ open, onClose, promptId }) => {
     };
 
     const handleSavePrompt = async values => {
-        const promptsArr = [values.prompt, values.prompt1, values.prompt2, values.prompt3];
         const promptData = {
             ...values,
-            prompt: promptsArr[values.activePrompt] || values.prompt,
             voice: selectedVoice
         };
         if (!values.queueId) {
