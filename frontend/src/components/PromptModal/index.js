@@ -230,6 +230,7 @@ const PromptModal = ({ open, onClose, promptId }) => {
                                     required
                                     rows={4}
                                     multiline={true}
+                                    disabled
                                 />
                                 <Field
                                     as={TextField}
