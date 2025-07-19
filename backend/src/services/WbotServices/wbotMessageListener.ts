@@ -46,6 +46,7 @@ import SendWhatsAppMessage from "./SendWhatsAppMessage";
 import sendFaceMessage from "../FacebookServices/sendFacebookMessage";
 import moment from "moment";
 import Queue from "../../models/Queue";
+import Prompt from "../../models/Prompt";
 import FindOrCreateATicketTrakingService from "../TicketServices/FindOrCreateATicketTrakingService";
 import VerifyCurrentSchedule from "../CompanyService/VerifyCurrentSchedule";
 import Campaign from "../../models/Campaign";
@@ -1069,7 +1070,11 @@ export const verifyMediaMessage = async (
           "isBot"
         ],
         include: [
-          { model: Queue, as: "queue" },
+          {
+            model: Queue,
+            as: "queue",
+            include: [{ model: Prompt, as: "promptSelected" }]
+          },
           { model: User, as: "user" },
           { model: Contact, as: "contact" },
           { model: Whatsapp, as: "whatsapp" }
@@ -1150,7 +1155,11 @@ export const verifyMessage = async (
     await ticket.update({ status: "pending" });
     await ticket.reload({
       include: [
-        { model: Queue, as: "queue" },
+        {
+          model: Queue,
+          as: "queue",
+          include: [{ model: Prompt, as: "promptSelected" }]
+        },
         { model: User, as: "user" },
         { model: Contact, as: "contact" },
         { model: Whatsapp, as: "whatsapp" }
@@ -1656,7 +1665,15 @@ const verifyQueue = async (
         status: "pending"
       });
 
-    await ticket.reload();
+    await ticket.reload({
+      include: [
+        {
+          model: Queue,
+          as: "queue",
+          include: [{ model: Prompt, as: "promptSelected" }]
+        }
+      ]
+    });
   }
 
   if (String(selectedOption).toLocaleLowerCase() == "sair") {
@@ -3378,7 +3395,8 @@ export const handleRating = async (
   await ticket.update({
     isBot: false,
     status: "closed",
-    amountUsedBotQueuesNPS: 0
+    amountUsedBotQueuesNPS: 0,
+    promptVariant: null
   });
 
   //loga fim de atendimento
@@ -3543,7 +3561,11 @@ const flowbuilderIntegration = async (
     await ticket.update({ status: "pending" });
     await ticket.reload({
       include: [
-        { model: Queue, as: "queue" },
+        {
+          model: Queue,
+          as: "queue",
+          include: [{ model: Prompt, as: "promptSelected" }]
+        },
         { model: User, as: "user" },
         { model: Contact, as: "contact" }
       ]
@@ -5051,7 +5073,15 @@ const handleMessage = async (
       });
     }
 
-    await ticket.reload();
+    await ticket.reload({
+      include: [
+        {
+          model: Queue,
+          as: "queue",
+          include: [{ model: Prompt, as: "promptSelected" }]
+        }
+      ]
+    });
   } catch (err) {
     Sentry.captureException(err);
     console.log(err);
@@ -5209,7 +5239,7 @@ const verifyCampaignMessageAndCloseTicket = async (
       messageRecord !== null
     ) {
       const ticket = await Ticket.findByPk(messageRecord.ticketId);
-      await ticket.update({ status: "closed", amountUsedBotQueues: 0 });
+      await ticket.update({ status: "closed", amountUsedBotQueues: 0, promptVariant: null });
 
       io.of(String(companyId))
         // .to("open")

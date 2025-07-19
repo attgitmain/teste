@@ -104,7 +104,8 @@ const UpdateTicketService = async ({
       });
 
       await ticket.update({
-        status: "closed"
+        status: "closed",
+        promptVariant: null
       });
 
       io.of(String(companyId))
@@ -300,6 +301,7 @@ const UpdateTicketService = async ({
         lastFlowId: null,
         dataWebhook: null,
         hashFlowId: null,
+        promptVariant: null
       });
 
       io.of(String(companyId))
@@ -323,7 +325,8 @@ const UpdateTicketService = async ({
         let newTicketTransfer = ticket;
         if (oldQueueId !== queueId) {
           await ticket.update({
-            status: "closed"
+            status: "closed",
+            promptVariant: null
           });
 
           await ticket.reload();
@@ -692,7 +695,8 @@ const UpdateTicketService = async ({
       integrationId,
       typebotSessionId: !useIntegration ? null : ticket.typebotSessionId,
       typebotStatus: useIntegration,
-      unreadMessages
+      unreadMessages,
+      ...(status === "closed" ? { promptVariant: null } : {})
     });
 
     ticketTraking.queuedAt = moment().toDate();
