@@ -3451,6 +3451,10 @@ export const convertTextToSpeechAndSaveToFile = (
   audioToFormat: string = "mp3"
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
+    const dir = path.dirname(filename);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
     const speechConfig = SpeechConfig.fromSubscription(
       subscriptionKey,
       serviceRegion
