@@ -4422,6 +4422,24 @@ const handleMessage = async (
 
     let mediaSent: Message | undefined;
 
+    try {
+      if (!msg.key.fromMe && ticketTraking !== null && verifyRating(ticketTraking)) {
+        const rating = parseFloat(bodyMessage);
+        if (!isNaN(rating)) {
+          await handleRating(rating, ticket, ticketTraking);
+          await ticketTraking.update({
+            ratingAt: moment().toDate(),
+            finishedAt: moment().toDate(),
+            rated: true
+          });
+          return;
+        }
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      logger.error(`[handleRating] falha ao gravar rating:`, err);
+    }
+
     if (!useLGPD) {
       console.log("log... 3391");
       if (hasMedia) {
@@ -4449,25 +4467,6 @@ const handleMessage = async (
       }
     }
 
-    try {
-      if (!msg.key.fromMe) {
-        console.log("log... 3226");
-        console.log("log... 3227", { ticketTraking});
-        if (ticketTraking !== null && verifyRating(ticketTraking)) {
-          await handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
-          await ticketTraking.update({
-            ratingAt: moment().toDate(),
-            finishedAt: moment().toDate(),
-            rated: true
-          });
-          return;
-        }
-      }
-    } catch (err) {
-      Sentry.captureException(err);
-      logger.error(`[handleRating] falha ao gravar rating:`, err);
-    }
-    
     // Atualiza o ticket se a ultima mensagem foi enviada por mim, para que possa ser finalizado.
     try {
       console.log("log... 3258");
