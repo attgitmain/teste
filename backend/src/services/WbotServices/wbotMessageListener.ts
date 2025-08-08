@@ -4917,7 +4917,8 @@ const handleMessage = async (
       !msg.key.fromMe &&
       !ticket.userId &&
       whatsapp.queues.length >= 1 &&
-      !ticket.useIntegration
+      !ticket.useIntegration &&
+      !ticket.fromMe
     ) {
       // console.log("antes do verifyqueue")
       await verifyQueue(wbot, msg, ticket, contact, settings, ticketTraking);
