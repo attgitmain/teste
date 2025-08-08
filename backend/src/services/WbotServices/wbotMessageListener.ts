@@ -4344,12 +4344,12 @@ const handleMessage = async (
 
     const normalizedBody = bodyMessage?.trim().toLowerCase();
 
-    if (!msg.key.fromMe && normalizedBody === "#") {
+    if (!msg.key.fromMe && !ticket.user && normalizedBody === "#") {
       await sayChatbot(ticket.queueId, wbot, ticket, contact, msg, ticketTraking);
       return;
     }
 
-    if (!msg.key.fromMe && normalizedBody === "sair") {
+    if (!msg.key.fromMe && !ticket.user && normalizedBody === "sair") {
       const ticketData = {
         status: "closed",
         sendFarewellMessage: true,
@@ -5058,7 +5058,7 @@ const handleMessage = async (
     }
 
     if (ticket.queue && ticket.queueId && !msg.key.fromMe) {
-      if (!ticket.user || ticket.queue?.chatbots?.length > 0) {
+      if (!ticket.user) {
         await sayChatbot(
           ticket.queueId,
           wbot,

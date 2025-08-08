@@ -161,6 +161,9 @@ export const sayChatbot = async (
   contact: Contact,
   msg: any
 ): Promise<any> => {
+  if (ticket.userId) {
+    return;
+  }
   const selectedOption = msg.text;
   if (!queueId && selectedOption && msg.is_echo) return;
 
