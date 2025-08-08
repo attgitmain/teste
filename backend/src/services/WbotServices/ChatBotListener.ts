@@ -687,6 +687,9 @@ export const sayChatbot = async (
   msg: proto.IWebMessageInfo,
   ticketTraking: TicketTraking
 ): Promise<any> => {
+  if (ticket.userId) {
+    return;
+  }
   // console.log("LINHA 718")
   // const selectedOption =
   //   msg?.message?.buttonsResponseMessage?.selectedButtonId ||
