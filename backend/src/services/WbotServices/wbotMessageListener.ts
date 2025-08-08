@@ -1419,6 +1419,10 @@ const verifyQueue = async (
 ) => {
   const companyId = ticket.companyId;
 
+  if (ticket.status === "nps") {
+    return;
+  }
+
   console.log("verifyQueue");
   // console.log("GETTING WHATSAPP VERIFY QUEUE", ticket.whatsappId, wbot.id)
   const { queues, greetingMessage, maxUseBotQueues, timeUseBotQueues } =
@@ -4917,7 +4921,8 @@ const handleMessage = async (
       !ticket.userId &&
       whatsapp.queues.length >= 1 &&
       !ticket.useIntegration &&
-      !ticket.fromMe
+      !ticket.fromMe &&
+      ticket.status !== "nps"
     ) {
       // console.log("antes do verifyqueue")
       await verifyQueue(wbot, msg, ticket, contact, settings, ticketTraking);
