@@ -72,7 +72,6 @@ const UpdateTicketService = async ({
       isTransfered = false,
       status
     } = ticketData;
-    let isBot: boolean | null = ticketData.isBot || false;
     let queueOptionId: number | null = ticketData.queueOptionId || null;
 
     const io = getIO();
@@ -84,6 +83,11 @@ const UpdateTicketService = async ({
     });
 
     let ticket = await ShowTicketService(ticketId, companyId);
+    let isBot: boolean | null = ticketData.isBot ?? ticket.isBot;
+
+    if (ticketData.userId !== undefined) {
+      isBot = ticketData.userId ? false : true;
+    }
 
 
 
@@ -136,7 +140,7 @@ const UpdateTicketService = async ({
       }
 
       // await CheckContactOpenTickets(ticket.contactId, ticket.whatsappId );
-      isBot = false;
+      isBot = userId ? false : true;
     }
 
     const ticketTraking = await FindOrCreateATicketTrakingService({
