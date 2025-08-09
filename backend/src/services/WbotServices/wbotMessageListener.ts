@@ -3348,7 +3348,6 @@ export const handleRating = async (
   ticket: Ticket,
   ticketTraking: TicketTraking
 ) => {
-  const io = getIO();
   const companyId = ticket.companyId;
 
   console.log("2050", { handleRating })
@@ -3401,35 +3400,25 @@ export const handleRating = async (
 
   await ticket.update({
     isBot: false,
+    amountUsedBotQueuesNPS: 0
+  });
+
+  await ticketTraking.update({
+    ratingAt: moment().toDate(),
+    finishedAt: moment().toDate(),
+    rated: true
+  });
+
+  const ticketData = {
     status: "closed",
-    amountUsedBotQueuesNPS: 0,
-    promptVariant: null
-  });
+    sendFarewellMessage: false
+  };
 
-  //loga fim de atendimento
-  await CreateLogTicketService({
-    userId: ticket.userId,
-    queueId: ticket.queueId,
+  await UpdateTicketService({
+    ticketData,
     ticketId: ticket.id,
-    type: "closed"
+    companyId
   });
-
-  io.of(String(companyId))
-    // .to("open")
-    .emit(`company-${companyId}-ticket`, {
-      action: "delete",
-      ticket,
-      ticketId: ticket.id
-    });
-
-  io.of(String(companyId))
-    // .to(ticket.status)
-    // .to(ticket.id.toString())
-    .emit(`company-${companyId}-ticket`, {
-      action: "update",
-      ticket,
-      ticketId: ticket.id
-    });
 };
 
 const sanitizeName = (name: string): string => {
@@ -4433,22 +4422,6 @@ const handleMessage = async (
 
         if (!isNaN(rating)) {
           await handleRating(rating, ticket, ticketTraking);
-          await ticketTraking.update({
-            ratingAt: moment().toDate(),
-            finishedAt: moment().toDate(),
-            rated: true
-          });
-
-          const ticketData = {
-            status: "closed",
-            sendFarewellMessage: false
-          };
-
-          await UpdateTicketService({
-            ticketData,
-            ticketId: ticket.id,
-            companyId
-          });
         } else {
           const bodyErrorRating = `\u200eOpção inválida, envie apenas uma nota de 0 a 10.`;
           const sentMessage = await SendWhatsAppMessage({

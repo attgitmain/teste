@@ -633,12 +633,6 @@ export const handleMessage = async (
 
               await handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
 
-              await ticketTraking.update({
-                ratingAt: moment().toDate(),
-                finishedAt: moment().toDate(),
-                rated: true
-              });
-
               return;
             } else {
 
