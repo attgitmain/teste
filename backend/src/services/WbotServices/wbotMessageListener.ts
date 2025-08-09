@@ -3329,12 +3329,14 @@ const verifyQueue = async (
   }
 };
 
-export const verifyRating = (ticketTraking: TicketTraking) => {
-  console.log("2029", { verifyRating })
+export const verifyRating = (
+  ticket: Ticket,
+  ticketTraking: TicketTraking
+) => {
+  console.log("2029", { verifyRating });
   if (
+    ticket.status === "nps" &&
     ticketTraking &&
-    ticketTraking.finishedAt === null &&
-    ticketTraking.closedAt !== null &&
     ticketTraking.ratingAt === null
   ) {
     return true;
@@ -4341,7 +4343,11 @@ const handleMessage = async (
       return;
     }
 
-    if (!msg.key.fromMe && !ticket.user && normalizedBody === "sair") {
+    if (
+      !msg.key.fromMe &&
+      normalizedBody === "sair" &&
+      ticket.status !== "nps"
+    ) {
       const ticketData = {
         status: "closed",
         sendFarewellMessage: true,
@@ -4415,11 +4421,15 @@ const handleMessage = async (
     let mediaSent: Message | undefined;
 
     try {
-      if (!msg.key.fromMe && ticketTraking !== null && verifyRating(ticketTraking)) {
+      if (
+        !msg.key.fromMe &&
+        ticketTraking !== null &&
+        verifyRating(ticket, ticketTraking)
+      ) {
         const rating = parseFloat(bodyMessage);
         const companyId = ticket.companyId;
 
-        if (!isNaN(rating)) {
+        if (!isNaN(rating) && rating >= 0 && rating <= 10) {
           await handleRating(rating, ticket, ticketTraking);
         } else {
           const bodyErrorRating = `\u200eOpção inválida, envie apenas uma nota de 0 a 10.`;

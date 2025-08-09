@@ -627,15 +627,16 @@ export const handleMessage = async (
           /**
            * Tratamento para avaliação do atendente
            */
-          if (ticket.status === "nps" && ticketTraking !== null && verifyRating(ticketTraking)) {
+          if (
+            ticketTraking !== null &&
+            verifyRating(ticket, ticketTraking)
+          ) {
+            const rating = parseFloat(bodyMessage);
 
-            if (!isNaN(parseFloat(bodyMessage))) {
-
-              await handleRating(parseFloat(bodyMessage), ticket, ticketTraking);
-
+            if (!isNaN(rating) && rating >= 0 && rating <= 10) {
+              await handleRating(rating, ticket, ticketTraking);
               return;
             } else {
-
               if (ticket.amountUsedBotQueuesNPS < getSession.maxUseBotQueuesNPS) {
                 let bodyErrorRating = `\u200eOpção inválida, tente novamente.\n`;
                 const sentMessage = await sendText(
