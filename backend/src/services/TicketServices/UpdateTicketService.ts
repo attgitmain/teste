@@ -185,7 +185,8 @@ const UpdateTicketService = async ({
 
           await ticketTraking.update({
             userId: ticket.userId,
-            closedAt: moment().toDate()
+            closedAt: moment().toDate(),
+            rated: false
           });
 
           await CreateLogTicketService({

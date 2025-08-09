@@ -4429,6 +4429,8 @@ const handleMessage = async (
     try {
       if (!msg.key.fromMe && ticketTraking !== null && verifyRating(ticketTraking)) {
         const rating = parseFloat(bodyMessage);
+        const companyId = ticket.companyId;
+
         if (!isNaN(rating)) {
           await handleRating(rating, ticket, ticketTraking);
           await ticketTraking.update({
@@ -4436,8 +4438,27 @@ const handleMessage = async (
             finishedAt: moment().toDate(),
             rated: true
           });
-          return;
+
+          const ticketData = {
+            status: "closed",
+            sendFarewellMessage: false
+          };
+
+          await UpdateTicketService({
+            ticketData,
+            ticketId: ticket.id,
+            companyId
+          });
+        } else {
+          const bodyErrorRating = `\u200eOpção inválida, envie apenas uma nota de 0 a 10.`;
+          const sentMessage = await SendWhatsAppMessage({
+            body: bodyErrorRating,
+            ticket
+          });
+          await verifyMessage(sentMessage, ticket, contact, ticketTraking);
         }
+
+        return;
       }
     } catch (err) {
       Sentry.captureException(err);
