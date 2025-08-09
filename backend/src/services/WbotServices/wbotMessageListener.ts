@@ -3335,7 +3335,6 @@ export const verifyRating = (ticketTraking: TicketTraking) => {
     ticketTraking &&
     ticketTraking.finishedAt === null &&
     ticketTraking.closedAt !== null &&
-    ticketTraking.userId !== null &&
     ticketTraking.ratingAt === null
   ) {
     return true;
